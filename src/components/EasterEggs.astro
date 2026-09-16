@@ -137,6 +137,153 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
             </div>
           </div>
         </div>
+        <span
+          class="font-mono text-[10px] text-neutral-400 dark:text-neutral-500 whitespace-nowrap shrink-0"
+        >
+          OCT 15, 2019
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 01: First Landing Page (Hello-ween! ASP.NET) Floating Popup -->
+<div
+  id="egg-popup-first-landing"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  inert
+  aria-labelledby="egg-landing-title"
+  class="egg-popup-modal popup-hidden fixed bottom-4 inset-x-0 mx-auto sm:inset-x-auto sm:right-6 sm:mx-0 sm:bottom-6 z-50 w-[92vw] max-w-[390px] sm:max-w-[420px] flex flex-col font-sans"
+>
+  <!-- Floating Dismiss Text Above Popup (Centered on mobile) -->
+  <div class="flex items-center justify-center sm:justify-end mb-1 px-1">
+    <button
+      type="button"
+      aria-label="Dismiss First Landing Page popup"
+      data-aria-en="Dismiss First Landing Page popup"
+      data-aria-id="Tutup pop-up Landing Page Pertama"
+      class="egg-popup-close font-mono text-xs text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 hover:underline cursor-pointer select-none transition-colors p-0 bg-transparent border-0 flex items-center justify-center gap-1 w-full sm:w-auto text-center"
+    >
+      <span
+        class="sm:hidden"
+        data-en="↓ Swipe down to dismiss"
+        data-id="↓ Usap ke bawah untuk menutup">↓ Swipe down to dismiss</span
+      >
+      <span
+        class="hidden sm:inline"
+        data-en="Dismiss x [esc]"
+        data-id="Tutup x [esc]">Dismiss x [esc]</span
+      >
+    </button>
+  </div>
+
+  <!-- Popup Card -->
+  <div
+    class="w-full bg-[#f6f4ee] dark:bg-[#141414] border border-neutral-300/80 dark:border-neutral-800 shadow-2xl shadow-black/40 overflow-hidden flex flex-col"
+  >
+    <!-- Media / Viewfinder Container -->
+    <div
+      class="relative w-full bg-black overflow-hidden border-b border-neutral-300/80 dark:border-neutral-800/80 select-none flex items-center justify-center"
+    >
+      <img
+        src={`${base}/whatisthis/page1.png`}
+        alt="First landing page Hello-ween running on localhost:44342"
+        width="1366"
+        height="768"
+        class="w-full h-auto block select-none"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+
+    <!-- Content Section (Project Tile Format) -->
+    <div class="p-4 sm:p-5 flex flex-col flex-1 gap-3">
+      <!-- Category Tag -->
+      <span
+        class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-semibold"
+      >
+        01 // COOL STUFF &bull; FIRST LANDING PAGE
+      </span>
+
+      <!-- Title -->
+      <h3
+        id="egg-landing-title"
+        class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight font-heading"
+      >
+        First Landing Page
+      </h3>
+
+      <!-- Description -->
+      <p
+        class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal"
+      >
+        My very first landing page experiment ("Hello-ween!"), built during early web exploration on localhost:44342 using ASP.NET / IIS Express, featuring handcrafted CSS layout, custom illustrations, and interactive theme mockups.
+      </p>
+
+      <!-- Tags Row -->
+      <ul
+        class="flex flex-wrap gap-1.5 sm:gap-2 pt-1 list-none p-0 m-0"
+        aria-label="Tags"
+      >
+        <li>
+          <span
+            class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded inline-block"
+          >
+            ASP.NET
+          </span>
+        </li>
+        <li>
+          <span
+            class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded inline-block"
+          >
+            IIS EXPRESS
+          </span>
+        </li>
+        <li>
+          <span
+            class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded inline-block"
+          >
+            LOCALHOST:44342
+          </span>
+        </li>
+        <li>
+          <span
+            class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded inline-block"
+          >
+            HTML / CSS
+          </span>
+        </li>
+      </ul>
+
+      <!-- Metadata Footer -->
+      <div
+        class="mt-auto pt-3 border-t border-neutral-200/80 dark:border-neutral-800/80 flex items-center justify-between gap-3 min-w-0"
+      >
+        <!-- File Name Marquee Container (Loops on Overflow) -->
+        <div
+          class="egg-marquee-wrapper relative overflow-hidden min-w-0 flex-1"
+        >
+          <div class="egg-marquee-track inline-flex items-center">
+            <div
+              class="egg-marquee-content inline-flex items-center text-neutral-400 dark:text-neutral-500 whitespace-nowrap shrink-0 font-mono text-[11px]"
+            >
+              <span>page1.png</span>
+              <span
+                class="egg-dot-trailing text-neutral-400 dark:text-neutral-600 select-none text-[8px] mx-2.5"
+                aria-hidden="true"
+              >
+                •
+              </span>
+            </div>
+          </div>
+        </div>
+        <span
+          class="font-mono text-[10px] text-neutral-400 dark:text-neutral-500 whitespace-nowrap shrink-0"
+        >
+          NOV 10, 2021
+        </span>
       </div>
     </div>
   </div>
@@ -569,6 +716,145 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
   </div>
 </div>
 
+<!-- 05: Pertemuan 7 Form Login Floating Popup -->
+<div
+  id="egg-popup-formlogin"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  inert
+  aria-labelledby="egg-formlogin-title"
+  class="egg-popup-modal popup-hidden fixed bottom-4 inset-x-0 mx-auto sm:inset-x-auto sm:right-6 sm:mx-0 sm:bottom-6 z-50 w-[92vw] max-w-[390px] sm:max-w-[420px] flex flex-col font-sans"
+>
+  <!-- Floating Dismiss Text Above Popup (Centered on mobile) -->
+  <div class="flex items-center justify-center sm:justify-end mb-1 px-1">
+    <button
+      type="button"
+      aria-label="Dismiss Form Login popup"
+      data-aria-en="Dismiss Form Login popup"
+      data-aria-id="Tutup pop-up Form Login"
+      class="egg-popup-close font-mono text-xs text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 hover:underline cursor-pointer select-none transition-colors p-0 bg-transparent border-0 flex items-center justify-center gap-1 w-full sm:w-auto text-center"
+    >
+      <span
+        class="sm:hidden"
+        data-en="↓ Swipe down to dismiss"
+        data-id="↓ Usap ke bawah untuk menutup">↓ Swipe down to dismiss</span
+      >
+      <span
+        class="hidden sm:inline"
+        data-en="Dismiss x [esc]"
+        data-id="Tutup x [esc]">Dismiss x [esc]</span
+      >
+    </button>
+  </div>
+
+  <!-- Popup Card -->
+  <div
+    class="w-full bg-[#f6f4ee] dark:bg-[#141414] border border-neutral-300/80 dark:border-neutral-800 shadow-2xl shadow-black/40 overflow-hidden flex flex-col"
+  >
+    <!-- Media / Viewfinder Container (Exact Original Pertemuan7 HTML via Iframe) -->
+    <div
+      class="relative w-full aspect-[16/9.5] bg-[#919191] overflow-hidden border-b border-neutral-300/80 dark:border-neutral-800/80 select-none flex items-center justify-center"
+    >
+      <iframe
+        data-src={`${base}/whatisthis/Pertemuan7-formlogin.html`}
+        title="Pertemuan 7 Form Login Interactive Display"
+        class="border-0 pointer-events-none select-none shrink-0"
+        style="width: 1200px; height: 720px; transform: scale(0.33); transform-origin: center center;"
+        loading="lazy"></iframe>
+    </div>
+
+    <!-- Content Section (Project Tile Format) -->
+    <div class="p-4 sm:p-5 flex flex-col flex-1 gap-3">
+      <!-- Category Tag -->
+      <span
+        class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-semibold"
+      >
+        05 // COOL STUFF &bull; WEB LAB
+      </span>
+
+      <!-- Title -->
+      <h3
+        id="egg-formlogin-title"
+        class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight font-heading"
+      >
+        Form Login (Pertemuan 7)
+      </h3>
+
+      <!-- Description -->
+      <p
+        class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal"
+      >
+        An early web development class assignment exploring semantic HTML forms, client-side submit validation hooks, tableless CSS box styling, and button hover transitions.
+      </p>
+
+      <!-- Tags Row -->
+      <ul
+        class="flex flex-wrap gap-1.5 sm:gap-2 pt-1 list-none p-0 m-0"
+        aria-label="Tags"
+      >
+        <li>
+          <span
+            class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded inline-block"
+          >
+            HTML5
+          </span>
+        </li>
+        <li>
+          <span
+            class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded inline-block"
+          >
+            CSS3 BOX-SHADOW
+          </span>
+        </li>
+        <li>
+          <span
+            class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded inline-block"
+          >
+            FORM VALIDASI
+          </span>
+        </li>
+        <li>
+          <span
+            class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded inline-block"
+          >
+            PERTEMUAN 7
+          </span>
+        </li>
+      </ul>
+
+      <!-- Metadata Footer -->
+      <div
+        class="mt-auto pt-3 border-t border-neutral-200/80 dark:border-neutral-800/80 flex items-center justify-between gap-3 min-w-0"
+      >
+        <!-- File Name Marquee Container (Loops on Overflow) -->
+        <div
+          class="egg-marquee-wrapper relative overflow-hidden min-w-0 flex-1"
+        >
+          <div class="egg-marquee-track inline-flex items-center">
+            <div
+              class="egg-marquee-content inline-flex items-center text-neutral-400 dark:text-neutral-500 whitespace-nowrap shrink-0 font-mono text-[11px]"
+            >
+              <span>Pertemuan7-formlogin.html</span>
+              <span
+                class="egg-dot-trailing text-neutral-400 dark:text-neutral-600 select-none text-[8px] mx-2.5"
+                aria-hidden="true"
+              >
+                •
+              </span>
+            </div>
+          </div>
+        </div>
+        <span
+          class="font-mono text-[10px] text-neutral-400 dark:text-neutral-500 whitespace-nowrap shrink-0"
+        >
+          OCT 15, 2021
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ░░ EASTER EGGS - Scattered Background Labels & Interactive Triggers ░░ -->
 <div
   aria-hidden="true"
@@ -625,11 +911,18 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
     style="top:44%;left:2%;">Node_12</span
   >
 
-  <!-- 06: ASCII_RENDERER (Sec 03 / Sec 04 Gap) -->
-  <span
-    class="egg-static absolute font-mono text-xs text-neutral-600 dark:text-neutral-300 select-none rotate-[3deg]"
-    style="top:55%;right:1.5%;">ASCII_RENDERER</span
+  <!-- 06: return validasi() (Sec 03 / Sec 04 Gap - ACTIVE EASTER EGG) -->
+  <button
+    type="button"
+    data-easter="pertemuan7"
+    class="egg-static absolute font-mono text-xs text-neutral-600 dark:text-neutral-300 opacity-[0.08] hover:opacity-75 hover:underline underline-offset-4 cursor-pointer select-none transition-[opacity,text-decoration] duration-200 pointer-events-auto p-1 bg-transparent border-0 tracking-wider focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded rotate-[3deg]"
+    style="top:55%;right:1.5%;"
+    aria-label="Unlock Pertemuan 7 Form Login Cool Stuff"
+    data-aria-en="Unlock Pertemuan 7 Form Login Cool Stuff"
+    data-aria-id="Buka Cool Stuff Form Login Pertemuan 7"
   >
+    return validasi()
+  </button>
 
   <!-- 07: since(2026); (Sec 04 / Sec 05 Gap) -->
   <span
@@ -637,11 +930,18 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
     style="top:66%;left:2%;">since(2026);</span
   >
 
-  <!-- 08: process.env.PORT || 8080 -->
-  <span
-    class="egg-static absolute font-mono text-xs text-neutral-600 dark:text-neutral-300 select-none rotate-[5deg]"
-    style="top:75%;right:3%;">process.env.PORT || 8080</span
+  <!-- 08: localhost:44342 (Sec 05 / Sec 06 Gap - ACTIVE EASTER EGG) -->
+  <button
+    type="button"
+    data-easter="first-landing"
+    class="egg-static absolute font-mono text-xs text-neutral-600 dark:text-neutral-300 opacity-[0.08] hover:opacity-75 hover:underline underline-offset-4 cursor-pointer select-none transition-[opacity,text-decoration] duration-200 pointer-events-auto p-1 bg-transparent border-0 tracking-wider focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded rotate-[5deg]"
+    style="top:75%;right:3%;"
+    aria-label="Unlock First Landing Page Cool Stuff"
+    data-aria-en="Unlock First Landing Page Cool Stuff"
+    data-aria-id="Buka Cool Stuff Landing Page Pertama"
   >
+    localhost:44342
+  </button>
 
   <!-- 09: struct Pixel { r: u8, g: u8, b: u8 } (Sec 06 / Sec 07 Gap) -->
   <span
@@ -1057,6 +1357,10 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
           togglePopup("egg-popup-ws2812b");
         } else if (easterType === "brght") {
           togglePopup("egg-popup-brght");
+        } else if (easterType === "first-landing" || easterType === "page1") {
+          togglePopup("egg-popup-first-landing");
+        } else if (easterType === "pertemuan7" || easterType === "formlogin") {
+          togglePopup("egg-popup-formlogin");
         }
         return;
       }
