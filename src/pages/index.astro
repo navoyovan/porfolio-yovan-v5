@@ -6,6 +6,7 @@ import ActionButton from "../components/ActionButton.astro";
 import ProjectTile from "../components/ProjectTile.astro";
 import HoverExpandButton from "../components/HoverExpandButton.astro";
 import EasterEggs from "../components/EasterEggs.astro";
+import { DitheringShader } from "../components/ui/dithering-shader";
 
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
@@ -180,19 +181,17 @@ const capabilities = [
               class="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center border-b border-neutral-300/80 dark:border-neutral-800 overflow-hidden"
               style="transform: translateZ(0); contain: paint;"
             >
-              <!-- Texture Backdrop: Full Soft 3/4 Radial Mask -->
+              <!-- Dithering Shader Wave Backdrop (Unmasked) -->
               <div
-                class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden [mask-image:radial-gradient(circle_at_50%_40%,black_35%,transparent_75%)]"
+                class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
                 style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
               >
-                <!-- tx1: Halftone dot pattern -->
-                <img
-                  src={`${base}/images/tx1.jpg`}
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  decoding="async"
-                  class="absolute inset-0 w-full h-full object-cover object-center opacity-40 dark:opacity-30 mix-blend-multiply dark:mix-blend-screen dark:invert grayscale filter contrast-125"
+                <DitheringShader
+                  client:visible
+                  shape="wave"
+                  type="8x8"
+                  pxSize={1}
+                  speed={0.6}
                 />
               </div>
 
@@ -1062,7 +1061,7 @@ const capabilities = [
               class="flex flex-nowrap overflow-x-auto gap-4 sm:gap-5 pb-5 pt-2 pl-[4%] sm:pl-[7%] lg:pl-[10%] pr-[4%] sm:pr-[7%] lg:pr-[10%] no-scrollbar scroll-smooth"
             >
               <div
-                class="w-[280px] sm:w-[310px] lg:w-[320px] shrink-0 flex flex-col"
+                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
               >
                 <ProjectTile
                   title="mcTextureGhost"
@@ -1087,7 +1086,7 @@ const capabilities = [
                 />
               </div>
               <div
-                class="w-[280px] sm:w-[310px] lg:w-[320px] shrink-0 flex flex-col"
+                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
               >
                 <ProjectTile
                   title="Component Library"
@@ -1105,7 +1104,7 @@ const capabilities = [
                 />
               </div>
               <div
-                class="w-[280px] sm:w-[310px] lg:w-[320px] shrink-0 flex flex-col"
+                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
               >
                 <ProjectTile
                   title="Interactive Map"
@@ -1124,7 +1123,7 @@ const capabilities = [
                 />
               </div>
               <div
-                class="w-[280px] sm:w-[310px] lg:w-[320px] shrink-0 flex flex-col"
+                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
               >
                 <ProjectTile
                   title="Frame & Cutout Studio"
@@ -1147,7 +1146,7 @@ const capabilities = [
                 />
               </div>
               <div
-                class="w-[280px] sm:w-[310px] lg:w-[320px] shrink-0 flex flex-col"
+                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
               >
                 <ProjectTile
                   title="Color Grading & Textures"
@@ -1803,6 +1802,21 @@ const capabilities = [
                 class="w-full sm:w-auto max-sm:!py-[11px]"
               >
                 <span data-en="LinkedIn ↗" data-id="LinkedIn ↗">LinkedIn ↗</span
+                >
+              </ActionButton>
+              <ActionButton
+                variant="secondary"
+                size="sm"
+                href="https://docs.google.com/document/d/1dlUKA5EGLI3qPxEOfJ3acjt4tA39oxKy_Fs1Z_JM0Pk/export?format=pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                ariaLabel="Download Resume / CV as PDF (opens in new tab)"
+                data-aria-en="Download Resume / CV as PDF (opens in new tab)"
+                data-aria-id="Unduh Resume / CV dalam format PDF (buka di tab baru)"
+                class="w-full sm:w-auto max-sm:!py-[11px]"
+              >
+                <span data-en="Resume / CV (PDF) ↗" data-id="Resume / CV (PDF) ↗"
+                  >Resume / CV (PDF) ↗</span
                 >
               </ActionButton>
             </div>
