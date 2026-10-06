@@ -8,11 +8,20 @@ export interface DitheringPalette {
 }
 
 export const PRESET_PALETTES: DitheringPalette[] = [
+  { name: "Cyber Wave", colorBack: "#001122", colorFront: "#ff0088" },
   { name: "Retro Ink", colorBack: "#0e0e0e", colorFront: "#fcfbf9" },
   { name: "Terminal Glow", colorBack: "#0a0a0a", colorFront: "#52FF1A" },
   { name: "Warm Editorial", colorBack: "#1a1a1a", colorFront: "#f6f4ee" },
   { name: "Subtle Charcoal", colorBack: "#121212", colorFront: "#4a4a4a" },
-  { name: "Cyber Wave", colorBack: "#001122", colorFront: "#ff0088" },
+];
+
+export const PRESET_PATTERNS = [
+  { id: 0, key: "waves", name: "1. DIRECTIONAL WAVE" },
+  { id: 1, key: "rings", name: "2. RADIAL HALO" },
+  { id: 2, key: "topography", name: "3. TOPOGRAPHIC CONTOUR" },
+  { id: 3, key: "scanline", name: "4. CRT MATRIX" },
+  { id: 4, key: "screentone", name: "5. RISOGRAPH DOTS" },
+  { id: 5, key: "organic", name: "6. CLOUDY INTERFERENCE" },
 ];
 
 export interface DitheringShaderProps {
@@ -30,13 +39,14 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
   type = "8x8",
   colorBack: initialColorBack,
   colorFront: initialColorFront,
-  pxSize: initialPxSize = 2,
+  pxSize: initialPxSize = 1,
   speed = 0.6,
   className = "",
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
 
+  // Default: Cyber Wave (index 0)
   const [activePaletteIndex, setActivePaletteIndex] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("dither_palette_idx");
@@ -47,9 +57,24 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
         }
       }
     }
-    return 0; // Default: Retro Ink
+    return 0; // Default: Cyber Wave
   });
 
+  // Default: Directional Wave (index 0)
+  const [activePatternIndex, setActivePatternIndex] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("dither_pattern_idx");
+      if (saved !== null) {
+        const parsed = parseInt(saved, 10);
+        if (!isNaN(parsed) && parsed >= 0 && parsed < PRESET_PATTERNS.length) {
+          return parsed;
+        }
+      }
+    }
+    return 0; // Default: Directional Wave
+  });
+
+  // Default: 1px scale
   const [currentPxSize, setCurrentPxSize] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("dither_px_size");
@@ -73,6 +98,14 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
       }
     };
 
+    const handlePatternChange = (e: Event) => {
+      const customEvent = e as CustomEvent<{ index: number }>;
+      if (typeof customEvent.detail?.index === "number") {
+        setActivePatternIndex(customEvent.detail.index);
+        localStorage.setItem("dither_pattern_idx", customEvent.detail.index.toString());
+      }
+    };
+
     const handleScaleChange = (e: Event) => {
       const customEvent = e as CustomEvent<{ pxSize: number }>;
       if (typeof customEvent.detail?.pxSize === "number") {
@@ -82,22 +115,26 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
     };
 
     window.addEventListener("dither:change-palette", handlePaletteChange);
+    window.addEventListener("dither:change-pattern", handlePatternChange);
     window.addEventListener("dither:change-scale", handleScaleChange);
 
     return () => {
       window.removeEventListener("dither:change-palette", handlePaletteChange);
+      window.removeEventListener("dither:change-pattern", handlePatternChange);
       window.removeEventListener("dither:change-scale", handleScaleChange);
     };
   }, []);
 
-  // Update uniforms when palette or pixel scale changes
+  // Update uniforms when palette, pattern, or pixel scale changes
   useEffect(() => {
     if (!materialRef.current) return;
+    const dpr = typeof window !== "undefined" ? Math.min(window.devicePixelRatio || 1, 2) : 1;
     const palette = PRESET_PALETTES[activePaletteIndex];
     materialRef.current.uniforms.uColorBack.value.set(palette.colorBack);
     materialRef.current.uniforms.uColorFront.value.set(palette.colorFront);
-    materialRef.current.uniforms.uPxSize.value = Math.max(1, currentPxSize);
-  }, [activePaletteIndex, currentPxSize]);
+    materialRef.current.uniforms.uPxSize.value = Math.max(1, currentPxSize * dpr);
+    materialRef.current.uniforms.uPatternType.value = activePatternIndex;
+  }, [activePaletteIndex, activePatternIndex, currentPxSize]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -114,8 +151,9 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
       antialias: false,
       powerPreference: "low-power",
     });
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.domElement.style.width = "100%";
     renderer.domElement.style.height = "100%";
     renderer.domElement.style.display = "block";
@@ -146,15 +184,17 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
     ditherTexture.needsUpdate = true;
 
     const initialPalette = PRESET_PALETTES[activePaletteIndex];
+
     const material = new THREE.ShaderMaterial({
       transparent: true,
       uniforms: {
         uTime: { value: 0 },
-        uResolution: { value: new THREE.Vector2(width, height) },
+        uResolution: { value: new THREE.Vector2(width * dpr, height * dpr) },
         uColorBack: { value: new THREE.Color(initialPalette.colorBack) },
         uColorFront: { value: new THREE.Color(initialPalette.colorFront) },
-        uPxSize: { value: Math.max(1, currentPxSize) },
+        uPxSize: { value: Math.max(1, currentPxSize * dpr) },
         uSpeed: { value: speed },
+        uPatternType: { value: activePatternIndex },
         uDitherMap: { value: ditherTexture },
       },
       vertexShader: `
@@ -171,28 +211,71 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
         uniform vec3 uColorFront;
         uniform float uPxSize;
         uniform float uSpeed;
+        uniform int uPatternType;
         uniform sampler2D uDitherMap;
         varying vec2 vUv;
 
         void main() {
           vec2 coord = floor(gl_FragCoord.xy / uPxSize) * uPxSize;
-          vec2 uv = coord / uResolution.xy;
+          vec2 uv = vUv;
 
           float t = uTime * uSpeed;
-          // Organic sine wave interference
-          float wave1 = sin(uv.x * 6.28 * 2.0 + t) * 0.5 + 0.5;
-          float wave2 = cos(uv.y * 6.28 * 1.5 - t * 0.8) * 0.5 + 0.5;
-          float wave3 = sin((uv.x + uv.y) * 6.28 * 1.0 + t * 0.5) * 0.5 + 0.5;
-          float lum = (wave1 * 0.45 + wave2 * 0.35 + wave3 * 0.2);
+          float lum = 0.0;
+
+          if (uPatternType == 0) {
+            // 1. DIRECTIONAL WAVE (Structured sweeping oceanic wave contours)
+            float wave = sin((uv.x * 2.5 + uv.y * 1.5) * 6.28 - t * 1.2);
+            float fine = sin((uv.x * 5.0 - uv.y * 2.0) * 6.28 + t * 0.6) * 0.3;
+            lum = smoothstep(-1.0, 1.0, wave + fine);
+          } else if (uPatternType == 1) {
+            // 2. RADIAL HALO (Concentric Sonar Rings expanding from behind head)
+            vec2 center = vec2(0.5, 0.55);
+            float dist = length((uv - center) * vec2(1.0, uResolution.y / uResolution.x));
+            float rings = sin(dist * 26.0 - t * 2.0) * 0.5 + 0.5;
+            float falloff = smoothstep(0.7, 0.1, dist);
+            lum = rings * falloff;
+          } else if (uPatternType == 2) {
+            // 3. TOPOGRAPHIC CONTOUR (Iso-elevation isobar lines)
+            float field = sin(uv.x * 4.0 + t * 0.4) * cos(uv.y * 4.0 - t * 0.3);
+            float bands = abs(fract(field * 4.5) - 0.5) * 2.0;
+            lum = 1.0 - smoothstep(0.15, 0.45, bands);
+          } else if (uPatternType == 3) {
+            // 4. CRT MATRIX (Horizontal scanline pulse & sweep)
+            float scan = sin(uv.y * 40.0 - t * 3.0) * 0.5 + 0.5;
+            float pulse = sin(uv.x * 8.0 + t) * 0.2 + 0.8;
+            lum = scan * pulse;
+          } else if (uPatternType == 4) {
+            // 5. RISOGRAPH DOTS (Classic halftoning gradient / screen)
+            float grad = 1.0 - length(uv - vec2(0.5, 0.6)) * 1.4;
+            float angle = 0.785;
+            vec2 rot = vec2(
+              uv.x * cos(angle) - uv.y * sin(angle),
+              uv.x * sin(angle) + uv.y * cos(angle)
+            );
+            float dots = sin(rot.x * 45.0 + t * 0.5) * sin(rot.y * 45.0 + t * 0.5);
+            lum = clamp(grad + dots * 0.25, 0.0, 1.0);
+          } else {
+            // 6. CLOUDY INTERFERENCE (Multi-axis organic noise)
+            float wave1 = sin(uv.x * 6.28 * 2.0 + t) * 0.5 + 0.5;
+            float wave2 = cos(uv.y * 6.28 * 1.5 - t * 0.8) * 0.5 + 0.5;
+            float wave3 = sin((uv.x + uv.y) * 6.28 * 1.0 + t * 0.5) * 0.5 + 0.5;
+            lum = (wave1 * 0.45 + wave2 * 0.35 + wave3 * 0.2);
+          }
+
+          // Smooth edge falloff (vignette) so the dither dots naturally dissolve at the borders
+          vec2 edgeDist = min(uv, 1.0 - uv);
+          float edgeAlpha = smoothstep(0.0, 0.15, edgeDist.x) * smoothstep(0.0, 0.15, edgeDist.y);
+
+          // Modulate luminance by edge falloff so the dither dot density naturally thins out at the edges
+          lum *= edgeAlpha;
 
           // Sample 8x8 Bayer matrix
           vec2 ditherUv = fract(coord / (8.0 * uPxSize));
           float threshold = texture2D(uDitherMap, ditherUv).r;
 
           float dither = step(threshold, lum);
-          // If dither is 0 (background), alpha is 0.0 (completely invisible/transparent)
-          // If dither is 1 (foreground dot), render uColorFront with full alpha 1.0
-          gl_FragColor = vec4(uColorFront, dither);
+          // Invisible transparent background, foreground dots smoothly feather out
+          gl_FragColor = vec4(uColorFront, dither * edgeAlpha);
         }
       `,
     });
@@ -203,11 +286,18 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
     scene.add(quad);
 
     let animationFrameId: number;
+    let isVisible = true;
     const clock = new THREE.Clock();
 
-    const animate = () => {
+    const renderFrame = () => {
       material.uniforms.uTime.value = clock.getElapsedTime();
       renderer.render(scene, camera);
+    };
+
+    const animate = () => {
+      if (isVisible) {
+        renderFrame();
+      }
       animationFrameId = requestAnimationFrame(animate);
     };
     animate();
@@ -217,13 +307,31 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
       const w = container.clientWidth || 300;
       const h = container.clientHeight || 300;
       renderer.setSize(w, h);
-      material.uniforms.uResolution.value.set(w, h);
+      material.uniforms.uResolution.value.set(w * dpr, h * dpr);
+      if (!isVisible) renderFrame();
     };
 
     window.addEventListener("resize", handleResize);
 
+    // Pause render loop when offscreen or tab is hidden to save GPU cycles & battery
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        isVisible = entry ? entry.isIntersecting && !document.hidden : !document.hidden;
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(container);
+
+    const handleVisibilityChange = () => {
+      isVisible = !document.hidden;
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
       cancelAnimationFrame(animationFrameId);
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
       geometry.dispose();
       material.dispose();
