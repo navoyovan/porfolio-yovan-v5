@@ -1,0 +1,301 @@
+---
+// AsciiParticleField.astro - Ambient Dithered Fluid ASCII Particles for Hero & Page Backdrops
+interface Props {
+  class?: string;
+  opacityMultiplier?: number;
+}
+
+const {
+  class: className = '',
+  opacityMultiplier = 1.0,
+} = Astro.props;
+---
+
+<div class={`absolute inset-0 pointer-events-none overflow-hidden select-none ${className}`} data-ascii-field data-opacity-mult={opacityMultiplier}>
+  <canvas class="ascii-canvas-layer absolute inset-0 block w-full h-full" style="width: 100%; height: 100%;"></canvas>
+</div>
+
+<script is:inline>
+  (function () {
+    function initFields() {
+      const containers = document.querySelectorAll('[data-ascii-field]');
+      if (!containers.length) return;
+
+      containers.forEach((container) => {
+        // Prevent duplicate initializations on view transition re-runs
+        if (container.dataset.initialized === 'true') return;
+        container.dataset.initialized = 'true';
+
+        const canvas = container.querySelector('.ascii-canvas-layer');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const opacityMult = parseFloat(container.dataset.opacityMult || '1.0');
+
+        let w = (canvas.width = container.clientWidth || window.innerWidth);
+        let h = (canvas.height = container.clientHeight || window.innerHeight);
+
+        function resize() {
+          w = canvas.width = container.clientWidth || window.innerWidth;
+          h = canvas.height = container.clientHeight || window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+
+        const BAYER_4X4 = [
+          [ 0,  8,  2, 10],
+          [12,  4, 14,  6],
+          [ 3, 11,  1,  9],
+          [15,  7, 13,  5]
+        ];
+
+        const CORE_CHAR_SETS = [
+          [' ', '.', ':', ';', 'X', 'M', 'r'],
+          [' ', '.', ':', ';', '%', '8', 's', 'r'],
+          [' ', '.', ':', ';', 'h', 'A', '1', '4'],
+          [' ', '.', ':', ';', 'T', 'Y', 'B', 'h'],
+          [' ', '.', ':', ';', '1', '2', '3', 'A'],
+          [' ', '.', ':', ';', 'N', '8', 'e', '%']
+        ];
+
+        // Calibrated defaults with localStorage persistence
+        const getSavedParam = (key, def) => {
+          const val = localStorage.getItem('ascii_' + key);
+          return val !== null ? parseFloat(val) : def;
+        };
+
+        const params = {
+          count: getSavedParam('count', Math.min(75, Math.max(30, Math.floor((w * h) / 14000)))),
+          radiusX: getSavedParam('radiusX', 8),
+          radiusY: getSavedParam('radiusY', 28),
+          breathSpeed: getSavedParam('breathSpeed', 1.0),
+          shearAmt: getSavedParam('shearAmt', 35),
+          ditherDensity: getSavedParam('ditherDensity', 1.7),
+          maxOpacity: getSavedParam('maxOpacity', 0.20) * opacityMult,
+          dustCount: getSavedParam('dustCount', Math.min(45, Math.max(20, Math.floor((w * h) / 25000))))
+        };
+
+        window.addEventListener('portfolio:ascii-params', (e) => {
+          if (!e.detail) return;
+          const d = e.detail;
+          let needRebuild = false;
+          if (d.count !== undefined && d.count !== params.count) {
+            params.count = d.count;
+            needRebuild = true;
+          }
+          if (d.dustCount !== undefined && d.dustCount !== params.dustCount) {
+            params.dustCount = d.dustCount;
+            needRebuild = true;
+          }
+          if (d.radiusX !== undefined) params.radiusX = d.radiusX;
+          if (d.radiusY !== undefined) params.radiusY = d.radiusY;
+          if (d.breathSpeed !== undefined) params.breathSpeed = d.breathSpeed;
+          if (d.shearAmt !== undefined) params.shearAmt = d.shearAmt;
+          if (d.ditherDensity !== undefined) params.ditherDensity = d.ditherDensity;
+          if (d.maxOpacity !== undefined) params.maxOpacity = d.maxOpacity * opacityMult;
+
+          if (needRebuild) {
+            rebuildEntities();
+          }
+        });
+
+        let islands = [];
+        let specks = [];
+
+        function rebuildEntities() {
+          islands = [];
+          for (let i = 0; i < params.count; i++) {
+            const isMicro = Math.random() > 0.35;
+            islands.push({
+              homeX: Math.random() * w,
+              homeY: Math.random() * h,
+              offsetX: 0,
+              offsetY: 0,
+              pulseSpeed: 0.25 + Math.random() * 0.45,
+              pulsePhase: Math.random() * Math.PI * 2,
+              wobbleSpeed: 0.5 + Math.random() * 0.8,
+              scaleRatio: isMicro ? (0.4 + Math.random() * 0.35) : (0.85 + Math.random() * 0.65),
+              depth: 0.35 + Math.random() * 0.65,
+              charSet: CORE_CHAR_SETS[i % CORE_CHAR_SETS.length],
+              baseAlpha: (0.35 + Math.random() * 0.45) * opacityMult
+            });
+          }
+
+          specks = [];
+          for (let s = 0; s < params.dustCount; s++) {
+            specks.push({
+              homeX: Math.random() * w,
+              homeY: Math.random() * h,
+              char: Math.random() > 0.6 ? ':' : (Math.random() > 0.3 ? '.' : ';'),
+              alpha: (0.2 + Math.random() * 0.35) * opacityMult,
+              depth: 0.2 + Math.random() * 0.8
+            });
+          }
+        }
+
+        rebuildEntities();
+
+        let lastScrollY = window.scrollY || window.pageYOffset;
+        let scrollY = lastScrollY;
+        window.addEventListener('scroll', () => {
+          scrollY = window.scrollY || window.pageYOffset;
+        }, { passive: true });
+
+        // Pre-computed color Lookup Table (LUT) to eliminate GC string allocations in render loop
+        const COLOR_LUT = [];
+        const NUM_LUT_STEPS = 50;
+        for (let step = 0; step <= NUM_LUT_STEPS; step++) {
+          const a = (step / NUM_LUT_STEPS).toFixed(2);
+          COLOR_LUT.push(`rgba(200, 200, 210, ${a})`);
+        }
+
+        let isDocumentVisible = !document.hidden;
+        document.addEventListener('visibilitychange', () => {
+          isDocumentVisible = !document.hidden;
+          if (isDocumentVisible && !animId) {
+            last = performance.now();
+            animId = requestAnimationFrame(animate);
+          }
+        });
+
+        const cellW = 8;
+        const cellH = 13;
+        let last = performance.now();
+        let animId;
+
+        function animate(t) {
+          if (!isDocumentVisible) {
+            animId = null;
+            return;
+          }
+
+          const nowSec = t * 0.001;
+          const dt = Math.min((t - last) * 0.001, 0.05);
+          last = t;
+
+          // Smooth scroll lerp
+          lastScrollY += (scrollY - lastScrollY) * 0.15;
+
+          // Transparent clear so it layers over existing site layouts
+          ctx.clearRect(0, 0, w, h);
+
+          const shearX = Math.sin(nowSec * 0.3) * params.shearAmt;
+          const shearY = Math.cos(nowSec * 0.22) * (params.shearAmt * 0.5);
+
+          ctx.font = '10.5px Consolas, "Courier New", monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // 1. Ambient dust with scroll parallax
+          for (let s = 0; s < specks.length; s++) {
+            const spk = specks[s];
+            const sx = ((spk.homeX + shearX * spk.depth) % w + w) % w;
+            const rawSy = spk.homeY + shearY * spk.depth - (lastScrollY * (0.6 + spk.depth * 0.6));
+            const sy = ((rawSy % h) + h) % h;
+
+            const lutIdx = Math.max(0, Math.min(NUM_LUT_STEPS, Math.round(spk.alpha * NUM_LUT_STEPS)));
+            ctx.fillStyle = COLOR_LUT[lutIdx];
+            ctx.fillText(spk.char, Math.round(sx), Math.round(sy));
+          }
+
+          // 2. Dithered fluid islands with fast LUT rendering
+          const pRadiusX = params.radiusX;
+          const pRadiusY = params.radiusY;
+          const pBreathSpeed = params.breathSpeed;
+          const pDitherDensity = params.ditherDensity;
+          const pMaxOpacity = params.maxOpacity;
+
+          for (let i = 0; i < islands.length; i++) {
+            const isl = islands[i];
+
+            const targetX = shearX * isl.depth;
+            const targetY = shearY * isl.depth;
+            isl.offsetX += (targetX - isl.offsetX) * (1.2 * dt);
+            isl.offsetY += (targetY - isl.offsetY) * (1.2 * dt);
+
+            // Subtract scroll so droplets scroll naturally up with page content
+            const scrollShift = lastScrollY * (0.7 + isl.depth * 0.5);
+            const cy = (((isl.homeY + isl.offsetY - scrollShift) % h) + h) % h;
+            const cx = (((isl.homeX + isl.offsetX) % w) + w) % w;
+
+            const breath = 0.5 + 0.5 * Math.sin(nowSec * (isl.pulseSpeed * pBreathSpeed) + isl.pulsePhase);
+            const scale = isl.scaleRatio * (0.2 + breath * 0.8);
+            const currentRx = Math.max(1, pRadiusX * scale);
+            const currentRy = Math.max(1, pRadiusY * scale);
+
+            const spanCols = Math.ceil((currentRx * 1.5) / cellW);
+            const spanRows = Math.ceil((currentRy * 1.5) / cellH);
+
+            const centerCol = Math.round(cx / cellW);
+            const centerRow = Math.round(cy / cellH);
+
+            const chars = isl.charSet;
+            const charsMaxIdx = chars.length - 1;
+            const wobbleTime = nowSec * isl.wobbleSpeed + i;
+            const baseAlpha = isl.baseAlpha;
+
+            for (let dy = -spanRows; dy <= spanRows; dy++) {
+              const gridY = centerRow + dy;
+              const py = gridY * cellH;
+              const dY = (py - cy);
+              const normY = dY / currentRy;
+              const normYSq = normY * normY;
+              if (normYSq > 1.8) continue;
+
+              const bayerY = ((gridY % 4) + 4) % 4;
+
+              for (let dx = -spanCols; dx <= spanCols; dx++) {
+                const gridX = centerCol + dx;
+                const px = gridX * cellW;
+                const dX = px - cx;
+
+                const normX = dX / currentRx;
+                const distSq = normX * normX + normYSq;
+
+                if (distSq > 1.8) continue;
+
+                const angle = Math.atan2(dY, dX);
+                const wobble = Math.sin(angle * 3 + wobbleTime) * 0.15;
+                const effectiveDist = Math.sqrt(distSq) / (1 + wobble);
+
+                if (effectiveDist <= 1.0) {
+                  const rawDensity = 1.0 - effectiveDist;
+                  const bayerX = ((gridX % 4) + 4) % 4;
+                  const ditherThresh = BAYER_4X4[bayerY][bayerX] * 0.0625; // / 16.0
+
+                  const ditherVal = rawDensity * pDitherDensity - (ditherThresh * 0.4);
+
+                  if (ditherVal > 0.08) {
+                    const idx = Math.min(
+                      charsMaxIdx,
+                      Math.max(1, Math.floor(ditherVal * charsMaxIdx))
+                    );
+                    const ch = chars[idx];
+
+                    if (ch !== ' ') {
+                      const alpha = Math.min(pMaxOpacity, baseAlpha * (0.35 + ditherVal * 0.65));
+                      const lutIdx = Math.max(0, Math.min(NUM_LUT_STEPS, Math.round(alpha * NUM_LUT_STEPS)));
+                      ctx.fillStyle = COLOR_LUT[lutIdx];
+                      ctx.fillText(ch, px, py);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          animId = requestAnimationFrame(animate);
+        }
+
+        animId = requestAnimationFrame(animate);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initFields);
+    } else {
+      initFields();
+    }
+    document.addEventListener('astro:page-load', initFields);
+  })();
+</script>

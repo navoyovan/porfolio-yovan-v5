@@ -51,7 +51,7 @@ const scrimPresets = [
 ---
 
 <div
-  class="hero-map-background absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-10"
+  class="hero-map-background absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none z-0"
   style="transform: translateZ(0); contain: paint;"
   data-lat={lat}
   data-lng={lng}
@@ -155,6 +155,13 @@ const scrimPresets = [
         class="dev-tab-btn px-2 py-0.5 text-[10px] font-mono rounded font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all cursor-pointer border-0 bg-transparent"
       >
         DITHER
+      </button>
+      <button
+        type="button"
+        id="dev-tab-ascii-btn"
+        class="dev-tab-btn px-2 py-0.5 text-[10px] font-mono rounded font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all cursor-pointer border-0 bg-transparent"
+      >
+        ASCII
       </button>
     </div>
     <kbd class="px-1.5 py-0.5 text-[9px] font-mono rounded bg-neutral-200/60 dark:bg-neutral-800/80 text-neutral-500">`</kbd>
@@ -293,7 +300,7 @@ const scrimPresets = [
         class="dither-pattern-btn flex items-center justify-between px-2.5 py-1 text-xs font-heading font-bold uppercase tracking-tight text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900/80 rounded transition-colors text-left w-full cursor-pointer border-0 bg-transparent"
       >
         <span>1. DIRECTIONAL WAVE</span>
-        <span class="dither-pattern-indicator text-[10px] font-mono text-neutral-400 dark:text-neutral-600">✓</span>
+        <span class="dither-pattern-indicator text-[10px] font-mono text-neutral-400 dark:text-neutral-600"></span>
       </button>
       <button
         type="button"
@@ -301,7 +308,7 @@ const scrimPresets = [
         class="dither-pattern-btn flex items-center justify-between px-2.5 py-1 text-xs font-heading font-bold uppercase tracking-tight text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900/80 rounded transition-colors text-left w-full cursor-pointer border-0 bg-transparent"
       >
         <span>2. RADIAL HALO</span>
-        <span class="dither-pattern-indicator text-[10px] font-mono text-neutral-400 dark:text-neutral-600"></span>
+        <span class="dither-pattern-indicator text-[10px] font-mono text-neutral-400 dark:text-neutral-600">✓</span>
       </button>
       <button
         type="button"
@@ -346,6 +353,93 @@ const scrimPresets = [
       <button type="button" data-dither-scale="2" class="dither-scale-btn py-1 text-center font-mono text-[10px] rounded border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900 cursor-pointer">2PX</button>
       <button type="button" data-dither-scale="3" class="dither-scale-btn py-1 text-center font-mono text-[10px] rounded border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900 cursor-pointer">3PX</button>
       <button type="button" data-dither-scale="4" class="dither-scale-btn py-1 text-center font-mono text-[10px] rounded border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-900 cursor-pointer">4PX</button>
+    </div>
+  </div>
+
+  <!-- ASCII Fluid Particles Tuner Panel -->
+  <div id="dev-panel-ascii" class="hidden flex-col gap-2 p-1 text-[11px] font-mono select-none">
+    <div class="px-1 pt-0.5 pb-1 border-b border-neutral-200/60 dark:border-neutral-800/60 flex items-center justify-between text-[9px] uppercase tracking-wider text-neutral-400 dark:text-neutral-500">
+      <span>// ASCII FLUID ENGINE</span>
+      <span class="text-emerald-500 font-semibold">LIVE</span>
+    </div>
+
+    <!-- Island Count -->
+    <div class="space-y-0.5 px-1">
+      <div class="flex justify-between text-[10px]">
+        <span class="text-neutral-500 dark:text-neutral-400">ISLAND_COUNT</span>
+        <span id="dev-ascii-val-count" class="text-emerald-400 font-semibold">65</span>
+      </div>
+      <input type="range" id="dev-ascii-ctrl-count" min="15" max="150" step="5" value="65" class="w-full accent-emerald-500 cursor-pointer h-1 bg-neutral-200 dark:bg-neutral-800 rounded appearance-none" />
+    </div>
+
+    <!-- Width (X) -->
+    <div class="space-y-0.5 px-1">
+      <div class="flex justify-between text-[10px]">
+        <span class="text-neutral-500 dark:text-neutral-400">WIDTH (X)</span>
+        <span id="dev-ascii-val-rad-x" class="text-emerald-400 font-semibold">8px</span>
+      </div>
+      <input type="range" id="dev-ascii-ctrl-rad-x" min="2" max="40" step="1" value="8" class="w-full accent-emerald-500 cursor-pointer h-1 bg-neutral-200 dark:bg-neutral-800 rounded appearance-none" />
+    </div>
+
+    <!-- Height (Y) -->
+    <div class="space-y-0.5 px-1">
+      <div class="flex justify-between text-[10px]">
+        <span class="text-neutral-500 dark:text-neutral-400">HEIGHT (Y)</span>
+        <span id="dev-ascii-val-rad-y" class="text-emerald-400 font-semibold">28px</span>
+      </div>
+      <input type="range" id="dev-ascii-ctrl-rad-y" min="2" max="50" step="1" value="28" class="w-full accent-emerald-500 cursor-pointer h-1 bg-neutral-200 dark:bg-neutral-800 rounded appearance-none" />
+    </div>
+
+    <!-- Dither Density -->
+    <div class="space-y-0.5 px-1">
+      <div class="flex justify-between text-[10px]">
+        <span class="text-neutral-500 dark:text-neutral-400">DITHER_DENSITY</span>
+        <span id="dev-ascii-val-dither" class="text-emerald-400 font-semibold">1.7x</span>
+      </div>
+      <input type="range" id="dev-ascii-ctrl-dither" min="0.6" max="2.6" step="0.1" value="1.7" class="w-full accent-emerald-500 cursor-pointer h-1 bg-neutral-200 dark:bg-neutral-800 rounded appearance-none" />
+    </div>
+
+    <!-- Breath Speed -->
+    <div class="space-y-0.5 px-1">
+      <div class="flex justify-between text-[10px]">
+        <span class="text-neutral-500 dark:text-neutral-400">BREATH_SPEED</span>
+        <span id="dev-ascii-val-breath" class="text-emerald-400 font-semibold">1.0x</span>
+      </div>
+      <input type="range" id="dev-ascii-ctrl-breath" min="0" max="3" step="0.1" value="1.0" class="w-full accent-emerald-500 cursor-pointer h-1 bg-neutral-200 dark:bg-neutral-800 rounded appearance-none" />
+    </div>
+
+    <!-- Slide Shear -->
+    <div class="space-y-0.5 px-1">
+      <div class="flex justify-between text-[10px]">
+        <span class="text-neutral-500 dark:text-neutral-400">SLIDE_SHEAR</span>
+        <span id="dev-ascii-val-shear" class="text-emerald-400 font-semibold">35px</span>
+      </div>
+      <input type="range" id="dev-ascii-ctrl-shear" min="0" max="100" step="5" value="35" class="w-full accent-emerald-500 cursor-pointer h-1 bg-neutral-200 dark:bg-neutral-800 rounded appearance-none" />
+    </div>
+
+    <!-- Opacity -->
+    <div class="space-y-0.5 px-1">
+      <div class="flex justify-between text-[10px]">
+        <span class="text-neutral-500 dark:text-neutral-400">GLYPH_OPACITY</span>
+        <span id="dev-ascii-val-opacity" class="text-emerald-400 font-semibold">20%</span>
+      </div>
+      <input type="range" id="dev-ascii-ctrl-opacity" min="0.05" max="1.0" step="0.05" value="0.20" class="w-full accent-emerald-500 cursor-pointer h-1 bg-neutral-200 dark:bg-neutral-800 rounded appearance-none" />
+    </div>
+
+    <!-- Ambient Dust -->
+    <div class="space-y-0.5 px-1">
+      <div class="flex justify-between text-[10px]">
+        <span class="text-neutral-500 dark:text-neutral-400">AMBIENT_DUST</span>
+        <span id="dev-ascii-val-dust" class="text-emerald-400 font-semibold">40</span>
+      </div>
+      <input type="range" id="dev-ascii-ctrl-dust" min="0" max="120" step="10" value="40" class="w-full accent-emerald-500 cursor-pointer h-1 bg-neutral-200 dark:bg-neutral-800 rounded appearance-none" />
+    </div>
+
+    <!-- Reset Button -->
+    <div class="pt-1.5 border-t border-neutral-200/60 dark:border-neutral-800/60 flex items-center justify-between px-1">
+      <button id="dev-ascii-btn-reset" class="px-2 py-0.5 rounded bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 text-[9px] cursor-pointer transition-colors border-0">
+        RESET DEFAULTS
+      </button>
     </div>
   </div>
 </div>
@@ -708,17 +802,20 @@ const scrimPresets = [
     const tabFontsBtn = document.getElementById('dev-tab-fonts-btn');
     const tabScrimBtn = document.getElementById('dev-tab-scrim-btn');
     const tabDitherBtn = document.getElementById('dev-tab-dither-btn');
+    const tabAsciiBtn = document.getElementById('dev-tab-ascii-btn');
     const panelMap = document.getElementById('dev-panel-map');
     const panelFonts = document.getElementById('dev-panel-fonts');
     const panelScrim = document.getElementById('dev-panel-scrim');
     const panelDither = document.getElementById('dev-panel-dither');
+    const panelAscii = document.getElementById('dev-panel-ascii');
 
-    const switchDevTab = (tab: 'map' | 'fonts' | 'scrim' | 'dither') => {
+    const switchDevTab = (tab: 'map' | 'fonts' | 'scrim' | 'dither' | 'ascii') => {
       const tabs = [
         { key: 'map', btn: tabMapBtn, panel: panelMap },
         { key: 'fonts', btn: tabFontsBtn, panel: panelFonts },
         { key: 'scrim', btn: tabScrimBtn, panel: panelScrim },
         { key: 'dither', btn: tabDitherBtn, panel: panelDither },
+        { key: 'ascii', btn: tabAsciiBtn, panel: panelAscii },
       ];
 
       tabs.forEach((t) => {
@@ -741,6 +838,95 @@ const scrimPresets = [
     if (tabFontsBtn) tabFontsBtn.onclick = (e) => { e.stopPropagation(); switchDevTab('fonts'); };
     if (tabScrimBtn) tabScrimBtn.onclick = (e) => { e.stopPropagation(); switchDevTab('scrim'); };
     if (tabDitherBtn) tabDitherBtn.onclick = (e) => { e.stopPropagation(); switchDevTab('dither'); };
+    if (tabAsciiBtn) tabAsciiBtn.onclick = (e) => { e.stopPropagation(); switchDevTab('ascii'); };
+
+    // ASCII Controls Live Wiring
+    const initAsciiDevControls = () => {
+      const getP = (k: string, def: number) => {
+        const v = localStorage.getItem('ascii_' + k);
+        return v !== null ? parseFloat(v) : def;
+      };
+
+      const asciiState = {
+        count: getP('count', 65),
+        radiusX: getP('radiusX', 8),
+        radiusY: getP('radiusY', 28),
+        ditherDensity: getP('ditherDensity', 1.7),
+        breathSpeed: getP('breathSpeed', 1.0),
+        shearAmt: getP('shearAmt', 35),
+        maxOpacity: getP('maxOpacity', 0.20),
+        dustCount: getP('dustCount', 40),
+      };
+
+      const cCount = document.getElementById('dev-ascii-ctrl-count') as HTMLInputElement;
+      const cRadX = document.getElementById('dev-ascii-ctrl-rad-x') as HTMLInputElement;
+      const cRadY = document.getElementById('dev-ascii-ctrl-rad-y') as HTMLInputElement;
+      const cDither = document.getElementById('dev-ascii-ctrl-dither') as HTMLInputElement;
+      const cBreath = document.getElementById('dev-ascii-ctrl-breath') as HTMLInputElement;
+      const cShear = document.getElementById('dev-ascii-ctrl-shear') as HTMLInputElement;
+      const cOpacity = document.getElementById('dev-ascii-ctrl-opacity') as HTMLInputElement;
+      const cDust = document.getElementById('dev-ascii-ctrl-dust') as HTMLInputElement;
+      const btnReset = document.getElementById('dev-ascii-btn-reset');
+
+      const syncUI = () => {
+        if (cCount) cCount.value = String(asciiState.count);
+        if (cRadX) cRadX.value = String(asciiState.radiusX);
+        if (cRadY) cRadY.value = String(asciiState.radiusY);
+        if (cDither) cDither.value = String(asciiState.ditherDensity);
+        if (cBreath) cBreath.value = String(asciiState.breathSpeed);
+        if (cShear) cShear.value = String(asciiState.shearAmt);
+        if (cOpacity) cOpacity.value = String(asciiState.maxOpacity);
+        if (cDust) cDust.value = String(asciiState.dustCount);
+
+        const vC = document.getElementById('dev-ascii-val-count'); if (vC) vC.textContent = String(asciiState.count);
+        const vX = document.getElementById('dev-ascii-val-rad-x'); if (vX) vX.textContent = asciiState.radiusX + 'px';
+        const vY = document.getElementById('dev-ascii-val-rad-y'); if (vY) vY.textContent = asciiState.radiusY + 'px';
+        const vD = document.getElementById('dev-ascii-val-dither'); if (vD) vD.textContent = asciiState.ditherDensity.toFixed(1) + 'x';
+        const vB = document.getElementById('dev-ascii-val-breath'); if (vB) vB.textContent = asciiState.breathSpeed.toFixed(1) + 'x';
+        const vS = document.getElementById('dev-ascii-val-shear'); if (vS) vS.textContent = asciiState.shearAmt + 'px';
+        const vO = document.getElementById('dev-ascii-val-opacity'); if (vO) vO.textContent = Math.round(asciiState.maxOpacity * 100) + '%';
+        const vDu = document.getElementById('dev-ascii-val-dust'); if (vDu) vDu.textContent = String(asciiState.dustCount);
+      };
+
+      const dispatch = () => {
+        window.dispatchEvent(new CustomEvent('portfolio:ascii-params', { detail: { ...asciiState } }));
+        try {
+          localStorage.setItem('ascii_count', String(asciiState.count));
+          localStorage.setItem('ascii_radiusX', String(asciiState.radiusX));
+          localStorage.setItem('ascii_radiusY', String(asciiState.radiusY));
+          localStorage.setItem('ascii_ditherDensity', String(asciiState.ditherDensity));
+          localStorage.setItem('ascii_breathSpeed', String(asciiState.breathSpeed));
+          localStorage.setItem('ascii_shearAmt', String(asciiState.shearAmt));
+          localStorage.setItem('ascii_maxOpacity', String(asciiState.maxOpacity));
+          localStorage.setItem('ascii_dustCount', String(asciiState.dustCount));
+        } catch(e) {}
+      };
+
+      cCount?.addEventListener('input', (e) => { asciiState.count = parseInt((e.target as HTMLInputElement).value, 10); syncUI(); dispatch(); });
+      cRadX?.addEventListener('input', (e) => { asciiState.radiusX = parseInt((e.target as HTMLInputElement).value, 10); syncUI(); dispatch(); });
+      cRadY?.addEventListener('input', (e) => { asciiState.radiusY = parseInt((e.target as HTMLInputElement).value, 10); syncUI(); dispatch(); });
+      cDither?.addEventListener('input', (e) => { asciiState.ditherDensity = parseFloat((e.target as HTMLInputElement).value); syncUI(); dispatch(); });
+      cBreath?.addEventListener('input', (e) => { asciiState.breathSpeed = parseFloat((e.target as HTMLInputElement).value); syncUI(); dispatch(); });
+      cShear?.addEventListener('input', (e) => { asciiState.shearAmt = parseInt((e.target as HTMLInputElement).value, 10); syncUI(); dispatch(); });
+      cOpacity?.addEventListener('input', (e) => { asciiState.maxOpacity = parseFloat((e.target as HTMLInputElement).value); syncUI(); dispatch(); });
+      cDust?.addEventListener('input', (e) => { asciiState.dustCount = parseInt((e.target as HTMLInputElement).value, 10); syncUI(); dispatch(); });
+
+      btnReset?.addEventListener('click', () => {
+        asciiState.count = 65;
+        asciiState.radiusX = 8;
+        asciiState.radiusY = 28;
+        asciiState.ditherDensity = 1.7;
+        asciiState.breathSpeed = 1.0;
+        asciiState.shearAmt = 35;
+        asciiState.maxOpacity = 0.20;
+        asciiState.dustCount = 40;
+        syncUI();
+        dispatch();
+      });
+
+      syncUI();
+    };
+    initAsciiDevControls();
 
     // Dither UI update & button handling
     const updateDitherMenuUI = () => {

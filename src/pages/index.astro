@@ -6,6 +6,7 @@ import ActionButton from "../components/ActionButton.astro";
 import ProjectTile from "../components/ProjectTile.astro";
 import HoverExpandButton from "../components/HoverExpandButton.astro";
 import EasterEggs from "../components/EasterEggs.astro";
+import AsciiParticleField from "../components/AsciiParticleField.astro";
 import { DitheringShader } from "../components/ui/dithering-shader";
 
 const rawBase = import.meta.env.BASE_URL;
@@ -138,6 +139,11 @@ const capabilities = [
 >
   <!-- page wrapper: position relative so easter eggs scatter through scroll height -->
   <div class="relative">
+    <!-- Ambient Liquid ASCII Particles drifting in the background behind all content -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
+      <AsciiParticleField class="w-full h-full opacity-60 dark:opacity-75" />
+    </div>
+
     <EasterEggs />
 
     <Hero firstName="yovan" middleName="gunardio" lastName="darmawan" />

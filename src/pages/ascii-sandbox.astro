@@ -1,0 +1,392 @@
+---
+import RootLayout from '../layouts/RootLayout.astro';
+---
+
+<RootLayout
+  title="Ajax Harness ASCII Field | Controls"
+  description="Interactive tuner for dithered ASCII fluid particles"
+  noindex={true}
+>
+  <div style="position: relative; width: 100vw; height: 100vh; background-color: #1a1a1c; overflow: hidden; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%);">
+    <canvas id="ascii-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block;"></canvas>
+
+    <!-- Floating HUD Controller -->
+    <div id="ascii-controls-panel" class="absolute top-4 right-4 z-50 w-72 bg-neutral-900/85 backdrop-blur-md border border-neutral-800 rounded-lg shadow-2xl p-4 text-xs font-mono text-neutral-300 select-none space-y-3.5 transition-opacity duration-200">
+      <div class="flex items-center justify-between border-b border-neutral-800 pb-2">
+        <span class="font-bold text-neutral-100 uppercase tracking-wider">// FLUID ASCII TUNER</span>
+        <button id="toggle-panel-btn" class="text-neutral-500 hover:text-white transition-colors cursor-pointer text-[10px]">_HIDE</button>
+      </div>
+
+      <!-- Control: Island Count -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-[11px]">
+          <span class="text-neutral-400">ISLAND_COUNT</span>
+          <span id="val-count" class="text-emerald-400 font-semibold">65</span>
+        </div>
+        <input type="range" id="ctrl-count" min="15" max="150" step="5" value="65" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg appearance-none" />
+      </div>
+
+      <!-- Control: Droplet Width (Radius X) -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-[11px]">
+          <span class="text-neutral-400">DROPLET_WIDTH (X)</span>
+          <span id="val-rad-x" class="text-emerald-400 font-semibold">8px</span>
+        </div>
+        <input type="range" id="ctrl-rad-x" min="2" max="40" step="1" value="8" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg appearance-none" />
+      </div>
+
+      <!-- Control: Droplet Height (Radius Y) -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-[11px]">
+          <span class="text-neutral-400">DROPLET_HEIGHT (Y)</span>
+          <span id="val-rad-y" class="text-emerald-400 font-semibold">28px</span>
+        </div>
+        <input type="range" id="ctrl-rad-y" min="2" max="50" step="1" value="28" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg appearance-none" />
+      </div>
+
+      <!-- Control: Breath Speed -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-[11px]">
+          <span class="text-neutral-400">BREATH_SPEED</span>
+          <span id="val-breath" class="text-emerald-400 font-semibold">1.0x</span>
+        </div>
+        <input type="range" id="ctrl-breath" min="0" max="3" step="0.1" value="1.0" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg appearance-none" />
+      </div>
+
+      <!-- Control: Liquid Shear (Push/Pull Speed) -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-[11px]">
+          <span class="text-neutral-400">SLIDE_SHEAR</span>
+          <span id="val-shear" class="text-emerald-400 font-semibold">35px</span>
+        </div>
+        <input type="range" id="ctrl-shear" min="0" max="100" step="5" value="35" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg appearance-none" />
+      </div>
+
+      <!-- Control: Dither Threshold / Density -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-[11px]">
+          <span class="text-neutral-400">DITHER_DENSITY</span>
+          <span id="val-dither" class="text-emerald-400 font-semibold">1.7x</span>
+        </div>
+        <input type="range" id="ctrl-dither" min="0.6" max="2.6" step="0.1" value="1.7" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg appearance-none" />
+      </div>
+
+      <!-- Control: Opacity Intensity -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-[11px]">
+          <span class="text-neutral-400">GLYPH_OPACITY</span>
+          <span id="val-opacity" class="text-emerald-400 font-semibold">20%</span>
+        </div>
+        <input type="range" id="ctrl-opacity" min="0.05" max="1.0" step="0.05" value="0.20" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg appearance-none" />
+      </div>
+
+      <!-- Control: Ambient Dust Count -->
+      <div class="space-y-1">
+        <div class="flex justify-between text-[11px]">
+          <span class="text-neutral-400">AMBIENT_DUST</span>
+          <span id="val-dust" class="text-emerald-400 font-semibold">40</span>
+        </div>
+        <input type="range" id="ctrl-dust" min="0" max="120" step="10" value="40" class="w-full accent-emerald-500 cursor-pointer h-1.5 bg-neutral-800 rounded-lg appearance-none" />
+      </div>
+
+      <!-- Preset Reset -->
+      <div class="pt-2 border-t border-neutral-800/80 flex items-center justify-between">
+        <button id="btn-reset" class="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-[10px] cursor-pointer transition-colors">
+          RESET DEFAULTS
+        </button>
+        <span class="text-[10px] text-neutral-500">[H] TO TOGGLE</span>
+      </div>
+    </div>
+  </div>
+
+  <script is:inline>
+    (function () {
+      function run() {
+        const canvas = document.getElementById('ascii-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        let w = (canvas.width = window.innerWidth);
+        let h = (canvas.height = window.innerHeight);
+
+        window.addEventListener('resize', () => {
+          w = canvas.width = window.innerWidth;
+          h = canvas.height = window.innerHeight;
+        });
+
+        // 4x4 Ordered Bayer Matrix
+        const BAYER_4X4 = [
+          [ 0,  8,  2, 10],
+          [12,  4, 14,  6],
+          [ 3, 11,  1,  9],
+          [15,  7, 13,  5]
+        ];
+
+        const CORE_CHAR_SETS = [
+          [' ', '.', ':', ';', 'X', 'M', 'r'],
+          [' ', '.', ':', ';', '%', '8', 's', 'r'],
+          [' ', '.', ':', ';', 'h', 'A', '1', '4'],
+          [' ', '.', ':', ';', 'T', 'Y', 'B', 'h'],
+          [' ', '.', ':', ';', '1', '2', '3', 'A'],
+          [' ', '.', ':', ';', 'N', '8', 'e', '%']
+        ];
+
+        // Live Tuner Parameters
+        const params = {
+          count: 65,
+          radiusX: 8,
+          radiusY: 28,
+          breathSpeed: 1.0,
+          shearAmt: 35,
+          ditherDensity: 1.7,
+          maxOpacity: 0.20,
+          dustCount: 40
+        };
+
+        // Wire DOM Slider Controls
+        const ctrlCount = document.getElementById('ctrl-count');
+        const ctrlRadX = document.getElementById('ctrl-rad-x');
+        const ctrlRadY = document.getElementById('ctrl-rad-y');
+        const ctrlBreath = document.getElementById('ctrl-breath');
+        const ctrlShear = document.getElementById('ctrl-shear');
+        const ctrlDither = document.getElementById('ctrl-dither');
+        const ctrlOpacity = document.getElementById('ctrl-opacity');
+        const ctrlDust = document.getElementById('ctrl-dust');
+        const btnReset = document.getElementById('btn-reset');
+        const toggleBtn = document.getElementById('toggle-panel-btn');
+        const panel = document.getElementById('ascii-controls-panel');
+
+        function updateLabels() {
+          if (document.getElementById('val-count')) document.getElementById('val-count').textContent = params.count;
+          if (document.getElementById('val-rad-x')) document.getElementById('val-rad-x').textContent = params.radiusX + 'px';
+          if (document.getElementById('val-rad-y')) document.getElementById('val-rad-y').textContent = params.radiusY + 'px';
+          if (document.getElementById('val-breath')) document.getElementById('val-breath').textContent = params.breathSpeed.toFixed(1) + 'x';
+          if (document.getElementById('val-shear')) document.getElementById('val-shear').textContent = params.shearAmt + 'px';
+          if (document.getElementById('val-dither')) document.getElementById('val-dither').textContent = params.ditherDensity.toFixed(1) + 'x';
+          if (document.getElementById('val-opacity')) document.getElementById('val-opacity').textContent = Math.round(params.maxOpacity * 100) + '%';
+          if (document.getElementById('val-dust')) document.getElementById('val-dust').textContent = params.dustCount;
+        }
+
+        let islands = [];
+        let specks = [];
+
+        function rebuildEntities() {
+          islands = [];
+          for (let i = 0; i < params.count; i++) {
+            const isMicro = Math.random() > 0.35;
+            islands.push({
+              homeX: Math.random() * w,
+              homeY: Math.random() * h,
+              offsetX: 0,
+              offsetY: 0,
+              pulseSpeed: (0.25 + Math.random() * 0.45),
+              pulsePhase: Math.random() * Math.PI * 2,
+              wobbleSpeed: 0.5 + Math.random() * 0.8,
+              scaleRatio: isMicro ? (0.4 + Math.random() * 0.35) : (0.85 + Math.random() * 0.65),
+              depth: 0.35 + Math.random() * 0.65,
+              charSet: CORE_CHAR_SETS[i % CORE_CHAR_SETS.length],
+              baseAlpha: 0.35 + Math.random() * 0.45
+            });
+          }
+
+          specks = [];
+          for (let s = 0; s < params.dustCount; s++) {
+            specks.push({
+              homeX: Math.random() * w,
+              homeY: Math.random() * h,
+              char: Math.random() > 0.6 ? ':' : (Math.random() > 0.3 ? '.' : ';'),
+              alpha: 0.2 + Math.random() * 0.35,
+              depth: 0.2 + Math.random() * 0.8
+            });
+          }
+        }
+
+        rebuildEntities();
+
+        // Listeners for live adjustment
+        ctrlCount?.addEventListener('input', (e) => {
+          params.count = parseInt(e.target.value, 10);
+          updateLabels();
+          rebuildEntities();
+        });
+        ctrlRadX?.addEventListener('input', (e) => {
+          params.radiusX = parseInt(e.target.value, 10);
+          updateLabels();
+        });
+        ctrlRadY?.addEventListener('input', (e) => {
+          params.radiusY = parseInt(e.target.value, 10);
+          updateLabels();
+        });
+        ctrlBreath?.addEventListener('input', (e) => {
+          params.breathSpeed = parseFloat(e.target.value);
+          updateLabels();
+        });
+        ctrlShear?.addEventListener('input', (e) => {
+          params.shearAmt = parseInt(e.target.value, 10);
+          updateLabels();
+        });
+        ctrlDither?.addEventListener('input', (e) => {
+          params.ditherDensity = parseFloat(e.target.value);
+          updateLabels();
+        });
+        ctrlOpacity?.addEventListener('input', (e) => {
+          params.maxOpacity = parseFloat(e.target.value);
+          updateLabels();
+        });
+        ctrlDust?.addEventListener('input', (e) => {
+          params.dustCount = parseInt(e.target.value, 10);
+          updateLabels();
+          rebuildEntities();
+        });
+
+        btnReset?.addEventListener('click', () => {
+          params.count = 65; ctrlCount.value = 65;
+          params.radiusX = 8; ctrlRadX.value = 8;
+          params.radiusY = 28; ctrlRadY.value = 28;
+          params.breathSpeed = 1.0; ctrlBreath.value = 1.0;
+          params.shearAmt = 35; ctrlShear.value = 35;
+          params.ditherDensity = 1.7; ctrlDither.value = 1.7;
+          params.maxOpacity = 0.20; ctrlOpacity.value = 0.20;
+          params.dustCount = 40; ctrlDust.value = 40;
+          updateLabels();
+          rebuildEntities();
+        });
+
+        let panelVisible = true;
+        function toggleHUD() {
+          panelVisible = !panelVisible;
+          if (panel) {
+            panel.style.display = panelVisible ? 'block' : 'none';
+          }
+        }
+        toggleBtn?.addEventListener('click', toggleHUD);
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'h' || e.key === 'H') toggleHUD();
+        });
+
+        const cellW = 8;
+        const cellH = 13;
+        let last = performance.now();
+
+        function animate(t) {
+          const nowSec = t * 0.001;
+          const dt = Math.min((t - last) / 1000, 0.05);
+          last = t;
+
+          ctx.fillStyle = '#1a1a1c';
+          ctx.fillRect(0, 0, w, h);
+
+          // Liquid shear with live slider amount
+          const shearX = Math.sin(nowSec * 0.3) * params.shearAmt;
+          const shearY = Math.cos(nowSec * 0.22) * (params.shearAmt * 0.5);
+
+          ctx.font = '10.5px Consolas, "Courier New", monospace';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          // Ambient Dust
+          for (let s = 0; s < specks.length; s++) {
+            const spk = specks[s];
+            let sx = spk.homeX + shearX * spk.depth;
+            let sy = spk.homeY + shearY * spk.depth;
+            if (sx < 0) sx = (sx % w) + w;
+            if (sx > w) sx = sx % w;
+            if (sy < 0) sy = (sy % h) + h;
+            if (sy > h) sy = sy % h;
+
+            const alpha = spk.alpha * (params.maxOpacity / 0.75);
+            ctx.fillStyle = `rgba(185, 185, 195, ${alpha.toFixed(2)})`;
+            ctx.fillText(spk.char, Math.round(sx), Math.round(sy));
+          }
+
+          // Dithered Islands
+          for (let i = 0; i < islands.length; i++) {
+            const isl = islands[i];
+
+            const targetX = shearX * isl.depth;
+            const targetY = shearY * isl.depth;
+            isl.offsetX += (targetX - isl.offsetX) * (1.2 * dt);
+            isl.offsetY += (targetY - isl.offsetY) * (1.2 * dt);
+
+            let cx = isl.homeX + isl.offsetX;
+            let cy = isl.homeY + isl.offsetY;
+
+            if (cx < -40) { isl.homeX += w + 80; cx += w + 80; }
+            if (cx > w + 40) { isl.homeX -= w + 80; cx -= w + 80; }
+            if (cy < -40) { isl.homeY += h + 80; cy += h + 80; }
+            if (cy > h + 40) { isl.homeY -= h + 80; cy -= h + 80; }
+
+            const breath = 0.5 + 0.5 * Math.sin(nowSec * (isl.pulseSpeed * params.breathSpeed) + isl.pulsePhase);
+            const scale = isl.scaleRatio * (0.2 + breath * 0.8);
+            const currentRx = params.radiusX * scale;
+            const currentRy = params.radiusY * scale;
+
+            const spanCols = Math.ceil((currentRx * 1.6) / cellW);
+            const spanRows = Math.ceil((currentRy * 1.6) / cellH);
+
+            const centerCol = Math.round(cx / cellW);
+            const centerRow = Math.round(cy / cellH);
+
+            const chars = isl.charSet;
+
+            for (let dy = -spanRows; dy <= spanRows; dy++) {
+              const gridY = centerRow + dy;
+              const py = gridY * cellH;
+              const dY = (py - cy);
+
+              for (let dx = -spanCols; dx <= spanCols; dx++) {
+                const gridX = centerCol + dx;
+                const px = gridX * cellW;
+                const dX = px - cx;
+
+                // Elliptical normalized distance calculation
+                const normX = dX / Math.max(1, currentRx);
+                const normY = dY / Math.max(1, currentRy);
+                const distSq = normX * normX + normY * normY;
+
+                if (distSq > 1.8) continue;
+
+                const angle = Math.atan2(dY, dX);
+                const wobble = Math.sin(angle * 3 + nowSec * isl.wobbleSpeed + i) * 0.15;
+                const effectiveDist = Math.sqrt(distSq) / (1 + wobble);
+
+                if (effectiveDist <= 1.0) {
+                  const rawDensity = 1.0 - effectiveDist;
+
+                  const bayerX = ((gridX % 4) + 4) % 4;
+                  const bayerY = ((gridY % 4) + 4) % 4;
+                  const ditherThresh = BAYER_4X4[bayerY][bayerX] / 16.0;
+
+                  const ditherVal = rawDensity * params.ditherDensity - (ditherThresh * 0.4);
+
+                  if (ditherVal > 0.08) {
+                    const idx = Math.min(
+                      chars.length - 1,
+                      Math.max(1, Math.floor(ditherVal * (chars.length - 1)))
+                    );
+                    const ch = chars[idx];
+
+                    if (ch !== ' ') {
+                      const alpha = Math.min(params.maxOpacity, isl.baseAlpha * (0.35 + ditherVal * 0.65) * (params.maxOpacity / 0.75));
+                      ctx.fillStyle = `rgba(205, 205, 215, ${alpha.toFixed(2)})`;
+                      ctx.fillText(ch, px, py);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+      }
+
+      run();
+      window.addEventListener('DOMContentLoaded', run);
+      document.addEventListener('astro:page-load', run);
+    })();
+  </script>
+</RootLayout>

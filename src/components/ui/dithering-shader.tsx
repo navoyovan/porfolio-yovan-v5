@@ -60,7 +60,7 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
     return 0; // Default: Cyber Wave
   });
 
-  // Default: Directional Wave (index 0)
+  // Default: Radial Halo (index 1) - concentric glow behind portrait
   const [activePatternIndex, setActivePatternIndex] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("dither_pattern_idx");
@@ -71,7 +71,7 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
         }
       }
     }
-    return 0; // Default: Directional Wave
+    return 1; // Default: Radial Halo
   });
 
   // Default: 1px scale
@@ -287,10 +287,10 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
 
     let animationFrameId: number;
     let isVisible = true;
-    const clock = new THREE.Clock();
+    const startTime = performance.now();
 
     const renderFrame = () => {
-      material.uniforms.uTime.value = clock.getElapsedTime();
+      material.uniforms.uTime.value = (performance.now() - startTime) * 0.001;
       renderer.render(scene, camera);
     };
 
