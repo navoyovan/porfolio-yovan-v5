@@ -1,7 +1,7 @@
 ---
 // ActionButton.astro - Action Button Primitive
 interface Props {
-  variant?: 'primary' | 'cta' | 'secondary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'primary-neutral' | 'cta' | 'secondary' | 'ghost' | 'danger';
   size?: 'micro' | 'sm' | 'md' | 'lg';
   rounded?: boolean;
   disabled?: boolean;
@@ -42,6 +42,7 @@ const baseStyles = 'uppercase inline-flex items-center justify-center leading-no
 const variantStyles = {
   cta: "font-heading font-bold bg-[var(--color-accent,#52FF1A)] text-black animate-kiosk-pulse hover:bg-[var(--color-accent-hover,#42e012)] hover:shadow-[0_0_20px_color-mix(in_srgb,var(--color-accent,#52FF1A)_35%,transparent)] active:opacity-90 border-none",
   primary: "font-heading font-bold bg-neutral-950 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200 active:scale-[0.98] border-none",
+  'primary-neutral': "font-heading font-bold bg-neutral-200/80 text-neutral-950 hover:bg-neutral-300/80 border border-neutral-300 dark:bg-neutral-900 dark:text-neutral-100 dark:border-neutral-800 dark:hover:bg-neutral-800 dark:hover:border-neutral-700 active:scale-[0.98]",
   secondary: isMicro
     ? "font-heading font-bold bg-transparent text-neutral-900 dark:text-neutral-100 border border-neutral-300 dark:border-neutral-700 hover:border-neutral-950 dark:hover:border-white hover:bg-neutral-900/5 dark:hover:bg-white/10 active:scale-[0.98]"
     : "font-heading font-bold bg-transparent text-neutral-900 dark:text-neutral-100 border border-dashed border-neutral-400 dark:border-neutral-600 hover:border-solid hover:border-neutral-950 dark:hover:border-white hover:bg-neutral-900/5 dark:hover:bg-white/10 active:scale-[0.98]",

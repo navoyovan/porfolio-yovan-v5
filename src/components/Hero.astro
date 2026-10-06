@@ -32,7 +32,7 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
     <!-- Main Column: Title & Actions -->
     <div class="max-w-2xl flex flex-col items-start w-full pointer-events-auto">
       <h1
-        class="hero-title-group select-none flex flex-col leading-none pl-7 sm:pl-0 m-0 p-0"
+        class="hero-title-group select-none flex flex-col leading-none m-0 p-0"
         aria-label={`${firstName} ${middleName} ${lastName}`}
       >
         <!-- Row 1: < yovan -->
@@ -44,8 +44,8 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
         >
           <span
             id="hero-bracket-l"
-            class="hero-h1-bracket-l absolute right-full mr-[0.1em] select-none text-neutral-950 dark:text-white"
-            style="bottom: 0.15em; opacity: 0.6; font-weight: 900;">&lt;</span
+            class="hero-h1-bracket-l inline-block select-none text-neutral-950 dark:text-white mr-1.5 sm:mr-[0.1em] sm:absolute sm:right-full sm:bottom-[0.15em]"
+            style="opacity: 0.6; font-weight: 900;">&lt;</span
           >
           <span id="hero-title-text">{firstName}</span>
         </div>
@@ -89,7 +89,7 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
       </h1>
 
       <!-- Subtitle & Quick Action Pills -->
-      <div class="mt-6 sm:mt-10 max-w-xl space-y-6">
+      <div class="mt-6 sm:mt-10 max-w-xl space-y-6 w-full">
         <p
           data-en="Software Engineer & systems builder turning ideas into working products; from landing pages and web apps to touchscreen kiosks and the hardware behind them."
           data-id="Software Engineer & systems builder yang membuat imajinasi jadi produk nyata; mulai dari landing page, web app sampai touchscreen kiosk dan hardware pendukungnya."
@@ -158,7 +158,7 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
             class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto"
           >
             <ActionButton
-              variant="primary"
+              variant="primary-neutral"
               size="md"
               href="#projects"
               class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
