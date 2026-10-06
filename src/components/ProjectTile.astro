@@ -459,8 +459,8 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
   }
 
   .tile-marquee-wrapper.is-overflowing {
-    mask-image: linear-gradient(to right, black calc(100% - 24px), transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black calc(100% - 24px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%);
   }
 
   .tile-marquee-track {
@@ -468,12 +468,6 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
     align-items: center;
     width: max-content;
     will-change: transform;
-  }
-
-  .tile-marquee-wrapper:hover .tile-marquee-track,
-  .group:hover .tile-marquee-track,
-  .tile-marquee-wrapper:focus-within .tile-marquee-track {
-    animation-play-state: paused !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -545,8 +539,42 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
         track.style.animationDuration = `${duration}s`;
         track.style.animationTimingFunction = "linear";
         track.style.animationIterationCount = "infinite";
+
+        const trigger = wrapper.closest(".group") || wrapper;
+        if (!(trigger as any)._hasTileMarqueeHover) {
+          (trigger as any)._hasTileMarqueeHover = true;
+          const slowDown = () => easeMarqueeRate(track, 0.22, 600);
+          const speedUp = () => easeMarqueeRate(track, 1.0, 600);
+          trigger.addEventListener("mouseenter", slowDown);
+          trigger.addEventListener("mouseleave", speedUp);
+          trigger.addEventListener("focusin", slowDown);
+          trigger.addEventListener("focusout", speedUp);
+        }
       }
     });
+  }
+
+  function easeMarqueeRate(track: HTMLElement, targetRate: number, durationMs = 600) {
+    const anims = track.getAnimations();
+    if (!anims.length) return;
+    const anim = anims[0];
+    const startRate = anim.playbackRate;
+    const startTime = performance.now();
+    const trackAny = track as any;
+    if (trackAny._rateRaf) cancelAnimationFrame(trackAny._rateRaf);
+
+    function step(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / durationMs, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      anim.playbackRate = startRate + (targetRate - startRate) * eased;
+      if (progress < 1) {
+        trackAny._rateRaf = requestAnimationFrame(step);
+      } else {
+        trackAny._rateRaf = null;
+      }
+    }
+    trackAny._rateRaf = requestAnimationFrame(step);
   }
 
   let tileVideoObserver: IntersectionObserver | null = null;

@@ -1,0 +1,186 @@
+---
+// HoverExpandOledModal.astro - Fullscreen OLED layout showcase for HoverExpandButton
+import HoverExpandButton from "./HoverExpandButton.astro";
+---
+
+<div
+  id="hover-expand-oled-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  class="fixed inset-0 z-[9999] bg-black hidden flex-col items-center justify-center select-none cursor-default"
+>
+  <!-- Background click area to dismiss -->
+  <button
+    id="hover-expand-oled-backdrop"
+    type="button"
+    class="absolute inset-0 w-full h-full bg-transparent border-0 p-0 cursor-default focus:outline-none"
+    aria-label="Dismiss fullscreen showcase"
+    tabindex="-1"
+  ></button>
+
+  <!-- Dismiss Hint (Subtle corner badge) -->
+  <div class="absolute top-6 right-6 z-10">
+    <button
+      id="hover-expand-oled-close"
+      type="button"
+      class="font-mono text-xs tracking-wider text-neutral-600 hover:text-white transition-colors cursor-pointer p-2 bg-transparent border-0"
+    >
+      [ESC]
+    </button>
+  </div>
+
+  <!-- Showcase Center Stage: Full Row Layout with Reserved Space -->
+  <div class="relative z-10 w-full max-w-5xl px-6 sm:px-10 flex flex-col items-center justify-center">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8 w-full justify-items-center">
+      {/* 01: Expand Left Dashed */}
+      <div class="flex flex-col gap-3 min-w-[140px] w-full">
+        <div class="flex items-center h-12">
+          <HoverExpandButton
+            label="ADDE NOVUM"
+            variant="dashed"
+            size="md"
+            expandDirection="left"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-mono text-xs font-semibold text-white">
+            Expand Left Dashed
+          </span>
+          <span class="font-mono text-[11px] text-neutral-500">
+            expandDirection="left" • 44px dashed
+          </span>
+        </div>
+      </div>
+
+      {/* 02: Expand Right Solid */}
+      <div class="flex flex-col gap-3 min-w-[140px] w-full">
+        <div class="flex items-center h-12">
+          <HoverExpandButton
+            label="FILTRA TABULAM"
+            variant="solid"
+            size="md"
+            expandDirection="right"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-mono text-xs font-semibold text-white">
+            Expand Right Solid
+          </span>
+          <span class="font-mono text-[11px] text-neutral-500">
+            expandDirection="right" • 44px solid
+          </span>
+        </div>
+      </div>
+
+      {/* 03: Danger Action */}
+      <div class="flex flex-col gap-3 min-w-[140px] w-full">
+        <div class="flex items-center h-12">
+          <HoverExpandButton
+            label="PURGA OMNIA"
+            variant="danger"
+            size="md"
+            expandDirection="right"
+          >
+            <svg slot="icon" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+            </svg>
+          </HoverExpandButton>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-mono text-xs font-semibold text-red-500">
+            Danger Action
+          </span>
+          <span class="font-mono text-[11px] text-neutral-500">
+            variant="danger" • icon slot
+          </span>
+        </div>
+      </div>
+
+      {/* 04: Micro Expand CTA */}
+      <div class="flex flex-col gap-3 min-w-[120px] w-full">
+        <div class="flex items-center h-12">
+          <HoverExpandButton
+            label="APPARATUS"
+            variant="cta"
+            size="micro"
+            expandDirection="left"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-mono text-xs font-semibold text-white">
+            Micro Expand CTA
+          </span>
+          <span class="font-mono text-[11px] text-neutral-500">
+            size="micro" • 32px cta
+          </span>
+        </div>
+      </div>
+
+      {/* 05: Micro Toggled Active */}
+      <div class="flex flex-col gap-3 min-w-[120px] w-full">
+        <div class="flex items-center h-12">
+          <HoverExpandButton
+            label="CLAUSUS"
+            variant="solid"
+            active={true}
+            size="micro"
+            expandDirection="right"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-mono text-xs font-semibold text-white">
+            Micro Toggled Active
+          </span>
+          <span class="font-mono text-[11px] text-neutral-500">
+            size="micro" • active=true
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const initHoverExpandOled = () => {
+    const modal = document.getElementById("hover-expand-oled-modal");
+    const closeBtn = document.getElementById("hover-expand-oled-close");
+    const backdrop = document.getElementById("hover-expand-oled-backdrop");
+
+    if (!modal) return;
+
+    const openModal = () => {
+      modal.style.display = "flex";
+      modal.classList.remove("hidden");
+      modal.setAttribute("aria-hidden", "false");
+      document.documentElement.style.overflow = "hidden";
+    };
+
+    const closeModal = () => {
+      modal.style.display = "none";
+      modal.classList.add("hidden");
+      modal.setAttribute("aria-hidden", "true");
+      document.documentElement.style.overflow = "";
+    };
+
+    closeBtn?.addEventListener("click", closeModal);
+    backdrop?.addEventListener("click", closeModal);
+
+    // Escape key listener
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.style.display === "flex") {
+        closeModal();
+      }
+    });
+
+    // Custom event listener triggered from component library input
+    window.addEventListener("open-hoverexpand-oled", openModal);
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initHoverExpandOled);
+  } else {
+    initHoverExpandOled();
+  }
+  document.addEventListener("astro:page-load", initHoverExpandOled);
+</script>

@@ -305,8 +305,8 @@ const collectionSchema = {
   }
 
   .index-marquee-wrapper.is-overflowing {
-    -webkit-mask-image: linear-gradient(to right, black calc(100% - 36px), transparent 100%);
-    mask-image: linear-gradient(to right, black calc(100% - 36px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 36px, black calc(100% - 36px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 36px, black calc(100% - 36px), transparent 100%);
   }
 
   .index-marquee-track {
@@ -314,12 +314,6 @@ const collectionSchema = {
     align-items: center;
     width: max-content;
     will-change: transform;
-  }
-
-  .index-marquee-wrapper:hover .index-marquee-track,
-  .group:hover .index-marquee-track,
-  .index-marquee-wrapper:focus-within .index-marquee-track {
-    animation-play-state: paused !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -376,8 +370,55 @@ const collectionSchema = {
         track.style.animationDuration = `${duration}s`;
         track.style.animationTimingFunction = 'linear';
         track.style.animationIterationCount = 'infinite';
+
+        const trigger = wrapper.closest('.group') || wrapper;
+        if (!(trigger as any)._marqueeTracks) {
+          (trigger as any)._marqueeTracks = [];
+          const slowDown = () => {
+            ((trigger as any)._marqueeTracks || []).forEach((t: HTMLElement) => easeIndexMarqueeRate(t, 0.22, 600));
+          };
+          const speedUp = () => {
+            ((trigger as any)._marqueeTracks || []).forEach((t: HTMLElement) => easeIndexMarqueeRate(t, 1.0, 600));
+          };
+          trigger.addEventListener('mouseenter', slowDown);
+          trigger.addEventListener('mouseleave', speedUp);
+          trigger.addEventListener('focusin', slowDown);
+          trigger.addEventListener('focusout', speedUp);
+        }
+        if (!(trigger as any)._marqueeTracks.includes(track)) {
+          (trigger as any)._marqueeTracks.push(track);
+        }
+
+        if (!(wrapper as any)._hasWrapperHover) {
+          (wrapper as any)._hasWrapperHover = true;
+          wrapper.addEventListener('mouseenter', () => easeIndexMarqueeRate(track, 0.22, 600));
+          wrapper.addEventListener('mouseleave', () => easeIndexMarqueeRate(track, 1.0, 600));
+        }
       }
     });
+  };
+
+  const easeIndexMarqueeRate = (track: HTMLElement, targetRate: number, durationMs = 600) => {
+    const anims = track.getAnimations();
+    if (!anims.length) return;
+    const anim = anims[0];
+    const startRate = anim.playbackRate;
+    const startTime = performance.now();
+    const trackAny = track as any;
+    if (trackAny._rateRaf) cancelAnimationFrame(trackAny._rateRaf);
+
+    function step(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / durationMs, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      anim.playbackRate = startRate + (targetRate - startRate) * eased;
+      if (progress < 1) {
+        trackAny._rateRaf = requestAnimationFrame(step);
+      } else {
+        trackAny._rateRaf = null;
+      }
+    }
+    trackAny._rateRaf = requestAnimationFrame(step);
   };
 
   let lastWidth = typeof window !== 'undefined' ? window.innerWidth : 0;

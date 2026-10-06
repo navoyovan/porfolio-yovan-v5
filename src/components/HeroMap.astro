@@ -23,6 +23,31 @@ const jktTimeFormatter = new Intl.DateTimeFormat('en-GB', {
   hour12: false,
 });
 const initialTime = jktTimeFormatter.format(new Date());
+
+const mapThemes = [
+  { id: 'default', label: 'DEFAULT', code: 'AUTO' },
+  { id: 'voyager', label: 'VOYAGER', code: 'CART' },
+  { id: 'dark', label: 'DARK MATTER', code: 'DARK' },
+  { id: 'light', label: 'POSITRON', code: 'LITE' },
+  { id: 'osm', label: 'OPENSTREETMAP', code: 'OSM' },
+  { id: 'satellite', label: 'SATELLITE', code: 'ESRI' },
+];
+
+const fontPresets = [
+  { id: 'default', label: 'DEFAULT (SYNE)', code: 'SYNE' },
+  { id: 'machina', label: 'NEUE MACHINA', code: 'MACH' },
+  { id: 'swiss', label: 'SWISS MODERN', code: 'JAKARTA' },
+  { id: 'brutalist', label: 'EDITORIAL BRUTAL', code: 'CLASH' },
+  { id: 'mono', label: 'TECH MONOSPACE', code: 'GROTESK' },
+  { id: 'serif', label: 'ARCHIVAL SERIF', code: 'FRAUNCES' },
+  { id: 'industrial', label: 'NEO INDUSTRIAL', code: 'OSWALD' },
+];
+
+const scrimPresets = [
+  { id: 'none', label: 'OFF (RAW MAP)', code: 'NONE' },
+  { id: 'subtle', label: 'WHISPER (RECOMMENDED)', code: 'SOFT' },
+  { id: 'full', label: 'ORIGINAL (FULL)', code: 'FULL' },
+];
 ---
 
 <div
@@ -77,13 +102,131 @@ const initialTime = jktTimeFormatter.format(new Date());
     </div>
   </button>
 
-  <!-- Radial & Linear Gradient Scrims (Minimal left edge protection for typography, maximum map exposure) -->
-  <div
-    class="absolute inset-y-0 left-0 w-full sm:w-[42%] lg:w-[32%] bg-gradient-to-r from-[#fcfbf9]/80 via-[#fcfbf9]/30 to-transparent dark:from-[#0e0e0e]/85 dark:via-[#0e0e0e]/30 dark:to-transparent pointer-events-none z-[1]"
-  ></div>
-  <div
-    class="absolute inset-0 bg-gradient-to-b from-[#fcfbf9]/20 via-transparent to-[#fcfbf9] dark:from-[#0e0e0e]/20 dark:via-transparent dark:to-[#0e0e0e] pointer-events-none z-[1]"
-  ></div>
+  <!-- Dynamic Gradient Scrim Overlays -->
+  <div id="hero-map-scrim-container" class="pointer-events-none select-none z-[1]">
+    <!-- Subtle Scrim (Whisper) -->
+    <div id="scrim-subtle" class="pointer-events-none">
+      <div class="absolute inset-y-0 left-0 w-full sm:w-[36%] lg:w-[28%] bg-gradient-to-r from-[#fcfbf9]/60 via-[#fcfbf9]/20 to-transparent dark:from-[#0e0e0e]/65 dark:via-[#0e0e0e]/20 dark:to-transparent pointer-events-none"></div>
+      <div class="absolute bottom-0 inset-x-0 h-24 sm:h-32 bg-gradient-to-t from-[#fcfbf9] to-transparent dark:from-[#0e0e0e] dark:to-transparent pointer-events-none"></div>
+    </div>
+
+    <!-- Full Scrim (Original) -->
+    <div id="scrim-full" class="hidden pointer-events-none">
+      <div class="absolute inset-y-0 left-0 w-full sm:w-[42%] lg:w-[32%] bg-gradient-to-r from-[#fcfbf9]/80 via-[#fcfbf9]/30 to-transparent dark:from-[#0e0e0e]/85 dark:via-[#0e0e0e]/30 dark:to-transparent pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-[#fcfbf9]/20 via-transparent to-[#fcfbf9] dark:from-[#0e0e0e]/20 dark:via-transparent dark:to-[#0e0e0e] pointer-events-none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Dev Settings Dropdown (reusing exact LangSwitcher / Navbar dropdown style) -->
+<div
+  id="hero-map-dev-menu"
+  role="menu"
+  aria-label="Dev Options"
+  class="fixed top-20 right-6 min-w-[240px] bg-[#fcfbf9]/95 dark:bg-[#0e0e0e]/95 backdrop-blur-xl border border-neutral-200/90 dark:border-neutral-800/90 rounded-lg shadow-xl dark:shadow-2xl p-1.5 z-50 opacity-0 -translate-y-2 scale-95 pointer-events-none transition-[opacity,transform] duration-200 ease-out origin-top flex flex-col gap-1 select-none"
+  style="-webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);"
+>
+  <div class="px-2 pt-1 pb-1.5 border-b border-neutral-200/60 dark:border-neutral-800/60 flex items-center justify-between gap-2">
+    <div class="flex items-center gap-1 bg-neutral-200/50 dark:bg-neutral-800/60 p-0.5 rounded">
+      <button
+        type="button"
+        id="dev-tab-map-btn"
+        class="dev-tab-btn px-2 py-0.5 text-[10px] font-mono rounded font-semibold text-neutral-950 dark:text-white bg-white dark:bg-neutral-900 shadow-sm transition-all cursor-pointer border-0"
+      >
+        MAP
+      </button>
+      <button
+        type="button"
+        id="dev-tab-fonts-btn"
+        class="dev-tab-btn px-2 py-0.5 text-[10px] font-mono rounded font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all cursor-pointer border-0 bg-transparent"
+      >
+        FONTS
+      </button>
+      <button
+        type="button"
+        id="dev-tab-scrim-btn"
+        class="dev-tab-btn px-2 py-0.5 text-[10px] font-mono rounded font-semibold text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-all cursor-pointer border-0 bg-transparent"
+      >
+        SCRIM
+      </button>
+    </div>
+    <kbd class="px-1.5 py-0.5 text-[9px] font-mono rounded bg-neutral-200/60 dark:bg-neutral-800/80 text-neutral-500">`</kbd>
+  </div>
+
+  <!-- Map Themes Panel -->
+  <div id="dev-panel-map" class="flex flex-col gap-0.5">
+    <div class="px-3 pt-1 pb-0.5 text-[9px] font-mono uppercase tracking-wider text-neutral-400 dark:text-neutral-500 select-none">
+      // MAP THEME
+    </div>
+    <ul class="flex flex-col gap-0.5 list-none m-0 p-0" role="none">
+      {mapThemes.map((t) => (
+        <li role="none">
+          <button
+            type="button"
+            role="menuitem"
+            data-theme={t.id}
+            data-code={t.code}
+            class="map-theme-btn group flex items-center justify-between px-3 py-2 text-xs font-heading font-bold uppercase tracking-tight text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900/80 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
+          >
+            <span class="font-heading font-bold uppercase tracking-tight">{t.label}</span>
+            <span class="map-theme-indicator text-[10px] font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
+              {t.code}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Font Presets Panel -->
+  <div id="dev-panel-fonts" class="hidden flex-col gap-0.5">
+    <div class="px-3 pt-1 pb-0.5 text-[9px] font-mono uppercase tracking-wider text-neutral-400 dark:text-neutral-500 select-none">
+      // PRIMARY FONTS
+    </div>
+    <ul class="flex flex-col gap-0.5 list-none m-0 p-0" role="none">
+      {fontPresets.map((f) => (
+        <li role="none">
+          <button
+            type="button"
+            role="menuitem"
+            data-font={f.id}
+            data-code={f.code}
+            class="font-preset-btn group flex items-center justify-between px-3 py-2 text-xs font-heading font-bold uppercase tracking-tight text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900/80 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
+          >
+            <span class="font-heading font-bold uppercase tracking-tight">{f.label}</span>
+            <span class="font-preset-indicator text-[10px] font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
+              {f.code}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <!-- Scrim Presets Panel -->
+  <div id="dev-panel-scrim" class="hidden flex-col gap-0.5">
+    <div class="px-3 pt-1 pb-0.5 text-[9px] font-mono uppercase tracking-wider text-neutral-400 dark:text-neutral-500 select-none">
+      // GRADIENT SCRIM OVERLAY
+    </div>
+    <ul class="flex flex-col gap-0.5 list-none m-0 p-0" role="none">
+      {scrimPresets.map((s) => (
+        <li role="none">
+          <button
+            type="button"
+            role="menuitem"
+            data-scrim={s.id}
+            data-code={s.code}
+            class="scrim-preset-btn group flex items-center justify-between px-3 py-2 text-xs font-heading font-bold uppercase tracking-tight text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900/80 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
+          >
+            <span class="font-heading font-bold uppercase tracking-tight">{s.label}</span>
+            <span class="scrim-preset-indicator text-[10px] font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
+              {s.code}
+            </span>
+          </button>
+        </li>
+      ))}
+    </ul>
+  </div>
 </div>
 
 <style is:global>
@@ -184,21 +327,47 @@ const initialTime = jktTimeFormatter.format(new Date());
 
       let currentBaseLayer: any = null;
 
-      const updateTileTheme = () => {
+      const getThemeTileLayer = (theme: string) => {
         const isDark = document.documentElement.classList.contains('dark');
-        const baseUrl = isDark ? darkBaseUrl : lightBaseUrl;
+        switch (theme) {
+          case 'voyager':
+            return L.tileLayer(
+              `https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png${keyParam}`,
+              { subdomains: 'abcd', maxZoom: 19 }
+            );
+          case 'dark':
+            return L.tileLayer(darkBaseUrl, { subdomains: 'abcd', maxZoom: 19 });
+          case 'light':
+            return L.tileLayer(lightBaseUrl, { subdomains: 'abcd', maxZoom: 19 });
+          case 'osm':
+            return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              subdomains: 'abc',
+              maxZoom: 19,
+            });
+          case 'satellite':
+            return L.tileLayer(
+              'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+              { maxZoom: 19 }
+            );
+          case 'default':
+          default:
+            return L.tileLayer(isDark ? darkBaseUrl : lightBaseUrl, {
+              subdomains: 'abcd',
+              maxZoom: 19,
+            });
+        }
+      };
 
+      const updateTileTheme = () => {
+        const activeTheme = localStorage.getItem('hero_map_theme') || 'default';
         if (currentBaseLayer) {
           map.removeLayer(currentBaseLayer);
         }
-
-        currentBaseLayer = L.tileLayer(baseUrl, {
-          subdomains: 'abcd',
-          maxZoom: 19,
-        }).addTo(map);
+        currentBaseLayer = getThemeTileLayer(activeTheme).addTo(map);
       };
 
       updateTileTheme();
+      window.addEventListener('portfolio:map-theme-change', updateTileTheme);
 
       // Location Toggle (Bogor <-> Jabodetabek)
       const badgeBtn = document.getElementById('hero-map-badge');
@@ -395,7 +564,235 @@ const initialTime = jktTimeFormatter.format(new Date());
     window.addEventListener('portfolio:lang-change', update);
   };
 
+  const initDevMenu = () => {
+    const devMenu = document.getElementById('hero-map-dev-menu');
+    if (!devMenu) return;
+
+    let isDevMenuOpen = false;
+    const setDevMenuState = (open: boolean) => {
+      isDevMenuOpen = open;
+      if (open) {
+        devMenu.classList.remove('opacity-0', '-translate-y-2', 'scale-95', 'pointer-events-none');
+        devMenu.classList.add('opacity-100', 'translate-y-0', 'scale-100', 'pointer-events-auto');
+      } else {
+        devMenu.classList.remove('opacity-100', 'translate-y-0', 'scale-100', 'pointer-events-auto');
+        devMenu.classList.add('opacity-0', '-translate-y-2', 'scale-95', 'pointer-events-none');
+      }
+    };
+
+    devMenu.onclick = (e) => e.stopPropagation();
+
+    // Tab switcher
+    const tabMapBtn = document.getElementById('dev-tab-map-btn');
+    const tabFontsBtn = document.getElementById('dev-tab-fonts-btn');
+    const tabScrimBtn = document.getElementById('dev-tab-scrim-btn');
+    const panelMap = document.getElementById('dev-panel-map');
+    const panelFonts = document.getElementById('dev-panel-fonts');
+    const panelScrim = document.getElementById('dev-panel-scrim');
+
+    const switchDevTab = (tab: 'map' | 'fonts' | 'scrim') => {
+      const tabs = [
+        { key: 'map', btn: tabMapBtn, panel: panelMap },
+        { key: 'fonts', btn: tabFontsBtn, panel: panelFonts },
+        { key: 'scrim', btn: tabScrimBtn, panel: panelScrim },
+      ];
+
+      tabs.forEach((t) => {
+        if (!t.btn || !t.panel) return;
+        if (t.key === tab) {
+          t.panel.classList.remove('hidden');
+          t.panel.classList.add('flex');
+          t.btn.classList.add('text-neutral-950', 'dark:text-white', 'bg-white', 'dark:bg-neutral-900', 'shadow-sm');
+          t.btn.classList.remove('text-neutral-500');
+        } else {
+          t.panel.classList.add('hidden');
+          t.panel.classList.remove('flex');
+          t.btn.classList.remove('text-neutral-950', 'dark:text-white', 'bg-white', 'dark:bg-neutral-900', 'shadow-sm');
+          t.btn.classList.add('text-neutral-500');
+        }
+      });
+    };
+
+    if (tabMapBtn) tabMapBtn.onclick = (e) => { e.stopPropagation(); switchDevTab('map'); };
+    if (tabFontsBtn) tabFontsBtn.onclick = (e) => { e.stopPropagation(); switchDevTab('fonts'); };
+    if (tabScrimBtn) tabScrimBtn.onclick = (e) => { e.stopPropagation(); switchDevTab('scrim'); };
+
+    // Map theme buttons
+    const updateMapMenuUI = () => {
+      const activeThemeKey = localStorage.getItem('hero_map_theme') || 'default';
+      const mapButtons = devMenu.querySelectorAll<HTMLButtonElement>('.map-theme-btn');
+      mapButtons.forEach((btn) => {
+        const theme = btn.getAttribute('data-theme');
+        const isSelected = theme === activeThemeKey;
+        const indicator = btn.querySelector('.map-theme-indicator');
+        if (isSelected) {
+          btn.classList.add('bg-neutral-100', 'dark:bg-neutral-900', 'text-neutral-950', 'dark:text-white');
+          btn.classList.remove('text-neutral-700', 'dark:text-neutral-300');
+          if (indicator) {
+            indicator.textContent = '✓';
+            indicator.classList.add('text-[var(--color-accent,#52FF1A)]', 'font-bold');
+          }
+        } else {
+          btn.classList.remove('bg-neutral-100', 'dark:bg-neutral-900', 'text-neutral-950', 'dark:text-white');
+          btn.classList.add('text-neutral-700', 'dark:text-neutral-300');
+          if (indicator) {
+            indicator.textContent = btn.getAttribute('data-code') || '';
+            indicator.classList.remove('text-[var(--color-accent,#52FF1A)]', 'font-bold');
+          }
+        }
+      });
+    };
+
+    const mapButtons = devMenu.querySelectorAll<HTMLButtonElement>('.map-theme-btn');
+    mapButtons.forEach((btn) => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const theme = btn.getAttribute('data-theme');
+        if (theme) {
+          localStorage.setItem('hero_map_theme', theme);
+          window.dispatchEvent(new CustomEvent('portfolio:map-theme-change', { detail: { theme } }));
+          updateMapMenuUI();
+          setDevMenuState(false);
+        }
+      };
+    });
+    updateMapMenuUI();
+
+    // Font preset buttons
+    const updateFontMenuUI = () => {
+      const currentFont = localStorage.getItem('portfolio_font_preset') || 'default';
+      const fontButtons = devMenu.querySelectorAll<HTMLButtonElement>('.font-preset-btn');
+      fontButtons.forEach((btn) => {
+        const font = btn.getAttribute('data-font');
+        const isSelected = font === currentFont;
+        const indicator = btn.querySelector('.font-preset-indicator');
+        if (isSelected) {
+          btn.classList.add('bg-neutral-100', 'dark:bg-neutral-900', 'text-neutral-950', 'dark:text-white');
+          btn.classList.remove('text-neutral-700', 'dark:text-neutral-300');
+          if (indicator) {
+            indicator.textContent = '✓';
+            indicator.classList.add('text-[var(--color-accent,#52FF1A)]', 'font-bold');
+          }
+        } else {
+          btn.classList.remove('bg-neutral-100', 'dark:bg-neutral-900', 'text-neutral-950', 'dark:text-white');
+          btn.classList.add('text-neutral-700', 'dark:text-neutral-300');
+          if (indicator) {
+            indicator.textContent = btn.getAttribute('data-code') || '';
+            indicator.classList.remove('text-[var(--color-accent,#52FF1A)]', 'font-bold');
+          }
+        }
+      });
+    };
+
+    const fontButtons = devMenu.querySelectorAll<HTMLButtonElement>('.font-preset-btn');
+    fontButtons.forEach((btn) => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const font = btn.getAttribute('data-font');
+        if (font && (window as any).__setPortfolioFont) {
+          (window as any).__setPortfolioFont(font);
+          updateFontMenuUI();
+          setDevMenuState(false);
+        }
+      };
+    });
+    updateFontMenuUI();
+    window.removeEventListener('portfolio:font-change', updateFontMenuUI);
+    window.addEventListener('portfolio:font-change', updateFontMenuUI);
+
+    // Scrim overlay preset handlers
+    const scrimSubtle = document.getElementById('scrim-subtle');
+    const scrimFull = document.getElementById('scrim-full');
+
+    const applyScrimMode = (mode: string) => {
+      if (scrimSubtle && scrimFull) {
+        if (mode === 'none') {
+          scrimSubtle.classList.add('hidden');
+          scrimFull.classList.add('hidden');
+        } else if (mode === 'full') {
+          scrimSubtle.classList.add('hidden');
+          scrimFull.classList.remove('hidden');
+        } else {
+          // Default: 'subtle'
+          scrimSubtle.classList.remove('hidden');
+          scrimFull.classList.add('hidden');
+        }
+      }
+      localStorage.setItem('hero_map_scrim', mode);
+      updateScrimMenuUI();
+    };
+
+    const updateScrimMenuUI = () => {
+      const activeScrim = localStorage.getItem('hero_map_scrim') || 'subtle';
+      const scrimButtons = devMenu.querySelectorAll<HTMLButtonElement>('.scrim-preset-btn');
+      scrimButtons.forEach((btn) => {
+        const mode = btn.getAttribute('data-scrim');
+        const isSelected = mode === activeScrim;
+        const indicator = btn.querySelector('.scrim-preset-indicator');
+        if (isSelected) {
+          btn.classList.add('bg-neutral-100', 'dark:bg-neutral-900', 'text-neutral-950', 'dark:text-white');
+          btn.classList.remove('text-neutral-700', 'dark:text-neutral-300');
+          if (indicator) {
+            indicator.textContent = '✓';
+            indicator.classList.add('text-[var(--color-accent,#52FF1A)]', 'font-bold');
+          }
+        } else {
+          btn.classList.remove('bg-neutral-100', 'dark:bg-neutral-900', 'text-neutral-950', 'dark:text-white');
+          btn.classList.add('text-neutral-700', 'dark:text-neutral-300');
+          if (indicator) {
+            indicator.textContent = btn.getAttribute('data-code') || '';
+            indicator.classList.remove('text-[var(--color-accent,#52FF1A)]', 'font-bold');
+          }
+        }
+      });
+    };
+
+    const scrimButtons = devMenu.querySelectorAll<HTMLButtonElement>('.scrim-preset-btn');
+    scrimButtons.forEach((btn) => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const mode = btn.getAttribute('data-scrim');
+        if (mode) {
+          applyScrimMode(mode);
+          setDevMenuState(false);
+        }
+      };
+    });
+
+    // Initialize scrim state from localStorage (defaults to 'subtle')
+    const savedScrim = localStorage.getItem('hero_map_scrim') || 'subtle';
+    applyScrimMode(savedScrim);
+
+    // Keyboard & click outside listeners
+    const handleDevMenuKeydown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) {
+        return;
+      }
+
+      if (e.key === '`' || e.code === 'Backquote') {
+        e.preventDefault();
+        setDevMenuState(!isDevMenuOpen);
+      } else if (e.key === 'Escape' && isDevMenuOpen) {
+        setDevMenuState(false);
+      }
+    };
+
+    if ((window as any).__devMenuKeyHandler) {
+      window.removeEventListener('keydown', (window as any).__devMenuKeyHandler);
+    }
+    (window as any).__devMenuKeyHandler = handleDevMenuKeydown;
+    window.addEventListener('keydown', handleDevMenuKeydown);
+
+    document.addEventListener('click', (e) => {
+      if (isDevMenuOpen && devMenu && !devMenu.contains(e.target as Node)) {
+        setDevMenuState(false);
+      }
+    });
+  };
+
   const scheduleInit = () => {
+    initDevMenu();
     startHeroClock();
     if ('requestIdleCallback' in window) {
       (window as any).requestIdleCallback(() => initLeafletMap(), { timeout: 1500 });
