@@ -22,6 +22,8 @@ import TrendChart from "../components/TrendChart.astro";
 import KioskTimeline from "../components/KioskTimeline.astro";
 import HoverExpandButton from "../components/HoverExpandButton.astro";
 import FrameRankChart from "../components/FrameRankChart.astro";
+import ActionButtonOledModal from "../components/ActionButtonOledModal.astro";
+import HoverExpandOledModal from "../components/HoverExpandOledModal.astro";
 
 const foundationsNav = [
   { id: "colors", label: "Color Tokens" },
@@ -64,7 +66,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   <div class="w-full flex min-h-[calc(100vh-4rem)]">
     <!-- Outer Sidebar Nav (Sticky, Outside Main Content) -->
     <aside
-      class="hidden xl:block w-64 shrink-0 border-r border-neutral-200/80 dark:border-neutral-800/80 py-8 px-0 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto"
+      class="hidden xl:block w-64 shrink-0 border-r border-neutral-200/80 dark:border-neutral-800/80 py-8 px-0 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto no-scrollbar"
     >
       <nav class="space-y-6">
         <!-- 01 // FOUNDATIONS -->
@@ -970,7 +972,9 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
             <!-- CTA Variant -->
             <div class="flex flex-col gap-4">
               <div class="flex flex-col items-start">
-                <ActionButton variant="cta">INCIPE SESSIONEM</ActionButton>
+                <ActionButton variant="cta" data-action-showcase="true"
+                  >INCIPE SESSIONEM</ActionButton
+                >
               </div>
               <div class="flex flex-col">
                 <span
@@ -3259,6 +3263,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       </section>
     </main>
   </div>
+  <ActionButtonOledModal />
+  <HoverExpandOledModal />
 </RootLayout>
 
 <script>
@@ -3569,8 +3575,55 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
         track.style.animationDuration = `${duration}s`;
         track.style.animationTimingFunction = "linear";
         track.style.animationIterationCount = "infinite";
+
+        const trigger = wrapper.closest(".group") || wrapper;
+        if (!(trigger as any)._marqueeTracks) {
+          (trigger as any)._marqueeTracks = [];
+          const slowDown = () => {
+            ((trigger as any)._marqueeTracks || []).forEach((t: HTMLElement) => easeIndexMarqueeRate(t, 0.22, 600));
+          };
+          const speedUp = () => {
+            ((trigger as any)._marqueeTracks || []).forEach((t: HTMLElement) => easeIndexMarqueeRate(t, 1.0, 600));
+          };
+          trigger.addEventListener("mouseenter", slowDown);
+          trigger.addEventListener("mouseleave", speedUp);
+          trigger.addEventListener("focusin", slowDown);
+          trigger.addEventListener("focusout", speedUp);
+        }
+        if (!(trigger as any)._marqueeTracks.includes(track)) {
+          (trigger as any)._marqueeTracks.push(track);
+        }
+
+        if (!(wrapper as any)._hasWrapperHover) {
+          (wrapper as any)._hasWrapperHover = true;
+          wrapper.addEventListener("mouseenter", () => easeIndexMarqueeRate(track, 0.22, 600));
+          wrapper.addEventListener("mouseleave", () => easeIndexMarqueeRate(track, 1.0, 600));
+        }
       }
     });
+  };
+
+  const easeIndexMarqueeRate = (track: HTMLElement, targetRate: number, durationMs = 600) => {
+    const anims = track.getAnimations();
+    if (!anims.length) return;
+    const anim = anims[0];
+    const startRate = anim.playbackRate;
+    const startTime = performance.now();
+    const trackAny = track as any;
+    if (trackAny._rateRaf) cancelAnimationFrame(trackAny._rateRaf);
+
+    function step(now: number) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / durationMs, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      anim.playbackRate = startRate + (targetRate - startRate) * eased;
+      if (progress < 1) {
+        trackAny._rateRaf = requestAnimationFrame(step);
+      } else {
+        trackAny._rateRaf = null;
+      }
+    }
+    trackAny._rateRaf = requestAnimationFrame(step);
   };
 
   let autoScrollInterval: number | null = null;
@@ -3636,12 +3689,55 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
             currentIndex = (currentIndex + 1) % autoScrollTargets.length;
             triggerTab(autoScrollTargets[currentIndex]);
           }, 2000);
+        } else if (
+          val.startsWith("actionbutton") ||
+          val.startsWith("action button") ||
+          val.startsWith("action-button")
+        ) {
+          e.preventDefault();
+          defaultInput.blur();
+          const custom = defaultInput.value.trim().replace(/^(actionbutton|action button|action-button)/i, "").trim();
+          window.dispatchEvent(new CustomEvent("open-actionbutton-oled", { detail: { text: custom || undefined } }));
+        } else if (
+          val === "hoverexpandbutton" ||
+          val === "hoverexpand" ||
+          val === "hover-expand" ||
+          val === "hover expand button" ||
+          val === "hover expand"
+        ) {
+          e.preventDefault();
+          defaultInput.blur();
+          window.dispatchEvent(new CustomEvent("open-hoverexpand-oled"));
         }
+      }
+    };
+
+    const onInput = () => {
+      const rawVal = defaultInput.value.trim();
+      const val = rawVal.toLowerCase();
+      if (
+        val === "actionbutton" ||
+        val === "action button" ||
+        val === "action-button"
+      ) {
+        defaultInput.blur();
+        window.dispatchEvent(new CustomEvent("open-actionbutton-oled"));
+      } else if (
+        val === "hoverexpandbutton" ||
+        val === "hoverexpand" ||
+        val === "hover-expand" ||
+        val === "hover expand button" ||
+        val === "hover expand"
+      ) {
+        defaultInput.blur();
+        window.dispatchEvent(new CustomEvent("open-hoverexpand-oled"));
       }
     };
 
     defaultInput.removeEventListener("keydown", onKeyDown);
     defaultInput.addEventListener("keydown", onKeyDown);
+    defaultInput.removeEventListener("input", onInput);
+    defaultInput.addEventListener("input", onInput);
   };
 
   setupComponentLibraryNav();
@@ -3688,11 +3784,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   .index-marquee-wrapper.is-overflowing {
     -webkit-mask-image: linear-gradient(
       to right,
+      transparent 0%,
+      black 36px,
       black calc(100% - 36px),
       transparent 100%
     );
     mask-image: linear-gradient(
       to right,
+      transparent 0%,
+      black 36px,
       black calc(100% - 36px),
       transparent 100%
     );
@@ -3703,12 +3803,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     align-items: center;
     width: max-content;
     will-change: transform;
-  }
-
-  .index-marquee-wrapper:hover .index-marquee-track,
-  .group:hover .index-marquee-track,
-  .index-marquee-wrapper:focus-within .index-marquee-track {
-    animation-play-state: paused !important;
   }
 
   @media (prefers-reduced-motion: reduce) {

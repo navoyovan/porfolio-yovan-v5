@@ -171,12 +171,106 @@ const { title, description, image, canonicalURL, type, keywords, schema, noindex
           updatePortfolioLang(lang);
         };
 
+        // Global Font Engine
+        const FONT_PRESETS = {
+          default: {
+            heading: "'Syne', sans-serif",
+            sans: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif",
+            cssUrl: ''
+          },
+          machina: {
+            heading: "'Neue Machina', sans-serif",
+            sans: "'Outfit', -apple-system, BlinkMacSystemFont, sans-serif",
+            cssUrl: ''
+          },
+          swiss: {
+            heading: "'Plus Jakarta Sans', sans-serif",
+            sans: "'Inter', sans-serif",
+            cssUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap'
+          },
+          brutalist: {
+            heading: "'Clash Display', sans-serif",
+            sans: "'General Sans', sans-serif",
+            cssUrl: 'https://api.fontshare.com/v2/css?f[]=clash-display@700,600&f[]=general-sans@400,500,600&display=swap'
+          },
+          mono: {
+            heading: "'Space Grotesk', sans-serif",
+            sans: "'Space Mono', monospace",
+            cssUrl: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap'
+          },
+          serif: {
+            heading: "'Fraunces', serif",
+            sans: "'Plus Jakarta Sans', sans-serif",
+            cssUrl: 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap'
+          },
+          industrial: {
+            heading: "'Oswald', sans-serif",
+            sans: "'DM Sans', sans-serif",
+            cssUrl: 'https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Oswald:wght@600;700&display=swap'
+          }
+        };
+
+        function updatePortfolioFont(fontKey) {
+          if (!fontKey || !FONT_PRESETS[fontKey]) fontKey = 'default';
+          const preset = FONT_PRESETS[fontKey];
+
+          if (preset.cssUrl && !document.querySelector(`link[href="${preset.cssUrl}"]`)) {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = preset.cssUrl;
+            document.head.appendChild(link);
+          }
+
+          let fontStyleEl = document.getElementById('portfolio-dynamic-font-css');
+          if (!fontStyleEl) {
+            fontStyleEl = document.createElement('style');
+            fontStyleEl.id = 'portfolio-dynamic-font-css';
+            document.head.appendChild(fontStyleEl);
+          }
+
+          if (fontKey === 'default') {
+            document.documentElement.style.removeProperty('--font-heading');
+            document.documentElement.style.removeProperty('--font-hero');
+            document.documentElement.style.removeProperty('--font-sans');
+            fontStyleEl.textContent = '';
+          } else {
+            document.documentElement.style.setProperty('--font-heading', preset.heading);
+            document.documentElement.style.setProperty('--font-hero', preset.heading);
+            document.documentElement.style.setProperty('--font-sans', preset.sans);
+            fontStyleEl.textContent = `
+              :root, html, body {
+                --font-heading: ${preset.heading} !important;
+                --font-hero: ${preset.heading} !important;
+                --font-sans: ${preset.sans} !important;
+              }
+              .font-heading, .font-hero, h1, h2, h3, h4, h5, h6 {
+                font-family: ${preset.heading} !important;
+              }
+              body, .font-sans {
+                font-family: ${preset.sans} !important;
+              }
+            `;
+          }
+
+          try {
+            localStorage.setItem('portfolio_font_preset', fontKey);
+          } catch(e) {}
+
+          window.dispatchEvent(new CustomEvent('portfolio:font-change', { detail: { fontKey: fontKey } }));
+        }
+
+        window.__setPortfolioFont = updatePortfolioFont;
+
         try {
           const savedHex = localStorage.getItem('portfolio_accent_hex');
           if (savedHex) updateAccentStyle(savedHex);
           const savedLang = localStorage.getItem('portfolio_lang');
           if (savedLang === 'id' || savedLang === 'en') {
             document.documentElement.lang = savedLang;
+          }
+          const savedFont = localStorage.getItem('portfolio_font_preset');
+          if (savedFont && savedFont !== 'default') {
+            updatePortfolioFont(savedFont);
           }
         } catch(e) {}
       })();
@@ -234,6 +328,17 @@ const { title, description, image, canonicalURL, type, keywords, schema, noindex
       <slot />
     </main>
     <Footer />
+    <!-- Global Bottom Progressive Blur & Gradient Vignette -->
+    <div
+      class="fixed bottom-0 inset-x-0 h-16 sm:h-20 pointer-events-none select-none z-30 overflow-hidden"
+      aria-hidden="true"
+    >
+      <div
+        class="w-full h-full bg-gradient-to-t from-[#fcfbf9]/85 via-[#fcfbf9]/40 to-transparent dark:from-[#0e0e0e]/85 dark:via-[#0e0e0e]/40 dark:to-transparent"
+        style="-webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%); mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0) 100%);"
+      >
+      </div>
+    </div>
   </body>
 </html>
 

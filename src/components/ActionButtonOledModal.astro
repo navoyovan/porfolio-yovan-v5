@@ -1,0 +1,242 @@
+---
+// ActionButtonOledModal.astro - Fullscreen OLED interactive showcase for ActionButton
+---
+
+<div
+  id="action-btn-oled-modal"
+  role="dialog"
+  aria-modal="true"
+  aria-hidden="true"
+  class="fixed inset-0 z-[9999] bg-black hidden flex-col items-center justify-center select-none cursor-default"
+>
+  <!-- Background click area to dismiss -->
+  <button
+    id="action-btn-oled-backdrop"
+    type="button"
+    class="absolute inset-0 w-full h-full bg-transparent border-0 p-0 cursor-default focus:outline-none"
+    aria-label="Dismiss fullscreen showcase"
+    tabindex="-1"
+  ></button>
+
+  <!-- Dismiss Hint (Subtle, clean corner badge) -->
+  <div class="absolute top-6 right-6 z-10">
+    <button
+      id="action-btn-oled-close"
+      type="button"
+      class="font-mono text-xs tracking-wider text-neutral-600 hover:text-white transition-colors cursor-pointer p-2 bg-transparent border-0"
+    >
+      [ESC]
+    </button>
+  </div>
+
+  <!-- Showcase Center Stage -->
+  <div class="relative z-10 flex flex-col items-center justify-center gap-5 px-4">
+    <!-- Active Stage Button (LG size) -->
+    <button
+      id="action-btn-oled-target"
+      type="button"
+      class="action-btn-physics uppercase inline-flex items-center justify-center leading-none select-none no-underline cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 font-heading font-bold rounded-none px-9 py-4 text-base sm:text-lg tracking-widest"
+    >
+      <span
+        id="action-btn-oled-label"
+        contenteditable="true"
+        spellcheck="false"
+        class="cursor-text focus:outline-none focus:ring-1 focus:ring-white/40 px-1 rounded-xs"
+        title="Click to edit label"
+      >INCIPE SESSIONEM</span>
+    </button>
+
+    <!-- Clean, Non-Brutalist Subtitle -->
+    <div
+      id="action-btn-oled-state-desc"
+      class="font-sans text-sm text-neutral-400 font-normal transition-opacity duration-200"
+    >
+      CTA (Pulse)
+    </div>
+
+    <div class="font-mono text-[11px] text-neutral-600">
+      Click text to edit label · Click button to cycle variant
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  @keyframes oled-btn-shake {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    20%, 60% {
+      transform: translateX(-5px);
+    }
+    40%, 80% {
+      transform: translateX(5px);
+    }
+  }
+
+  .oled-btn-shake {
+    animation: oled-btn-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  .action-btn-physics {
+    transition:
+      transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s,
+      opacity 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .action-btn-physics:active {
+    transform: scale(0.95);
+    transition: none !important;
+  }
+</style>
+
+<script>
+  const initActionButtonOled = () => {
+    const modal = document.getElementById("action-btn-oled-modal");
+    const closeBtn = document.getElementById("action-btn-oled-close");
+    const backdrop = document.getElementById("action-btn-oled-backdrop");
+    const targetBtn = document.getElementById(
+      "action-btn-oled-target",
+    ) as HTMLButtonElement | null;
+    const labelEl = document.getElementById("action-btn-oled-label");
+    const descEl = document.getElementById("action-btn-oled-state-desc");
+
+    if (!modal || !targetBtn || !labelEl || !descEl) return;
+
+    // Showcase States Cycle: cta -> primary -> secondary -> error + reactive
+    const states = [
+      {
+        name: "cta",
+        defaultLabel: "INCIPE SESSIONEM",
+        desc: "CTA (Pulse)",
+        classes:
+          "bg-[var(--color-accent,#52FF1A)] text-black animate-kiosk-pulse hover:bg-[var(--color-accent-hover,#42e012)] hover:shadow-[0_0_20px_color-mix(in_srgb,var(--color-accent,#52FF1A)_35%,transparent)] active:opacity-90 border-none",
+      },
+      {
+        name: "primary",
+        defaultLabel: "CONFIRMA ET IMPRIME",
+        desc: "Primary",
+        classes:
+          "bg-white text-neutral-950 hover:bg-neutral-200 border-none shadow-lg",
+      },
+      {
+        name: "secondary",
+        defaultLabel: "REDI AD PINACOTHECAM",
+        desc: "Secondary",
+        classes:
+          "bg-transparent text-white border border-dashed border-neutral-500 hover:border-solid hover:border-white hover:bg-white/10",
+      },
+      {
+        name: "error",
+        defaultLabel: "AUTHENTICATIO DEFECTA",
+        desc: "Error (Validation)",
+        classes:
+          "bg-red-600 text-white border border-red-500 hover:bg-red-700 shadow-[0_0_25px_rgba(239,68,68,0.65)]",
+      },
+    ];
+
+    let currentStateIndex = 0;
+    let customUserLabel: string | null = null;
+
+    const applyState = (index: number) => {
+      currentStateIndex = index % states.length;
+      const state = states[currentStateIndex];
+
+      // Keep custom user-edited label if set, otherwise use state default
+      labelEl.textContent = customUserLabel || state.defaultLabel;
+      descEl.textContent = state.desc;
+
+      // Base layout classes for LG size
+      const baseClasses =
+        "action-btn-physics uppercase inline-flex items-center justify-center leading-none select-none no-underline cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 font-heading font-bold rounded-none px-9 py-4 text-base sm:text-lg tracking-widest";
+
+      targetBtn.className = `${baseClasses} ${state.classes}`;
+
+      // Trigger shake animation on error state
+      if (state.name === "error") {
+        targetBtn.classList.remove("oled-btn-shake");
+        void targetBtn.offsetWidth;
+        targetBtn.classList.add("oled-btn-shake");
+      } else {
+        targetBtn.classList.remove("oled-btn-shake");
+      }
+    };
+
+    const openModal = (customText?: string) => {
+      if (customText) {
+        customUserLabel = customText;
+      }
+      applyState(0);
+      modal.style.display = "flex";
+      modal.classList.remove("hidden");
+      modal.setAttribute("aria-hidden", "false");
+      document.documentElement.style.overflow = "hidden";
+      targetBtn.focus();
+    };
+
+    const closeModal = () => {
+      modal.style.display = "none";
+      modal.classList.add("hidden");
+      modal.setAttribute("aria-hidden", "true");
+      document.documentElement.style.overflow = "";
+      targetBtn.blur();
+    };
+
+    // Prevent button click cycle when clicking directly on the editable label text
+    labelEl.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+
+    labelEl.addEventListener("input", () => {
+      customUserLabel = labelEl.textContent?.trim() || null;
+    });
+
+    labelEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        labelEl.blur();
+      }
+    });
+
+    // Cycle on button container click
+    targetBtn.addEventListener("click", (e) => {
+      applyState((currentStateIndex + 1) % states.length);
+    });
+
+    closeBtn?.addEventListener("click", closeModal);
+    backdrop?.addEventListener("click", closeModal);
+
+    // Escape key listener
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.style.display === "flex") {
+        closeModal();
+      }
+    });
+
+    // Custom event listener triggered from anywhere on the page
+    window.addEventListener("open-actionbutton-oled", ((e: CustomEvent) => {
+      const customText = e.detail?.text;
+      openModal(customText);
+    }) as EventListener);
+
+    // Also attach directly to the showcase ActionButton in Section 04
+    const showcaseActionButtons = document.querySelectorAll(
+      "#buttons [data-action-showcase]",
+    );
+    showcaseActionButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        openModal();
+      });
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initActionButtonOled);
+  } else {
+    initActionButtonOled();
+  }
+  document.addEventListener("astro:page-load", initActionButtonOled);
+</script>
