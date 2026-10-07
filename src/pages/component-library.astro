@@ -64,10 +64,45 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   noindex={true}
 >
   <div class="w-full flex min-h-[calc(100vh-4rem)]">
-    <!-- Outer Sidebar Nav (Sticky, Outside Main Content) -->
+    <!-- Outer Sticky Sidebar (Collapsible & Anchored - Default Minimized) -->
     <aside
-      class="hidden xl:block w-64 shrink-0 border-r border-neutral-200/80 dark:border-neutral-800/80 py-8 px-0 sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto no-scrollbar"
+      id="component-library-sidebar"
+      class="hidden xl:block sticky top-16 h-[calc(100vh-4rem)] shrink-0 transition-[width] duration-300 ease-in-out w-0 z-30"
+      data-collapsed="true"
     >
+      <!-- Floating Micro Toggle Button anchored directly to the side of the sidebar -->
+      <div
+        id="sidebar-toggle-container"
+        class="absolute top-6 left-3 translate-x-0 z-40 transition-all duration-300 ease-in-out"
+      >
+        <ActionButton
+          id="sidebar-toggle-btn"
+          size="micro"
+          variant="secondary"
+          ariaLabel="Expand Sidebar"
+          class="bg-[#fcfbf9] dark:bg-[#0e0e0e] shadow-md hover:scale-105 border border-neutral-300 dark:border-neutral-700"
+        >
+          <svg
+            id="sidebar-toggle-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-3.5 h-3.5 transition-transform duration-300 ease-in-out rotate-180"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </ActionButton>
+      </div>
+
+      <!-- Scrollable Navigation Rail -->
+      <div
+        id="sidebar-nav-content"
+        class="w-64 h-full border-r border-neutral-200/80 dark:border-neutral-800/80 py-8 px-0 overflow-y-auto no-scrollbar transition-[opacity,transform] duration-300 ease-in-out opacity-0 -translate-x-full pointer-events-none"
+      >
       <nav class="space-y-6">
         <!-- 01 // FOUNDATIONS -->
         <div class="space-y-2">
@@ -212,6 +247,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
           </span>
         </div>
       </nav>
+      </div>
     </aside>
 
     <!-- Main Content Container -->
@@ -3758,7 +3794,65 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
     defaultInput.addEventListener("input", onInput);
   };
 
+  const setupSidebarCollapse = () => {
+    const sidebar = document.getElementById("component-library-sidebar");
+    const navContent = document.getElementById("sidebar-nav-content");
+    const toggleContainer = document.getElementById("sidebar-toggle-container");
+    const toggleBtn = document.getElementById("sidebar-toggle-btn");
+    const icon = document.getElementById("sidebar-toggle-icon");
+    if (!sidebar || !navContent || !toggleBtn) return;
+
+    let isCollapsed = true;
+    try {
+      const saved = localStorage.getItem("cl_sidebar_collapsed");
+      if (saved === "false") {
+        isCollapsed = false;
+      }
+    } catch {}
+
+    const applyState = (collapsed: boolean) => {
+      isCollapsed = collapsed;
+      sidebar.setAttribute("data-collapsed", collapsed.toString());
+      if (collapsed) {
+        sidebar.classList.remove("w-64");
+        sidebar.classList.add("w-0");
+        navContent.classList.add("opacity-0", "-translate-x-full", "pointer-events-none");
+        if (toggleContainer) {
+          toggleContainer.classList.remove("left-full", "-translate-x-1/2");
+          toggleContainer.classList.add("left-3", "translate-x-0");
+        }
+        if (icon) icon.classList.add("rotate-180");
+        toggleBtn.setAttribute("aria-label", "Expand Sidebar");
+        toggleBtn.setAttribute("title", "Expand Sidebar");
+      } else {
+        sidebar.classList.remove("w-0");
+        sidebar.classList.add("w-64");
+        navContent.classList.remove("opacity-0", "-translate-x-full", "pointer-events-none");
+        if (toggleContainer) {
+          toggleContainer.classList.remove("left-3", "translate-x-0");
+          toggleContainer.classList.add("left-full", "-translate-x-1/2");
+        }
+        if (icon) icon.classList.remove("rotate-180");
+        toggleBtn.setAttribute("aria-label", "Collapse Sidebar");
+        toggleBtn.setAttribute("title", "Collapse Sidebar");
+      }
+    };
+
+    applyState(isCollapsed);
+
+    toggleBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const next = !isCollapsed;
+      applyState(next);
+      try {
+        localStorage.setItem("cl_sidebar_collapsed", next.toString());
+      } catch {}
+    };
+  };
+
   setupComponentLibraryNav();
+  setupSidebarCollapse();
   setupAccentColorPicker();
   initIndexMarquees();
   setupAutoTabScroll();
@@ -3778,6 +3872,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 
   document.addEventListener("astro:page-load", () => {
     setupComponentLibraryNav();
+    setupSidebarCollapse();
     setupAccentColorPicker();
     initIndexMarquees();
     setupAutoTabScroll();
