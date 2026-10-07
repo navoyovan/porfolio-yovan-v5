@@ -1,0 +1,283 @@
+---
+import RootLayout from '../../layouts/RootLayout.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.[^/.]+$/, '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// Pre-resolve related project if declared
+let relatedProject: any = null;
+if (post.data.project) {
+  relatedProject = await getEntry(post.data.project);
+}
+
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+
+const formattedDate = post.data.publishDate.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+
+const siteUrl = Astro.site?.toString() || 'https://navoyovan.github.io/portfolio-yovan';
+const postSlug = post.id.replace(/\.[^/.]+$/, '');
+const articleUrl = `${siteUrl}/blog/${postSlug}`;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'TechArticle',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.publishDate.toISOString(),
+  url: articleUrl,
+  author: {
+    '@type': 'Person',
+    name: 'Yovan Gunardio Darmawan',
+  },
+};
+---
+
+<RootLayout
+  title={`${post.data.title} | Yovan Gunardio Darmawan`}
+  description={post.data.description}
+  type="article"
+  keywords={post.data.tags}
+  schema={articleSchema}
+>
+  <div class="relative z-10 w-[92%] sm:w-[86%] lg:w-[80%] max-w-4xl mx-auto pt-10 sm:pt-14 pb-24">
+    <!-- Breadcrumb / Back link -->
+    <div class="mb-8">
+      <a
+        href={`${base}/blog`}
+        class="inline-flex items-center gap-2 font-mono text-xs text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
+      >
+        <span aria-hidden="true">←</span>
+        <span>All Articles & Post-Mortems</span>
+      </a>
+    </div>
+
+    <!-- Article Header -->
+    <header class="space-y-5 mb-10 pb-8 border-b border-neutral-200/80 dark:border-neutral-800/80">
+      <div class="flex items-center gap-3 flex-wrap">
+        <time datetime={post.data.publishDate.toISOString()} class="font-mono text-xs text-neutral-500">
+          {formattedDate}
+        </time>
+        <span class="text-neutral-300 dark:text-neutral-700">•</span>
+        <div class="flex items-center gap-1.5 flex-wrap">
+          {post.data.tags.map((tag: string) => (
+            <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight text-neutral-950 dark:text-white leading-[1.15]">
+        {post.data.title}
+      </h1>
+
+      <p class="font-sans text-base sm:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed">
+        {post.data.description}
+      </p>
+
+      <!-- RELATED PROJECT SYSTEM HERO CARD -->
+      {relatedProject && (
+        <aside class="mt-8 p-5 sm:p-6 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-900/60 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+            <div class="space-y-2 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-mono text-[10px] uppercase tracking-wider px-2 py-0.5 rounded bg-neutral-200/70 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-semibold">
+                  RELATED PROJECT
+                </span>
+                <span class="font-mono text-xs text-neutral-500">
+                  {relatedProject.data.category}
+                </span>
+              </div>
+              <h3 class="text-lg sm:text-xl font-heading font-bold text-neutral-950 dark:text-white">
+                {relatedProject.data.title}
+              </h3>
+              <p class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                {relatedProject.data.description}
+              </p>
+              <div class="flex items-center gap-1.5 flex-wrap pt-1">
+                {relatedProject.data.tech.map((t: string) => (
+                  <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-800/80 text-neutral-600 dark:text-neutral-400">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div class="flex sm:flex-col items-center sm:items-end gap-2 shrink-0 pt-1">
+              {relatedProject.data.href && (
+                <a
+                  href={relatedProject.data.href}
+                  target={relatedProject.data.href.startsWith('http') ? '_blank' : undefined}
+                  rel={relatedProject.data.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 font-heading font-bold text-xs hover:opacity-90 transition-opacity"
+                >
+                  <span>Explore Project</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+              )}
+              {relatedProject.data.github && (
+                <a
+                  href={relatedProject.data.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1 font-mono text-xs text-neutral-500 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                >
+                  <span>GitHub Repository</span>
+                </a>
+              )}
+            </div>
+          </div>
+        </aside>
+      )}
+    </header>
+
+    <!-- Post Body / Markdown Content -->
+    <div class="blog-prose font-sans text-neutral-800 dark:text-neutral-200 leading-relaxed space-y-6">
+      <Content />
+    </div>
+
+    <!-- Article Footer / Navigation -->
+    <footer class="mt-16 pt-8 border-t border-neutral-200/80 dark:border-neutral-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <a
+        href={`${base}/blog`}
+        class="inline-flex items-center gap-2 font-mono text-xs font-semibold px-4 py-2 rounded-lg border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+      >
+        <span>← Back to all articles</span>
+      </a>
+
+      <span class="font-mono text-xs text-neutral-400">
+        Written by Yovan Gunardio Darmawan
+      </span>
+    </footer>
+  </div>
+</RootLayout>
+
+<style is:global>
+  /* Blog Prose Typography & Elements */
+  .blog-prose h2 {
+    font-family: var(--font-heading, 'Syne', sans-serif);
+    font-weight: 800;
+    font-size: 1.65rem;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--tw-prose-headings, inherit);
+  }
+
+  .blog-prose h3 {
+    font-family: var(--font-heading, 'Syne', sans-serif);
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--tw-prose-headings, inherit);
+  }
+
+  .blog-prose p {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.75;
+  }
+
+  .blog-prose ul, .blog-prose ol {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .blog-prose ul {
+    list-style-type: disc;
+  }
+
+  .blog-prose ol {
+    list-style-type: decimal;
+  }
+
+  .blog-prose li {
+    margin-top: 0.35rem;
+    margin-bottom: 0.35rem;
+    line-height: 1.65;
+  }
+
+  .blog-prose pre {
+    border-radius: 0.75rem;
+    padding: 1.15rem 1.25rem;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.825rem;
+    line-height: 1.6;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    overflow-x: auto;
+    border: 1px solid rgba(120, 120, 130, 0.2);
+    background-color: #121214 !important;
+  }
+
+  .blog-prose code:not(pre code) {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.85em;
+    padding: 0.15em 0.35em;
+    border-radius: 0.25rem;
+    background-color: rgba(150, 150, 160, 0.15);
+  }
+
+  .blog-prose blockquote {
+    border-left: 3px solid var(--color-accent, #52FF1A);
+    padding-left: 1rem;
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    font-style: italic;
+    color: inherit;
+    opacity: 0.85;
+  }
+
+  .blog-prose table {
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+  }
+
+  .blog-prose th, .blog-prose td {
+    padding: 0.65rem 0.85rem;
+    border: 1px solid rgba(150, 150, 160, 0.2);
+    text-align: left;
+  }
+
+  .blog-prose th {
+    font-family: var(--font-heading, 'Syne', sans-serif);
+    font-weight: 700;
+    background-color: rgba(150, 150, 160, 0.08);
+  }
+
+  .blog-prose hr {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    border: 0;
+    border-top: 1px solid rgba(150, 150, 160, 0.2);
+  }
+
+  .blog-prose img {
+    border-radius: 0.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(150, 150, 160, 0.2);
+  }
+</style>

@@ -1,0 +1,12 @@
+{
+  "title": "Photobooth Vendor Portal",
+  "brand": "hypebox",
+  "category": "VENDOR ECOSYSTEM",
+  "categoryId": "EKOSISTEM VENDOR",
+  "description": "Multi-tenant vendor management portal for real-time telemetry, session logs, asset curation, and kiosk hardware monitoring.",
+  "descriptionId": "Portal manajemen vendor multi-tenant untuk telemetri real-time, log sesi, kurasi aset, dan pemantauan perangkat keras kiosk.",
+  "tech": ["React 19", "Vite", "CSS Modules", "Tabler Icons"],
+  "href": "https://navoyovan.github.io/photobooth-vendor-portal/",
+  "github": "https://github.com/navoyovan/photobooth-vendor-portal",
+  "year": "2026"
+}

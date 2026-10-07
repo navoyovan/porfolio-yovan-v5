@@ -1,0 +1,10 @@
+{
+  "title": "Photobooth REST & WebSocket API",
+  "brand": "hypebox",
+  "category": "BACKEND & CLOUD",
+  "categoryId": "BACKEND & CLOUD",
+  "description": "High-throughput real-time backend API orchestrating photo uploads, WebSocket telemetry broadcasting, and cloud storage pipelines.",
+  "descriptionId": "Backend API real-time berkinerja tinggi yang mengatur unggahan foto, penyiaran telemetri WebSocket, dan pipeline cloud storage.",
+  "tech": ["Laravel 13", "Laravel Reverb", "Google Cloud Storage", "GCP", "MySQL"],
+  "year": "2026"
+}

@@ -1,0 +1,11 @@
+{
+  "title": "Component Library & Design Tokens",
+  "brand": "portfolio",
+  "category": "DESIGN SYSTEM",
+  "categoryId": "DESIGN SYSTEM",
+  "description": "Design system, typography specimens, color tokens, and interactive UI primitives architected for this Portfolio.",
+  "descriptionId": "Design system, typography, color tokens, dan komponen UI interaktif yang dirancang untuk Portfolio ini.",
+  "tech": ["Astro v5", "Tailwind CSS v4", "Design Tokens", "React"],
+  "href": "/component-library",
+  "year": "2026"
+}

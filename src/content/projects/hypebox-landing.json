@@ -1,0 +1,12 @@
+{
+  "title": "HYPE-BOX Landing Page",
+  "brand": "hypebox",
+  "category": "LANDING & WEB",
+  "categoryId": "LANDING & WEB",
+  "description": "High-conversion marketing site featuring animated specimens, interactive terminal showcases, and dark-mode aesthetic styling.",
+  "descriptionId": "Situs pemasaran konversi tinggi yang menampilkan spesimen animasi, showcase terminal interaktif, dan gaya estetika dark-mode.",
+  "tech": ["Astro", "Tailwind CSS v4", "TypeScript"],
+  "href": "https://navoyovan.github.io/hypebox/",
+  "github": "https://github.com/navoyovan/hypebox",
+  "year": "2026"
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Photobooth Kiosk OS",
+  "brand": "hypebox",
+  "category": "KIOSK & DESKTOP",
+  "categoryId": "KIOSK & DESKTOP",
+  "description": "Interactive touchscreen photobooth kiosk OS with real-time camera controls, countdown sequencer, and thermal printing automation.",
+  "descriptionId": "OS photobooth layar sentuh interaktif dengan kontrol kamera real-time, sekuens hitung mundur, dan otomatisasi cetak thermal.",
+  "tech": ["Electron", "React 19", "Anime.js", "Vite", "Canvas API"],
+  "imageSrc": "/images/kiosk-screenshot.webp",
+  "href": "https://navoyovan.github.io/photobooth-kiosk-demo/",
+  "github": "https://github.com/navoyovan/photobooth-kiosk-demo",
+  "year": "2026"
+}

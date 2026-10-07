@@ -1,0 +1,12 @@
+{
+  "title": "Interactive Mapping System",
+  "brand": "portfolio",
+  "category": "GIS & SPATIAL",
+  "categoryId": "GIS & SPATIAL",
+  "description": "Geospatial visualization and tracking platform with custom assets and telemetry.",
+  "descriptionId": "Platform visualisasi dan pelacakan geospasial dengan aset kustom dan telemetri.",
+  "tech": ["Laravel", "Leaflet.js", "AJAX", "Tailwind"],
+  "href": "https://github.com/navoyovan/interactive-map",
+  "github": "https://github.com/navoyovan/interactive-map",
+  "year": "2025"
+}

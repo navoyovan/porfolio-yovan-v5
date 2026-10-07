@@ -1,0 +1,115 @@
+---
+import RootLayout from '../../layouts/RootLayout.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime()
+);
+
+// Pre-resolve related projects for each post
+const postsWithProjects = await Promise.all(
+  posts.map(async (post) => {
+    let project = null;
+    if (post.data.project) {
+      project = await getEntry(post.data.project);
+    }
+    return { post, project };
+  })
+);
+
+const siteUrl = Astro.site?.toString() || 'https://navoyovan.github.io/portfolio-yovan';
+
+const blogSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'Technical Writing & Architecture Post-Mortems',
+  description: 'Deep dives, post-mortems, and architectural case studies by Yovan Gunardio Darmawan.',
+  url: `${siteUrl}/blog`,
+  author: {
+    '@type': 'Person',
+    name: 'Yovan Gunardio Darmawan',
+  },
+};
+---
+
+<RootLayout
+  title="Blog & Architecture Deep Dives | Yovan Gunardio Darmawan"
+  description="Technical post-mortems, software architecture deep dives, and performance engineering case studies."
+  keywords={['Software Engineering Blog', 'Performance Optimization', 'Architecture Post-Mortem', 'Astro', 'TypeScript']}
+  schema={blogSchema}
+>
+  <div class="relative z-10 w-[92%] sm:w-[86%] lg:w-[80%] max-w-5xl mx-auto pt-12 sm:pt-16 pb-24">
+    <!-- Header -->
+    <header class="space-y-4 mb-12 border-b border-neutral-200/80 dark:border-neutral-800/80 pb-8">
+      <div class="flex items-center gap-2">
+        <span class="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400">
+          // 04 WRITING & CASE STUDIES
+        </span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-heading font-black tracking-tight text-neutral-950 dark:text-white">
+        Engineering Post-Mortems & Deep Dives
+      </h1>
+      <p class="text-base sm:text-lg font-sans text-neutral-600 dark:text-neutral-400 max-w-2xl leading-relaxed">
+        Forensic analyses, performance bottleneck investigations, and architectural decision records from real-world production systems.
+      </p>
+    </header>
+
+    <!-- Post List -->
+    {postsWithProjects.length === 0 ? (
+      <div class="p-8 text-center border border-dashed border-neutral-300 dark:border-neutral-800 rounded-lg text-neutral-500 font-sans text-sm">
+        No articles published yet. Check back soon!
+      </div>
+    ) : (
+      <div class="space-y-6">
+        {postsWithProjects.map(({ post, project }) => {
+          const postSlug = post.id.replace(/\.[^/.]+$/, '');
+          const formattedDate = post.data.publishDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          });
+
+          return (
+            <article class="group relative p-6 sm:p-7 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 bg-white/70 dark:bg-neutral-950/70 hover:border-neutral-400 dark:hover:border-neutral-700 transition-[border-color,background-color] duration-200 shadow-sm hover:shadow-md">
+              <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 mb-3">
+                <div class="flex items-center gap-3 flex-wrap">
+                  <time datetime={post.data.publishDate.toISOString()} class="font-mono text-xs text-neutral-500">
+                    {formattedDate}
+                  </time>
+                  {project && (
+                    <span class="inline-flex items-center gap-1.5 font-mono text-[11px] px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300">
+                      <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-accent,#52FF1A)]"></span>
+                      <span>{project.data.title}</span>
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <h2 class="text-xl sm:text-2xl font-heading font-bold text-neutral-950 dark:text-white group-hover:text-[var(--color-accent,#52FF1A)] transition-colors mb-2">
+                <a href={`${base}/blog/${postSlug}`} class="focus:outline-none focus-visible:underline">
+                  <span class="absolute inset-0" aria-hidden="true"></span>
+                  {post.data.title}
+                </a>
+              </h2>
+
+              <p class="font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4">
+                {post.data.description}
+              </p>
+
+              <div class="flex items-center gap-2 flex-wrap">
+                {post.data.tags.map((tag: string) => (
+                  <span class="font-mono text-[11px] px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-900/80 text-neutral-500 border border-neutral-200/60 dark:border-neutral-800/60">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</RootLayout>
