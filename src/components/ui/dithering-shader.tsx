@@ -71,7 +71,7 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
         }
       }
     }
-    return 1; // Default: Radial Halo
+    return 0; // Default: Directional Wave (Cyber Wave)
   });
 
   // Default: 1px scale

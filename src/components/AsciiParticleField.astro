@@ -33,14 +33,16 @@ const {
 
         const opacityMult = parseFloat(container.dataset.opacityMult || '1.0');
 
-        let w = (canvas.width = container.clientWidth || window.innerWidth);
-        let h = (canvas.height = container.clientHeight || window.innerHeight);
+        let w = (canvas.width = container.clientWidth || window.innerWidth || document.documentElement.clientWidth || 360);
+        let h = (canvas.height = container.clientHeight || window.innerHeight || document.documentElement.clientHeight || 640);
 
         function resize() {
-          w = canvas.width = container.clientWidth || window.innerWidth;
-          h = canvas.height = container.clientHeight || window.innerHeight;
+          w = canvas.width = container.clientWidth || window.innerWidth || document.documentElement.clientWidth || 360;
+          h = canvas.height = container.clientHeight || window.innerHeight || document.documentElement.clientHeight || 640;
+          rebuildEntities();
         }
-        window.addEventListener('resize', resize);
+        window.addEventListener('resize', resize, { passive: true });
+        window.addEventListener('orientationchange', resize, { passive: true });
 
         const BAYER_4X4 = [
           [ 0,  8,  2, 10],
@@ -65,14 +67,14 @@ const {
         };
 
         const params = {
-          count: getSavedParam('count', Math.min(75, Math.max(30, Math.floor((w * h) / 14000)))),
+          count: getSavedParam('count', Math.min(75, Math.max(35, Math.floor((w * h) / 14000)))),
           radiusX: getSavedParam('radiusX', 8),
           radiusY: getSavedParam('radiusY', 28),
           breathSpeed: getSavedParam('breathSpeed', 1.0),
           shearAmt: getSavedParam('shearAmt', 35),
           ditherDensity: getSavedParam('ditherDensity', 1.7),
           maxOpacity: getSavedParam('maxOpacity', 0.20) * opacityMult,
-          dustCount: getSavedParam('dustCount', Math.min(45, Math.max(20, Math.floor((w * h) / 25000))))
+          dustCount: getSavedParam('dustCount', Math.min(45, Math.max(25, Math.floor((w * h) / 25000))))
         };
 
         window.addEventListener('portfolio:ascii-params', (e) => {
@@ -135,19 +137,42 @@ const {
 
         rebuildEntities();
 
-        let lastScrollY = window.scrollY || window.pageYOffset;
+        let lastScrollY = window.scrollY || window.pageYOffset || 0;
         let scrollY = lastScrollY;
         window.addEventListener('scroll', () => {
-          scrollY = window.scrollY || window.pageYOffset;
+          scrollY = window.scrollY || window.pageYOffset || 0;
         }, { passive: true });
 
-        // Pre-computed color Lookup Table (LUT) to eliminate GC string allocations in render loop
+        // Pre-computed dynamic color Lookup Table (LUT) for Dark and Light modes
         const COLOR_LUT = [];
         const NUM_LUT_STEPS = 50;
-        for (let step = 0; step <= NUM_LUT_STEPS; step++) {
-          const a = (step / NUM_LUT_STEPS).toFixed(2);
-          COLOR_LUT.push(`rgba(200, 200, 210, ${a})`);
+
+        function refreshColorLUT() {
+          const isDark = document.documentElement.classList.contains('dark') ||
+                         window.matchMedia('(prefers-color-scheme: dark)').matches;
+          COLOR_LUT.length = 0;
+          for (let step = 0; step <= NUM_LUT_STEPS; step++) {
+            const a = (step / NUM_LUT_STEPS).toFixed(2);
+            if (isDark) {
+              COLOR_LUT.push(`rgba(220, 225, 235, ${a})`);
+            } else {
+              COLOR_LUT.push(`rgba(25, 30, 40, ${a})`);
+            }
+          }
         }
+        refreshColorLUT();
+
+        // Observe theme class changes live
+        const themeObserver = new MutationObserver((mutations) => {
+          for (const m of mutations) {
+            if (m.attributeName === 'class') {
+              refreshColorLUT();
+              break;
+            }
+          }
+        });
+        themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+        window.addEventListener('portfolio:theme-change', refreshColorLUT);
 
         let isDocumentVisible = !document.hidden;
         document.addEventListener('visibilitychange', () => {
@@ -158,8 +183,6 @@ const {
           }
         });
 
-        const cellW = 8;
-        const cellH = 13;
         let last = performance.now();
         let animId;
 
@@ -173,16 +196,28 @@ const {
           const dt = Math.min((t - last) * 0.001, 0.05);
           last = t;
 
+          // Responsive viewport scaling: compact & micro-detailed on mobile
+          const isMobile = w < 640;
+          const isTablet = !isMobile && w < 1024;
+          const vpScale = isMobile ? 0.65 : (isTablet ? 0.85 : 1.0);
+
+          const cellW = isMobile ? 5.5 : (isTablet ? 7 : 8);
+          const cellH = isMobile ? 9.0 : (isTablet ? 11.5 : 13);
+
           // Smooth scroll lerp
           lastScrollY += (scrollY - lastScrollY) * 0.15;
 
           // Transparent clear so it layers over existing site layouts
           ctx.clearRect(0, 0, w, h);
 
-          const shearX = Math.sin(nowSec * 0.3) * params.shearAmt;
-          const shearY = Math.cos(nowSec * 0.22) * (params.shearAmt * 0.5);
+          const shearX = Math.sin(nowSec * 0.3) * (params.shearAmt * vpScale);
+          const shearY = Math.cos(nowSec * 0.22) * (params.shearAmt * 0.5 * vpScale);
 
-          ctx.font = '10.5px Consolas, "Courier New", monospace';
+          ctx.font = isMobile
+            ? '7.5px Consolas, "Courier New", monospace'
+            : isTablet
+            ? '9px Consolas, "Courier New", monospace'
+            : '10.5px Consolas, "Courier New", monospace';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
 
@@ -199,8 +234,8 @@ const {
           }
 
           // 2. Dithered fluid islands with fast LUT rendering
-          const pRadiusX = params.radiusX;
-          const pRadiusY = params.radiusY;
+          const pRadiusX = params.radiusX * vpScale;
+          const pRadiusY = params.radiusY * vpScale;
           const pBreathSpeed = params.breathSpeed;
           const pDitherDensity = params.ditherDensity;
           const pMaxOpacity = params.maxOpacity;
