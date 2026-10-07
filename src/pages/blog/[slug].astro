@@ -1,5 +1,6 @@
 ---
 import RootLayout from '../../layouts/RootLayout.astro';
+import DevMenu from '../../components/DevMenu.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -164,6 +165,9 @@ const articleSchema = {
       </span>
     </footer>
   </div>
+
+  <!-- Developer Command & Quick File Access Menu (triggered by `) -->
+  <DevMenu currentPost={post} relatedProject={relatedProject} />
 </RootLayout>
 
 <style is:global>

@@ -1,0 +1,513 @@
+---
+// DevMenu.astro - Developer Command Palette & Quick File Access Modal
+// Triggered on blogpost pages via keypress ` (Backquote / Tilde) or floating pill button.
+
+interface Props {
+  currentPost?: any;
+  relatedProject?: any;
+}
+
+const { currentPost, relatedProject } = Astro.props;
+
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+const repoUrl = 'https://github.com/navoyovan/portfolio-yovan/blob/master';
+
+interface RepoFileItem {
+  name: string;
+  path: string;
+  category: 'page' | 'component' | 'content' | 'config' | 'layout';
+  description: string;
+  route?: string;
+  tags?: string[];
+  isPinned?: boolean;
+}
+
+const contextualFiles: RepoFileItem[] = [];
+
+if (currentPost) {
+  const postFile = currentPost.id.endsWith('.md') ? currentPost.id : `${currentPost.id}.md`;
+  contextualFiles.push({
+    name: postFile.split('/').pop() || postFile,
+    path: `src/content/blog/${postFile}`,
+    category: 'content',
+    description: `Active Article Source: "${currentPost.data?.title || 'Current Post'}"`,
+    tags: ['current', 'active', 'source', 'markdown', 'post'],
+    isPinned: true,
+  });
+}
+
+if (relatedProject) {
+  const projFile = `${relatedProject.id}.json`;
+  contextualFiles.push({
+    name: projFile,
+    path: `src/content/projects/${projFile}`,
+    category: 'content',
+    description: `Related Project Data: "${relatedProject.data?.title || 'Project'}"`,
+    tags: ['current', 'related', 'project', 'metadata', 'json'],
+    isPinned: true,
+  });
+}
+
+const files: RepoFileItem[] = [
+  // Pages & Routes
+  { name: 'index.astro', path: 'src/pages/index.astro', category: 'page', description: 'Homepage with hero, capabilities, featured work, and ASCII field', route: `${base}/`, tags: ['home', 'hero', 'landing', 'root'] },
+  { name: 'blog/index.astro', path: 'src/pages/blog/index.astro', category: 'page', description: 'Technical writing & architecture post-mortem archive', route: `${base}/blog`, tags: ['blog', 'writing', 'articles', 'posts'] },
+  { name: 'blog/[slug].astro', path: 'src/pages/blog/[slug].astro', category: 'page', description: 'Dynamic post reader with related project card', route: `${base}/blog/sample-post`, tags: ['reader', 'markdown', 'article'] },
+  { name: 'component-library.astro', path: 'src/pages/component-library.astro', category: 'page', description: 'Living design system showcase & interaction primitives', route: `${base}/component-library`, tags: ['ui', 'tokens', 'showcase', 'specimens'] },
+  { name: 'portfolio-index.astro', path: 'src/pages/portfolio-index.astro', category: 'page', description: 'Structured system directory & project index', route: `${base}/portfolio-index`, tags: ['projects', 'ecosystem', 'directory'] },
+  { name: 'ascii-sandbox.astro', path: 'src/pages/ascii-sandbox.astro', category: 'page', description: 'Interactive ASCII dithering & fluid particle tuner', route: `${base}/ascii-sandbox`, tags: ['ascii', 'fluid', 'shader', 'canvas'] },
+  { name: '404.astro', path: 'src/pages/404.astro', category: 'page', description: 'Custom retro-themed 404 page', route: `${base}/404`, tags: ['error', 'missing'] },
+
+  // Content Collections & Config
+  { name: 'content.config.ts', path: 'src/content.config.ts', category: 'content', description: 'Astro 5 Content Layer collections definition (projects & blog)', tags: ['schema', 'zod', 'collections', 'content layer'] },
+  { name: 'sample-post.md', path: 'src/content/blog/sample-post.md', category: 'content', description: 'Sample technical post-mortem markdown entry', tags: ['post', 'markdown', 'sample'] },
+  { name: 'mctextureghost.json', path: 'src/content/projects/mctextureghost.json', category: 'content', description: 'mcTextureGhost desktop suite project metadata', tags: ['wpf', 'webview2', 'c#', 'desktop'] },
+  { name: 'photobooth-kiosk.json', path: 'src/content/projects/photobooth-kiosk.json', category: 'content', description: 'Photobooth touchscreen kiosk project metadata', tags: ['electron', 'touchscreen', 'react'] },
+  { name: 'photobooth-vendor-portal.json', path: 'src/content/projects/photobooth-vendor-portal.json', category: 'content', description: 'Photobooth B2B vendor portal metadata', tags: ['spa', 'react', 'vite'] },
+  { name: 'photobooth-api.json', path: 'src/content/projects/photobooth-api.json', category: 'content', description: 'Photobooth REST & WebSocket backend metadata', tags: ['laravel', 'api', 'gcp', 'reverb'] },
+  { name: 'hypebox-landing.json', path: 'src/content/projects/hypebox-landing.json', category: 'content', description: 'HYPE-BOX brand landing page metadata', tags: ['landing', 'astro', 'tailwind'] },
+  { name: 'interactive-map.json', path: 'src/content/projects/interactive-map.json', category: 'content', description: 'Interactive geospatial mapping system metadata', tags: ['gis', 'leaflet', 'laravel'] },
+  { name: 'component-library.json', path: 'src/content/projects/component-library.json', category: 'content', description: 'Design system & component showcase metadata', tags: ['tokens', 'primitives'] },
+
+  // Layouts & Shell
+  { name: 'RootLayout.astro', path: 'src/layouts/RootLayout.astro', category: 'layout', description: 'Global HTML shell, theme engine, fonts, and metadata', tags: ['shell', 'html', 'head', 'theme'] },
+  { name: 'Navbar.astro', path: 'src/components/Navbar.astro', category: 'layout', description: 'Header navigation bar with dropdown menus & active states', tags: ['nav', 'header', 'menu'] },
+  { name: 'Footer.astro', path: 'src/components/Footer.astro', category: 'layout', description: 'Editorial footer with status badge & social links', tags: ['footer', 'links'] },
+  { name: 'SEO.astro', path: 'src/components/SEO.astro', category: 'layout', description: 'OpenGraph, Twitter Cards, and JSON-LD schema generator', tags: ['seo', 'meta', 'opengraph'] },
+  { name: 'CustomScrollbar.astro', path: 'src/components/CustomScrollbar.astro', category: 'layout', description: 'Minimalist high-contrast custom scrollbar', tags: ['scrollbar', 'scroll'] },
+  { name: 'EasterEggs.astro', path: 'src/components/EasterEggs.astro', category: 'component', description: 'Easter egg modals, terminal triggers, and popups', tags: ['easter eggs', 'retro', 'clock'] },
+
+  // Key Interactive Components
+  { name: 'AsciiParticleField.astro', path: 'src/components/AsciiParticleField.astro', category: 'component', description: 'Ambient dithered ASCII fluid particle canvas with LUT', tags: ['ascii', 'particles', 'canvas', 'bayer', 'lut'] },
+  { name: 'Hero.astro', path: 'src/components/Hero.astro', category: 'component', description: 'Homepage headline, telemetry ticker, and quick links', tags: ['hero', 'heading'] },
+  { name: 'HeroMap.astro', path: 'src/components/HeroMap.astro', category: 'component', description: 'Interactive Mapbox/Carto dark basemap overlay', tags: ['map', 'carto', 'gis'] },
+  { name: 'ActionButton.astro', path: 'src/components/ActionButton.astro', category: 'component', description: 'Primary action button with hover states and variants', tags: ['button', 'primitive'] },
+  { name: 'KioskTimeline.astro', path: 'src/components/KioskTimeline.astro', category: 'component', description: 'Interactive multi-kiosk activity telemetry timeline', tags: ['timeline', 'kiosk', 'telemetry'] },
+  { name: 'TrendChart.astro', path: 'src/components/TrendChart.astro', category: 'component', description: 'Weekly comparative SVG telemetry trend spline', tags: ['chart', 'svg', 'spline'] },
+  { name: 'ArchitectureDiagram.astro', path: 'src/components/ArchitectureDiagram.astro', category: 'component', description: 'Interactive system architecture flow visualizer', tags: ['diagram', 'flow', 'architecture'] },
+  { name: 'SystemTopology.astro', path: 'src/components/SystemTopology.astro', category: 'component', description: 'System topology network node visualizer', tags: ['topology', 'network', 'nodes'] },
+  { name: 'SquareWaveLoader.astro', path: 'src/components/SquareWaveLoader.astro', category: 'component', description: 'Square wave kinetic SVG loading animation', tags: ['loader', 'spinner', 'kinetic'] },
+  { name: 'SearchDropdown.astro', path: 'src/components/SearchDropdown.astro', category: 'component', description: 'Autocomplete search input with filter tags', tags: ['search', 'dropdown', 'filter'] },
+
+  // Core Config & Styles
+  { name: 'global.css', path: 'src/styles/global.css', category: 'config', description: 'Tailwind CSS v4 @theme design tokens and typography', tags: ['css', 'tailwind', 'theme', 'styles'] },
+  { name: 'astro.config.mjs', path: 'astro.config.mjs', category: 'config', description: 'Astro build configuration, GitHub Pages base URL & integrations', tags: ['astro', 'vite', 'config'] },
+  { name: 'package.json', path: 'package.json', category: 'config', description: 'NPM package manifest, dependencies, and build scripts', tags: ['npm', 'deps', 'scripts'] },
+  { name: 'AGENTS.md', path: 'AGENTS.md', category: 'config', description: 'Repository rules, Tailwind standards, and checklist for agents', tags: ['agent', 'rules', 'guidelines'] },
+];
+
+const allFiles = [...contextualFiles, ...files];
+---
+
+<!-- Trigger Pill Button (Fixed bottom-left) -->
+<button
+  type="button"
+  id="dev-menu-trigger-btn"
+  aria-label="Open Developer Menu (Press `)"
+  title="Developer Menu (Press `)"
+  class="fixed bottom-3 left-3 sm:bottom-4 sm:left-4 z-40 inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-neutral-900/90 text-white dark:bg-neutral-100/90 dark:text-neutral-950 font-mono text-[11px] font-semibold tracking-wider shadow-lg shadow-black/20 border border-neutral-700/80 dark:border-neutral-300/80 backdrop-blur-md hover:scale-105 active:scale-95 transition-[transform,background-color,border-color] duration-150 cursor-pointer select-none"
+>
+  <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-accent,#52FF1A)] animate-pulse"></span>
+  <span>DEV</span>
+  <kbd class="px-1 py-0.2 rounded bg-neutral-800 text-neutral-300 dark:bg-neutral-200 dark:text-neutral-700 text-[10px] leading-none border border-neutral-700 dark:border-neutral-300">`</kbd>
+</button>
+
+<!-- Dev Menu Modal & Overlay -->
+<div
+  id="dev-menu-container"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="dev-menu-title"
+  aria-hidden="true"
+  class="fixed inset-0 z-[100] hidden items-center justify-center p-3 sm:p-6 sm:pt-16 font-sans select-none"
+>
+  <!-- Backdrop -->
+  <div
+    id="dev-menu-backdrop"
+    class="fixed inset-0 bg-neutral-950/70 dark:bg-black/80 backdrop-blur-sm transition-opacity duration-200"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Modal Box -->
+  <div
+    id="dev-menu-panel"
+    class="relative z-10 w-full max-w-3xl max-h-[85vh] flex flex-col bg-[#fcfbf9] dark:bg-[#121212] border border-neutral-300/90 dark:border-neutral-800 rounded-xl shadow-2xl shadow-black/40 overflow-hidden transform scale-95 opacity-0 transition-[transform,opacity] duration-200"
+  >
+    <!-- Header -->
+    <header class="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-neutral-200 dark:border-neutral-800/80 bg-neutral-100/60 dark:bg-neutral-900/60">
+      <div class="flex items-center gap-2.5">
+        <div class="w-2.5 h-2.5 rounded-full bg-[var(--color-accent,#52FF1A)]"></div>
+        <h2 id="dev-menu-title" class="font-heading font-black text-sm uppercase tracking-wider text-neutral-900 dark:text-white">
+          Developer Command & Quick File Access
+        </h2>
+        <span class="px-1.5 py-0.5 rounded bg-neutral-200 dark:bg-neutral-800 font-mono text-[10px] text-neutral-600 dark:text-neutral-400 font-bold">
+          REPO INDEX
+        </span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="hidden sm:inline-block font-mono text-[11px] text-neutral-500 dark:text-neutral-400">
+          Press <kbd class="px-1.5 py-0.5 rounded bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-[10px] font-semibold">`</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-neutral-200 dark:bg-neutral-800 border border-neutral-300 dark:border-neutral-700 text-[10px] font-semibold">ESC</kbd> to close
+        </span>
+        <button
+          type="button"
+          id="dev-menu-close-btn"
+          aria-label="Close developer menu"
+          class="p-1.5 rounded-md text-neutral-500 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/70 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Quick Dev Toolbar (Theme & Accent & Stats) -->
+    <div class="flex flex-wrap items-center justify-between gap-2 px-4 sm:px-6 py-2.5 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-[#161616] text-xs">
+      <!-- Quick Route Jumpers -->
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <span class="font-mono text-[10px] uppercase font-bold text-neutral-400 dark:text-neutral-500">Jump:</span>
+        <a href={`${base}/`} class="px-2 py-1 rounded bg-neutral-200/80 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 font-mono text-[11px] text-neutral-800 dark:text-neutral-200 transition-colors">/ Home</a>
+        <a href={`${base}/blog`} class="px-2 py-1 rounded bg-neutral-200/80 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 font-mono text-[11px] text-neutral-800 dark:text-neutral-200 transition-colors">/ Blog</a>
+        <a href={`${base}/portfolio-index`} class="px-2 py-1 rounded bg-neutral-200/80 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 font-mono text-[11px] text-neutral-800 dark:text-neutral-200 transition-colors">/ Index</a>
+        <a href={`${base}/component-library`} class="px-2 py-1 rounded bg-neutral-200/80 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 font-mono text-[11px] text-neutral-800 dark:text-neutral-200 transition-colors">/ Showcase</a>
+        <a href={`${base}/ascii-sandbox`} class="px-2 py-1 rounded bg-neutral-200/80 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 font-mono text-[11px] text-neutral-800 dark:text-neutral-200 transition-colors">/ Sandbox</a>
+      </div>
+
+      <!-- Accent Switcher -->
+      <div class="flex items-center gap-1.5">
+        <span class="font-mono text-[10px] uppercase font-bold text-neutral-400 dark:text-neutral-500">Accent:</span>
+        <div class="flex items-center gap-1">
+          <button type="button" data-accent="#52FF1A" title="Lime (#52FF1A)" class="dev-accent-btn w-4 h-4 rounded-full bg-[#52FF1A] border border-black/20 hover:scale-125 transition-transform cursor-pointer"></button>
+          <button type="button" data-accent="#3B82F6" title="Blue (#3B82F6)" class="dev-accent-btn w-4 h-4 rounded-full bg-[#3B82F6] border border-black/20 hover:scale-125 transition-transform cursor-pointer"></button>
+          <button type="button" data-accent="#EC4899" title="Pink (#EC4899)" class="dev-accent-btn w-4 h-4 rounded-full bg-[#EC4899] border border-black/20 hover:scale-125 transition-transform cursor-pointer"></button>
+          <button type="button" data-accent="#F59E0B" title="Amber (#F59E0B)" class="dev-accent-btn w-4 h-4 rounded-full bg-[#F59E0B] border border-black/20 hover:scale-125 transition-transform cursor-pointer"></button>
+          <button type="button" data-accent="#8B5CF6" title="Purple (#8B5CF6)" class="dev-accent-btn w-4 h-4 rounded-full bg-[#8B5CF6] border border-black/20 hover:scale-125 transition-transform cursor-pointer"></button>
+          <button type="button" data-accent="#10B981" title="Emerald (#10B981)" class="dev-accent-btn w-4 h-4 rounded-full bg-[#10B981] border border-black/20 hover:scale-125 transition-transform cursor-pointer"></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Input & Category Filters -->
+    <div class="p-4 sm:px-6 sm:py-4 border-b border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#121212] flex flex-col gap-3">
+      <div class="relative">
+        <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          id="dev-menu-search"
+          type="search"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Filter files, components, routes... (e.g. blog, navbar, config)"
+          class="w-full pl-10 pr-4 py-2.5 rounded-lg bg-neutral-100 dark:bg-neutral-900 border border-neutral-300/80 dark:border-neutral-700/80 font-mono text-xs sm:text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-accent,#52FF1A)] focus:border-transparent transition-shadow"
+        />
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+        <button type="button" data-filter="all" class="dev-filter-pill active px-2.5 py-1 rounded-md font-mono text-[11px] font-semibold border transition-colors cursor-pointer bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 border-neutral-900 dark:border-white">
+          All ({allFiles.length})
+        </button>
+        <button type="button" data-filter="page" class="dev-filter-pill px-2.5 py-1 rounded-md font-mono text-[11px] font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer">
+          Pages ({allFiles.filter(f => f.category === 'page').length})
+        </button>
+        <button type="button" data-filter="component" class="dev-filter-pill px-2.5 py-1 rounded-md font-mono text-[11px] font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer">
+          Components ({allFiles.filter(f => f.category === 'component').length})
+        </button>
+        <button type="button" data-filter="content" class="dev-filter-pill px-2.5 py-1 rounded-md font-mono text-[11px] font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer">
+          Content & Data ({allFiles.filter(f => f.category === 'content').length})
+        </button>
+        <button type="button" data-filter="layout" class="dev-filter-pill px-2.5 py-1 rounded-md font-mono text-[11px] font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer">
+          Layouts ({allFiles.filter(f => f.category === 'layout').length})
+        </button>
+        <button type="button" data-filter="config" class="dev-filter-pill px-2.5 py-1 rounded-md font-mono text-[11px] font-medium border border-neutral-300 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer">
+          Config ({allFiles.filter(f => f.category === 'config').length})
+        </button>
+      </div>
+    </div>
+
+    <!-- Scrollable Results List -->
+    <div id="dev-menu-list" class="flex-1 overflow-y-auto divide-y divide-neutral-100 dark:divide-neutral-800/80 p-2 sm:p-3">
+      {allFiles.map((file, idx) => {
+        const categoryColor =
+          file.isPinned ? 'bg-[var(--color-accent,#52FF1A)] text-neutral-950 font-black border-transparent' :
+          file.category === 'page' ? 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300 border-blue-200 dark:border-blue-900' :
+          file.category === 'component' ? 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-900' :
+          file.category === 'content' ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-900' :
+          file.category === 'layout' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-900' :
+          'bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 border-neutral-300 dark:border-neutral-700';
+
+        return (
+          <div
+            class={`dev-file-item group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg transition-colors ${file.isPinned ? 'bg-neutral-100/70 dark:bg-neutral-900/60 border border-[var(--color-accent,#52FF1A)]/30' : 'hover:bg-neutral-100/90 dark:hover:bg-neutral-900/80'}`}
+            data-category={file.category}
+            data-name={file.name.toLowerCase()}
+            data-path={file.path.toLowerCase()}
+            data-tags={(file.tags || []).join(' ').toLowerCase()}
+            data-route={file.route || ''}
+            tabindex="0"
+          >
+            <!-- Left Info -->
+            <div class="flex items-start gap-3 min-w-0">
+              <span class={`px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider shrink-0 border ${categoryColor}`}>
+                {file.isPinned ? 'ARTICLE FILE' : file.category}
+              </span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-heading font-bold text-xs sm:text-sm text-neutral-900 dark:text-white truncate">
+                    {file.name}
+                  </span>
+                  <span class="font-mono text-[11px] text-neutral-400 dark:text-neutral-500 truncate">
+                    {file.path}
+                  </span>
+                </div>
+                <p class="text-xs text-neutral-600 dark:text-neutral-400 mt-0.5 line-clamp-1">
+                  {file.description}
+                </p>
+              </div>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+              {file.route && (
+                <a
+                  href={file.route}
+                  class="dev-action-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[var(--color-accent,#52FF1A)] text-neutral-950 hover:opacity-90 font-mono text-[11px] font-bold transition-opacity"
+                >
+                  <span>Open Route</span>
+                  <span aria-hidden="true">&rarr;</span>
+                </a>
+              )}
+              <button
+                type="button"
+                class="dev-copy-path-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-800 dark:text-neutral-200 font-mono text-[11px] font-medium transition-colors cursor-pointer"
+                data-copy={file.path}
+                title="Copy relative file path"
+              >
+                <span>Copy Path</span>
+              </button>
+              <a
+                href={`${repoUrl}/${file.path}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1 px-2 py-1 rounded text-neutral-500 hover:text-neutral-900 dark:hover:text-white font-mono text-[11px] transition-colors"
+                title="View file on GitHub"
+              >
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <!-- Footer Stats & Shortcuts -->
+    <footer class="flex items-center justify-between px-4 sm:px-6 py-2.5 border-t border-neutral-200 dark:border-neutral-800/80 bg-neutral-100/70 dark:bg-neutral-900/70 text-[11px] font-mono text-neutral-500 dark:text-neutral-400">
+      <div class="flex items-center gap-2">
+        <span id="dev-menu-counter">{files.length} items</span>
+        <span>•</span>
+        <span class="text-neutral-400 dark:text-neutral-500">Repository Master Branch</span>
+      </div>
+      <div id="dev-menu-toast" class="font-bold text-[var(--color-accent,#52FF1A)] opacity-0 transition-opacity duration-150">
+        Copied to clipboard!
+      </div>
+    </footer>
+  </div>
+</div>
+
+<script>
+  function setupDevMenu() {
+    const triggerBtn = document.getElementById('dev-menu-trigger-btn');
+    const container = document.getElementById('dev-menu-container');
+    const panel = document.getElementById('dev-menu-panel');
+    const backdrop = document.getElementById('dev-menu-backdrop');
+    const closeBtn = document.getElementById('dev-menu-close-btn');
+    const searchInput = document.getElementById('dev-menu-search') as HTMLInputElement | null;
+    const filterPills = document.querySelectorAll('.dev-filter-pill');
+    const fileItems = document.querySelectorAll('.dev-file-item') as NodeListOf<HTMLElement>;
+    const counterEl = document.getElementById('dev-menu-counter');
+    const toastEl = document.getElementById('dev-menu-toast');
+    const accentBtns = document.querySelectorAll('.dev-accent-btn');
+
+    let isOpen = false;
+    let currentFilter = 'all';
+
+    function openMenu() {
+      if (!container || !panel) return;
+      isOpen = true;
+      container.classList.remove('hidden');
+      container.classList.add('flex');
+      container.setAttribute('aria-hidden', 'false');
+      requestAnimationFrame(() => {
+        panel.classList.remove('scale-95', 'opacity-0');
+        panel.classList.add('scale-100', 'opacity-100');
+        if (searchInput) {
+          searchInput.focus();
+          searchInput.select();
+        }
+      });
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      if (!container || !panel) return;
+      isOpen = false;
+      panel.classList.remove('scale-100', 'opacity-100');
+      panel.classList.add('scale-95', 'opacity-0');
+      container.setAttribute('aria-hidden', 'true');
+      setTimeout(() => {
+        if (!isOpen) {
+          container.classList.remove('flex');
+          container.classList.add('hidden');
+          document.body.style.overflow = '';
+        }
+      }, 200);
+    }
+
+    function toggleMenu() {
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    // Global Keypress Listener for ` (Backquote)
+    window.addEventListener('keydown', (e: KeyboardEvent) => {
+      // Check if user is typing in an input, textarea, or contenteditable
+      const target = e.target as HTMLElement;
+      const isTyping =
+        target.tagName === 'INPUT' ||
+        target.tagName === 'TEXTAREA' ||
+        target.isContentEditable;
+
+      if ((e.key === '`' || e.code === 'Backquote')) {
+        // If typing inside an input outside dev menu, allow normal character typing
+        if (isTyping && target.id !== 'dev-menu-search') {
+          return;
+        }
+        e.preventDefault();
+        toggleMenu();
+      } else if (e.key === 'Escape' && isOpen) {
+        e.preventDefault();
+        closeMenu();
+      }
+    });
+
+    if (triggerBtn) {
+      triggerBtn.addEventListener('click', toggleMenu);
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeMenu);
+    }
+    if (backdrop) {
+      backdrop.addEventListener('click', closeMenu);
+    }
+
+    // Search and Category Filter Logic
+    function filterResults() {
+      const query = (searchInput?.value || '').toLowerCase().trim();
+      let visibleCount = 0;
+
+      fileItems.forEach((item) => {
+        const category = item.getAttribute('data-category') || '';
+        const name = item.getAttribute('data-name') || '';
+        const path = item.getAttribute('data-path') || '';
+        const tags = item.getAttribute('data-tags') || '';
+
+        const matchesFilter = currentFilter === 'all' || category === currentFilter;
+        const matchesQuery =
+          !query ||
+          name.includes(query) ||
+          path.includes(query) ||
+          tags.includes(query);
+
+        if (matchesFilter && matchesQuery) {
+          item.classList.remove('hidden');
+          item.classList.add('flex');
+          visibleCount++;
+        } else {
+          item.classList.remove('flex');
+          item.classList.add('hidden');
+        }
+      });
+
+      if (counterEl) {
+        counterEl.textContent = `${visibleCount} item${visibleCount === 1 ? '' : 's'}`;
+      }
+    }
+
+    if (searchInput) {
+      searchInput.addEventListener('input', filterResults);
+    }
+
+    filterPills.forEach((pill) => {
+      pill.addEventListener('click', () => {
+        filterPills.forEach((p) => {
+          p.classList.remove('active', 'bg-neutral-900', 'text-white', 'dark:bg-white', 'dark:text-neutral-950', 'border-neutral-900', 'dark:border-white');
+          p.classList.add('border-neutral-300', 'dark:border-neutral-700', 'text-neutral-600', 'dark:text-neutral-400');
+        });
+        pill.classList.add('active', 'bg-neutral-900', 'text-white', 'dark:bg-white', 'dark:text-neutral-950', 'border-neutral-900', 'dark:border-white');
+        pill.classList.remove('border-neutral-300', 'dark:border-neutral-700', 'text-neutral-600', 'dark:text-neutral-400');
+
+        currentFilter = pill.getAttribute('data-filter') || 'all';
+        filterResults();
+      });
+    });
+
+    // Copy Path functionality
+    const copyBtns = document.querySelectorAll('.dev-copy-path-btn');
+    copyBtns.forEach((btn) => {
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const copyText = btn.getAttribute('data-copy');
+        if (!copyText) return;
+
+        try {
+          await navigator.clipboard.writeText(copyText);
+          const btnSpan = btn.querySelector('span');
+          if (btnSpan) btnSpan.textContent = 'Copied!';
+          if (toastEl) {
+            toastEl.textContent = `Copied: ${copyText}`;
+            toastEl.classList.remove('opacity-0');
+            toastEl.classList.add('opacity-100');
+          }
+          setTimeout(() => {
+            if (btnSpan) btnSpan.textContent = 'Copy Path';
+            if (toastEl) {
+              toastEl.classList.remove('opacity-100');
+              toastEl.classList.add('opacity-0');
+            }
+          }, 1500);
+        } catch (err) {
+          console.error('Clipboard copy failed', err);
+        }
+      });
+    });
+
+    // Accent switcher buttons
+    accentBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const hex = btn.getAttribute('data-accent');
+        if (hex && (window as any).__setPortfolioAccent) {
+          (window as any).__setPortfolioAccent(hex);
+        } else if (hex) {
+          localStorage.setItem('portfolio_accent_hex', hex);
+          document.documentElement.style.setProperty('--color-accent', hex);
+        }
+      });
+    });
+  }
+
+  // Initialize on DOM load and Astro page transitions
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupDevMenu);
+  } else {
+    setupDevMenu();
+  }
+  document.addEventListener('astro:page-load', setupDevMenu);
+</script>
