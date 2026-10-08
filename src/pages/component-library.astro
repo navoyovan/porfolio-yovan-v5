@@ -24,6 +24,10 @@ import HoverExpandButton from "../components/HoverExpandButton.astro";
 import FrameRankChart from "../components/FrameRankChart.astro";
 import ActionButtonOledModal from "../components/ActionButtonOledModal.astro";
 import HoverExpandOledModal from "../components/HoverExpandOledModal.astro";
+import PersonalBusinessCard from "../components/PersonalBusinessCard.astro";
+import AsciiParticleField from "../components/AsciiParticleField.astro";
+import ConceptMetaballField from "../components/ascii-concepts/ConceptMetaballField.astro";
+import ConceptFloatingParticleBlobs from "../components/ascii-concepts/ConceptFloatingParticleBlobs.astro";
 
 const foundationsNav = [
   { id: "colors", label: "Color Tokens" },
@@ -53,6 +57,7 @@ const systemsNav = [
   { id: "trend-chart", label: "Telemetry Trend Spline" },
   { id: "kiosk-timeline", label: "Activity Schedule Timeline" },
   { id: "frame-rank-chart", label: "Filmstrip Asset Ranking" },
+  { id: "ascii-particles", label: "ASCII Particle Fields" },
 ];
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -969,6 +974,22 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
                     >elevation="floating" • deep shadow • 32dp</span
                   >
                 </div>
+              </div>
+            </div>
+
+            <!-- Subsection 03.1 / Skeuomorphic Calling Card -->
+            <div class="pt-8 border-t border-neutral-200/70 dark:border-neutral-800/70 space-y-4">
+              <div class="flex flex-col gap-1">
+                <span class="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100">
+                  03.1 / Skeuomorphic 3D Parallax Calling Card
+                </span>
+                <span class="font-mono text-[11px] text-neutral-500">
+                  interactive={true} • 3D perspective parallax • EMV smart chip • dynamic specular glare • debossed letterpress
+                </span>
+              </div>
+
+              <div class="py-2 flex justify-start">
+                <PersonalBusinessCard id="cl-skeuo-card" latinMode={true} />
               </div>
             </div>
           </div>
@@ -3275,6 +3296,128 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
             </div>
           </div>
         </section>
+
+        <!-- 19 / Ambient Dithered ASCII Particles & Fluid Surfaces -->
+        <section id="ascii-particles" class="space-y-8 scroll-mt-40 xl:scroll-mt-24">
+          <div class="pb-2 border-b border-neutral-200 dark:border-neutral-800">
+            <h2
+              class="!font-mono font-mono text-xs uppercase tracking-[0.15em] text-neutral-500 dark:text-neutral-400 font-semibold"
+            >
+              19 / Ambient Dithered ASCII Particles & Fluid Surfaces
+            </h2>
+          </div>
+
+          <!-- 19.1 Production Specimen: Ambient Fluid ASCII Field -->
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0">
+              <span
+                class="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100 uppercase tracking-wider"
+                >19.1 / Ambient Fluid ASCII Field (Production Specimen)</span
+              >
+              <span class="font-mono text-[10px] text-neutral-400"
+                >4x4 Bayer Dither Matrix • Canvas 2D</span
+              >
+            </div>
+
+            <div class="relative w-full h-80 sm:h-96 border border-neutral-200 dark:border-neutral-800 bg-[#fcfbf9] dark:bg-[#0e0e0e] overflow-hidden">
+              <AsciiParticleField class="w-full h-full" opacityMultiplier={1.5} />
+              
+              <!-- Center Stage Latin Editorial Label -->
+              <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-10 px-4 text-center">
+                <span class="font-heading font-black text-2xl sm:text-3xl lg:text-4xl text-neutral-950 dark:text-white tracking-tight uppercase">
+                  PARTICULAE FLUIDAE
+                </span>
+                <span class="font-mono text-[10px] sm:text-xs text-neutral-500 tracking-widest uppercase mt-1">
+                  STATUS_VIVUS // DITHER_DENSITAS_1.7X
+                </span>
+              </div>
+            </div>
+
+            <div class="flex flex-col">
+              <span
+                class="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100"
+                >Ambient Fluid ASCII Particle Field</span
+              >
+              <span class="font-mono text-[11px] text-neutral-500"
+                >&lt;AsciiParticleField /&gt; • 4x4 Bayer ordered dithering • dynamic dark/light LUT • liquid slide shear • responsive viewport scaling</span
+              >
+            </div>
+          </div>
+
+          <!-- 19.2 Exploratory Concept 1: Central Morphing Metaball Field -->
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0">
+              <span
+                class="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100 uppercase tracking-wider"
+                >19.2 / Central Morphing Metaball Field (Concept Prototype 01)</span
+              >
+              <span class="font-mono text-[10px] text-neutral-400"
+                >Multi-Body Harmonic Potential Surface</span
+              >
+            </div>
+
+            <div class="relative w-full h-80 sm:h-96 border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+              <ConceptMetaballField class="w-full h-full" />
+              
+              <!-- Bottom Left Latin Editorial Label -->
+              <div class="absolute bottom-4 left-4 pointer-events-none select-none z-10">
+                <span class="font-heading font-bold text-sm sm:text-base text-white tracking-tight uppercase block">
+                  METABALLA CENTRALE
+                </span>
+                <span class="font-mono text-[9px] text-neutral-400 tracking-wider uppercase block">
+                  PROTOTYPUS_01 // HARMONIC_SYNTHESIS
+                </span>
+              </div>
+            </div>
+
+            <div class="flex flex-col">
+              <span
+                class="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100"
+                >Morphing Metaball Field</span
+              >
+              <span class="font-mono text-[11px] text-neutral-500"
+                >ConceptMetaballField.astro • multi-frequency radial harmonic synthesis • real-time density ramp</span
+              >
+            </div>
+          </div>
+
+          <!-- 19.3 Exploratory Concept 2: Orbital Satellite Particle Blobs -->
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 sm:gap-0">
+              <span
+                class="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100 uppercase tracking-wider"
+                >19.3 / Orbital Satellite Particle Blobs (Concept Prototype 02)</span
+              >
+              <span class="font-mono text-[10px] text-neutral-400"
+                >Multi-Body Gravitational Node Orbit</span
+              >
+            </div>
+
+            <div class="relative w-full h-80 sm:h-96 border border-neutral-200 dark:border-neutral-800 overflow-hidden">
+              <ConceptFloatingParticleBlobs class="w-full h-full" />
+              
+              <!-- Bottom Left Latin Editorial Label -->
+              <div class="absolute bottom-4 left-4 pointer-events-none select-none z-10">
+                <span class="font-heading font-bold text-sm sm:text-base text-white tracking-tight uppercase block">
+                  SYSTEMA NODORUM ORBITALIUM
+                </span>
+                <span class="font-mono text-[9px] text-neutral-400 tracking-wider uppercase block">
+                  PROTOTYPUS_02 // ORBITAL_GRAVITY_SIM
+                </span>
+              </div>
+            </div>
+
+            <div class="flex flex-col">
+              <span
+                class="font-mono text-xs font-semibold text-neutral-900 dark:text-neutral-100"
+                >Orbital Satellite Particle Blobs</span
+              >
+              <span class="font-mono text-[11px] text-neutral-500"
+                >ConceptFloatingParticleBlobs.astro • multi-body gravitational orbit simulation • pulsing cores</span
+              >
+            </div>
+          </div>
+        </section>
       </div>
 
       <!-- License & Attribution Section -->
@@ -3359,6 +3502,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, "");
       "trend-chart",
       "kiosk-timeline",
       "frame-rank-chart",
+      "ascii-particles",
     ];
 
     const updateActiveTab = (activeId: string) => {

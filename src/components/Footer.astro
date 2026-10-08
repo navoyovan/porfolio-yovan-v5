@@ -2,182 +2,112 @@
 // Footer.astro - Global Systems Footer
 import GithubContributionDivider from './GithubContributionDivider.astro';
 
-const rawBase = import.meta.env.BASE_URL;
-const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
 const currentYear = new Date().getFullYear();
 ---
 
 <GithubContributionDivider />
 <footer
-  class="w-full bg-[#fcfbf9] dark:bg-[#0e0e0e] text-neutral-600 dark:text-neutral-400 font-sans transition-colors duration-200"
+  class="w-full bg-[#fcfbf9] dark:bg-[#0e0e0e] text-neutral-600 dark:text-neutral-400 font-sans transition-colors duration-200 border-t border-neutral-200/60 dark:border-neutral-800/60"
 >
-  <div class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto py-12 sm:py-16 space-y-12">
-    <!-- Top Grid: Brand & Link Groups -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
-      <!-- Left Column: Identity -->
-      <div class="md:col-span-5 space-y-4">
-        <a
-          href={`${base}/`}
-          aria-label="Home"
-          data-aria-en="Home"
-          data-aria-id="Beranda"
-          class="text-xl font-black tracking-[0.5px] text-neutral-950 dark:text-white font-heading hover:opacity-80 transition-opacity inline-flex items-baseline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
+  <div class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto">
+    <!-- Layer 2: Closing Statement / Contact Hub -->
+    <div
+      id="contact"
+      class="scroll-mt-24 py-10 sm:py-14 border-b border-neutral-200/60 dark:border-neutral-800/60 flex flex-col md:flex-row md:items-end justify-between gap-6"
+    >
+      <div class="space-y-3 max-w-xl">
+        <h2
+          id="heading-contact"
+          class="font-heading text-3xl sm:text-4xl md:text-5xl text-neutral-950 dark:text-white tracking-tight leading-[1.08]"
+          data-en="Have an idea? Let's build it."
+          data-id="Punya ide? Mari kita bangun."
         >
-          <span>yovan</span><span class="text-[var(--color-accent,#52FF1A)] ml-[2px]">;</span>
-        </a>
+          <span class="font-normal text-neutral-400 dark:text-neutral-500">Have an idea?</span><br />
+          <span class="font-black text-neutral-950 dark:text-white">Let's build <span class="text-[var(--color-accent,#1b7f3b)] dark:text-[var(--color-accent,#52FF1A)]">it.</span></span>
+        </h2>
         <p
-          data-en="Software engineer & systems builder turning ideas into production web apps, touchscreen kiosk platforms, and hardware integrations."
-          data-id="Software engineer & pembuat sistem yang mengubah ide menjadi aplikasi web produksi, platform kios layar sentuh, dan integrasi perangkat keras."
-          class="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-sm leading-relaxed font-normal"
+          class="font-mono text-xs sm:text-[13px] text-neutral-500 dark:text-neutral-400"
+          data-en="Available for select freelance contracts & full-time engineering roles."
+          data-id="Tersedia untuk kontrak lepas pilihan & posisi engineering full-time."
         >
-          Software engineer & systems builder turning ideas into production web
-          apps, touchscreen kiosk platforms, and hardware integrations.
+          Available for select freelance contracts &amp; full-time engineering roles.
         </p>
-        <div
-          class="flex items-center gap-2 pt-1 text-xs text-neutral-500 dark:text-neutral-400"
-        >
-          <span class="w-2 h-2 rounded-full bg-[var(--color-accent,#52FF1A)] animate-pulse"></span>
-          <span class="font-mono text-[11px]" data-en="AVAILABLE FOR NEW PROJECTS" data-id="TERSEDIA UNTUK PROYEK BARU">AVAILABLE FOR NEW PROJECTS</span>
-        </div>
       </div>
 
-      <!-- Right Columns: Navigation & Connect -->
-      <div class="md:col-span-7 grid grid-cols-2 gap-8 sm:gap-12">
-        <!-- Navigation -->
-        <nav aria-label="Footer Navigation" data-aria-en="Footer Navigation" data-aria-id="Navigasi Footer">
-          <h3
-            class="font-heading font-bold text-xs uppercase tracking-wider text-neutral-950 dark:text-white block m-0 mb-5 sm:mb-6"
-            data-en="Navigation"
-            data-id="Navigasi"
-          >
-            Navigation
-          </h3>
-          <ul class="space-y-2 text-xs list-none p-0 m-0">
-            <li>
-              <a
-                href={`${base}/`}
-                data-en="Home"
-                data-id="Beranda"
-                class="hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href={`${base}/#about`}
-                data-en="About"
-                data-id="Tentang"
-                class="hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
-              >
-                About
-              </a>
-            </li>
-            <li>
-              <a
-                href={`${base}/#projects`}
-                data-en="Featured Work"
-                data-id="Karya Pilihan"
-                class="hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
-              >
-                Featured Work
-              </a>
-            </li>
-            <li>
-              <a
-                href={`${base}/portfolio-index`}
-                class="hover:text-neutral-950 dark:hover:text-white transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
-              >
-                <span data-en="Portfolio Index" data-id="Indeks Portofolio">Portfolio Index</span>
-                <span
-                  class="text-[10px] font-mono text-neutral-400 dark:text-neutral-500"
-                  aria-hidden="true">↗</span
-                >
-              </a>
-            </li>
-            <li>
-              <a
-                href={`${base}/component-library`}
-                class="hover:text-neutral-950 dark:hover:text-white transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
-              >
-                <span data-en="Component Library" data-id="Pustaka Komponen">Component Library</span>
-                <span
-                  class="text-[10px] font-mono text-neutral-400 dark:text-neutral-500"
-                  aria-hidden="true">↗</span
-                >
-              </a>
-            </li>
-          </ul>
-        </nav>
+      <!-- Contact & Coordinate Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0">
+        <!-- Email (Primary Transmission) -->
+        <a
+          href="mailto:yovangunardio@gmail.com"
+          class="group inline-flex items-center gap-2 px-3.5 py-2 rounded-md border border-neutral-300 dark:border-neutral-700 bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 hover:bg-neutral-800 dark:hover:bg-neutral-200 font-mono text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+          aria-label="Send email to Yovan"
+          data-aria-en="Send email to Yovan"
+          data-aria-id="Kirim email ke Yovan"
+        >
+          <i class="ti ti-mail text-sm" aria-hidden="true"></i>
+          <span>yovangunardio@gmail.com</span>
+          <span class="text-neutral-400 group-hover:text-white dark:group-hover:text-neutral-950 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true">↗</span>
+        </a>
 
-        <!-- Connect -->
-        <nav aria-label="Connect Links" data-aria-en="Connect Links" data-aria-id="Tautan Kontak">
-          <h3
-            class="font-heading font-bold text-xs uppercase tracking-wider text-neutral-950 dark:text-white block m-0 mb-5 sm:mb-6"
-            data-en="Connect"
-            data-id="Kontak"
-          >
-            Connect
-          </h3>
-          <ul class="space-y-2 text-xs list-none p-0 m-0">
-            <li>
-              <a
-                href="https://github.com/navoyovan"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub Profile (opens in new tab)"
-                data-aria-en="GitHub Profile (opens in new tab)"
-                data-aria-id="Profil GitHub (buka di tab baru)"
-                class="hover:text-neutral-950 dark:hover:text-white transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
-              >
-                <i class="ti ti-brand-github text-sm" aria-hidden="true"></i>
-                <span>GitHub</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://linkedin.com/in/yovan-g-d-22379ba7/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn Profile (opens in new tab)"
-                data-aria-en="LinkedIn Profile (opens in new tab)"
-                data-aria-id="Profil LinkedIn (buka di tab baru)"
-                class="hover:text-neutral-950 dark:hover:text-white transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
-              >
-                <i class="ti ti-brand-linkedin text-sm" aria-hidden="true"></i>
-                <span>LinkedIn</span>
-              </a>
-            </li>
-            <li>
-              <a
-                href="mailto:yovangunardio@gmail.com"
-                aria-label="Send email to Yovan"
-                data-aria-en="Send email to Yovan"
-                data-aria-id="Kirim email ke Yovan"
-                class="hover:text-neutral-950 dark:hover:text-white transition-colors flex items-center gap-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
-              >
-                <i class="ti ti-mail text-sm" aria-hidden="true"></i>
-                <span>Email</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <!-- GitHub -->
+        <a
+          href="https://github.com/navoyovan"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-800 bg-transparent hover:border-neutral-400 dark:hover:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white font-mono text-xs transition-[border-color,color] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+          aria-label="GitHub Profile (opens in new tab)"
+          data-aria-en="GitHub Profile (opens in new tab)"
+          data-aria-id="Profil GitHub (buka di tab baru)"
+        >
+          <i class="ti ti-brand-github text-sm text-neutral-400 group-hover:text-neutral-950 dark:group-hover:text-white transition-colors" aria-hidden="true"></i>
+          <span>GitHub</span>
+          <span class="text-neutral-400 group-hover:text-neutral-950 dark:group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true">↗</span>
+        </a>
+
+        <!-- LinkedIn -->
+        <a
+          href="https://linkedin.com/in/yovan-g-d-22379ba7/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-800 bg-transparent hover:border-neutral-400 dark:hover:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white font-mono text-xs transition-[border-color,color] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+          aria-label="LinkedIn Profile (opens in new tab)"
+          data-aria-en="LinkedIn Profile (opens in new tab)"
+          data-aria-id="Profil LinkedIn (buka di tab baru)"
+        >
+          <i class="ti ti-brand-linkedin text-sm text-neutral-400 group-hover:text-neutral-950 dark:group-hover:text-white transition-colors" aria-hidden="true"></i>
+          <span>LinkedIn</span>
+          <span class="text-neutral-400 group-hover:text-neutral-950 dark:group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true">↗</span>
+        </a>
+
+        <!-- Resume / CV -->
+        <a
+          href="https://docs.google.com/document/d/1dlUKA5EGLI3qPxEOfJ3acjt4tA39oxKy_Fs1Z_JM0Pk/export?format=pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="group inline-flex items-center gap-1.5 px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-800 bg-transparent hover:border-neutral-400 dark:hover:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white font-mono text-xs transition-[border-color,color] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+          aria-label="Download Resume / CV as PDF (opens in new tab)"
+          data-aria-en="Download Resume / CV as PDF (opens in new tab)"
+          data-aria-id="Unduh Resume / CV (buka di tab baru)"
+        >
+          <i class="ti ti-file-text text-sm text-neutral-400 group-hover:text-neutral-950 dark:group-hover:text-white transition-colors" aria-hidden="true"></i>
+          <span data-en="Resume / CV" data-id="Resume / CV">Resume / CV</span>
+          <span class="text-neutral-400 group-hover:text-neutral-950 dark:group-hover:text-white group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true">↗</span>
+        </a>
       </div>
     </div>
 
-    <!-- Bottom Strip: Copyright & Platform Stack -->
+    <!-- Layer 3: Footer Utility Strip -->
     <div
-      class="pt-8 border-t border-neutral-200/80 dark:border-neutral-800/80 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-neutral-500 dark:text-neutral-500"
+      class="py-6 sm:py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-neutral-500 dark:text-neutral-500"
     >
+      <!-- Left: Copyright & Attribution -->
       <div
-        class="flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1"
+        class="flex flex-wrap items-center justify-center sm:justify-start gap-x-2 gap-y-1 text-center sm:text-left"
       >
         <span class="font-heading font-bold text-neutral-950 dark:text-white">
-          Yovan Gunardio Darmawan
+          &copy; {currentYear} Yovan Gunardio Darmawan
         </span>
-        <span class="select-none" aria-hidden="true">•</span>
-        <span>&copy; {currentYear}</span>
-        <span class="hidden sm:inline select-none" aria-hidden="true">•</span>
+        <span class="hidden sm:inline select-none text-neutral-400 dark:text-neutral-600" aria-hidden="true">•</span>
         <span class="text-[11px] text-neutral-400 dark:text-neutral-600">
           Map tiles by <a
             href="https://carto.com/attributions"
@@ -201,13 +131,62 @@ const currentYear = new Date().getFullYear();
         </span>
       </div>
 
-      <div class="flex items-center gap-2 font-mono text-[11px]">
-        <span>ASTRO v5</span>
-        <span class="select-none">•</span>
-        <span>TAILWIND v4</span>
-        <span class="select-none">•</span>
-        <span>GITHUB PAGES</span>
+      <!-- Right: Back-to-Top & Subdued Metadata (Zero Duplicates) -->
+      <div class="flex items-center justify-center sm:justify-end gap-3 font-mono text-xs">
+        <!-- Back to Top -->
+        <button
+          type="button"
+          id="footer-back-to-top"
+          aria-label="Back to top"
+          class="group inline-flex items-center gap-1.5 text-xs text-neutral-500 hover:text-neutral-950 dark:text-neutral-400 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded px-1.5 py-0.5 cursor-pointer"
+        >
+          <span data-en="Top" data-id="Atas">Top</span>
+          <svg
+            class="w-3.5 h-3.5 text-neutral-400 group-hover:text-neutral-950 dark:group-hover:text-white group-hover:-translate-y-0.5 transition-transform"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+          </svg>
+        </button>
+
+        <span class="select-none text-neutral-300 dark:text-neutral-700" aria-hidden="true">|</span>
+
+        <!-- Subdued Secondary Metadata -->
+        <div class="flex items-center gap-1.5 text-[10px] text-neutral-400 dark:text-neutral-600">
+          <span>ASTRO v5</span>
+          <span class="select-none">•</span>
+          <span>TAILWIND v4</span>
+          <span class="select-none">•</span>
+          <span>GITHUB PAGES</span>
+        </div>
       </div>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  (() => {
+    const initBackToTop = () => {
+      const btn = document.getElementById('footer-back-to-top');
+      if (!btn || btn.dataset.bound === 'true') return;
+      btn.dataset.bound = 'true';
+      btn.addEventListener('click', () => {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' });
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initBackToTop);
+    } else {
+      initBackToTop();
+    }
+    document.addEventListener('astro:page-load', initBackToTop);
+  })();
+</script>

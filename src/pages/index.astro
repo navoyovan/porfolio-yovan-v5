@@ -6,7 +6,6 @@ import ActionButton from "../components/ActionButton.astro";
 import ProjectTile from "../components/ProjectTile.astro";
 import HoverExpandButton from "../components/HoverExpandButton.astro";
 import EasterEggs from "../components/EasterEggs.astro";
-import AsciiParticleField from "../components/AsciiParticleField.astro";
 import { DitheringShader } from "../components/ui/dithering-shader";
 
 const rawBase = import.meta.env.BASE_URL;
@@ -139,11 +138,6 @@ const capabilities = [
 >
   <!-- page wrapper: position relative so easter eggs scatter through scroll height -->
   <div class="relative">
-    <!-- Ambient Liquid ASCII Particles drifting in the background behind all content -->
-    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-      <AsciiParticleField class="w-full h-full" />
-    </div>
-
     <EasterEggs />
 
     <Hero firstName="yovan" middleName="gunardio" lastName="darmawan" />
@@ -193,7 +187,7 @@ const capabilities = [
                 style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
               >
                 <DitheringShader
-                  client:visible
+                  client:load
                   shape="wave"
                   type="8x8"
                   pxSize={1}
@@ -1726,127 +1720,6 @@ const capabilities = [
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- 06 // GET IN TOUCH -->
-      <section
-        id="contact"
-        aria-labelledby="heading-contact"
-        class="scroll-mt-24 pt-16 space-y-8"
-      >
-        <div
-          class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800"
-        >
-          <span
-            class="font-heading font-bold text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400"
-          >
-            06 // GET IN TOUCH
-          </span>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <!-- Left Column: Contact Card -->
-          <div
-            class="lg:col-span-6 flex flex-col gap-5 p-6 sm:p-8 border border-neutral-300/80 dark:border-neutral-800 bg-[#f6f4ee] dark:bg-[#141414]"
-          >
-            <div class="space-y-1.5">
-              <span
-                data-en="Direct Contact"
-                data-id="Kontak Langsung"
-                class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-bold block"
-              >
-                Direct Contact
-              </span>
-              <a
-                href="mailto:yovangunardio@gmail.com"
-                class="text-lg sm:text-xl font-heading font-bold text-neutral-950 dark:text-white hover:text-[var(--color-accent,#52FF1A)] dark:hover:text-[var(--color-accent,#52FF1A)] transition-colors break-all"
-              >
-                yovangunardio@gmail.com
-              </a>
-            </div>
-
-            <div
-              class="pt-3 border-t border-neutral-200/80 dark:border-neutral-800/80 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto"
-            >
-              <ActionButton
-                variant="primary"
-                size="sm"
-                href="mailto:yovangunardio@gmail.com"
-                ariaLabel="Send an email to Yovan"
-                data-aria-en="Send an email to Yovan"
-                data-aria-id="Kirim email ke Yovan"
-                class="w-full sm:w-auto max-sm:!py-[11px]"
-              >
-                <span data-en="Send an Email ↗" data-id="Kirim Email ↗"
-                  >Send an Email ↗</span
-                >
-              </ActionButton>
-              <ActionButton
-                variant="secondary"
-                size="sm"
-                href="https://github.com/navoyovan"
-                target="_blank"
-                rel="noopener noreferrer"
-                ariaLabel="GitHub Profile (opens in new tab)"
-                data-aria-en="GitHub Profile (opens in new tab)"
-                data-aria-id="Profil GitHub (buka di tab baru)"
-                class="w-full sm:w-auto max-sm:!py-[11px]"
-              >
-                <span data-en="GitHub ↗" data-id="GitHub ↗">GitHub ↗</span>
-              </ActionButton>
-              <ActionButton
-                variant="secondary"
-                size="sm"
-                href="https://linkedin.com/in/yovan-g-d-22379ba7/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ariaLabel="LinkedIn Profile (opens in new tab)"
-                data-aria-en="LinkedIn Profile (opens in new tab)"
-                data-aria-id="Profil LinkedIn (buka di tab baru)"
-                class="w-full sm:w-auto max-sm:!py-[11px]"
-              >
-                <span data-en="LinkedIn ↗" data-id="LinkedIn ↗">LinkedIn ↗</span
-                >
-              </ActionButton>
-              <ActionButton
-                variant="secondary"
-                size="sm"
-                href="https://docs.google.com/document/d/1dlUKA5EGLI3qPxEOfJ3acjt4tA39oxKy_Fs1Z_JM0Pk/export?format=pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                ariaLabel="Download Resume / CV as PDF (opens in new tab)"
-                data-aria-en="Download Resume / CV as PDF (opens in new tab)"
-                data-aria-id="Unduh Resume / CV dalam format PDF (buka di tab baru)"
-                class="w-full sm:w-auto max-sm:!py-[11px]"
-              >
-                <span data-en="Resume / CV (PDF) ↗" data-id="Resume / CV (PDF) ↗"
-                  >Resume / CV (PDF) ↗</span
-                >
-              </ActionButton>
-            </div>
-          </div>
-
-          <!-- Right Column: Title & Body Description -->
-          <div class="lg:col-span-6 space-y-4">
-            <h2
-              id="heading-contact"
-              data-en="Have an idea or a project in mind? Let's build it."
-              data-id="Punya ide atau proyek yang mau diwujudkan? Yuk kita bangun bareng."
-              class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-neutral-950 dark:text-white leading-tight font-heading"
-            >
-              Have an idea or a project in mind? Let's build it.
-            </h2>
-            <p
-              data-en="Whether you want to build a custom web platform, a touchscreen kiosk, or explore a hardware experiment, I'm always open to discussing new engineering challenges."
-              data-id="Mau bikin platform web kustom, touchscreen kiosk, atau eksplorasi eksperimen hardware, aku selalu terbuka buat ngobrol dan mendiskusikan tantangan baru."
-              class="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal"
-            >
-              Whether you want to build a custom web platform, a touchscreen
-              kiosk, or explore a hardware experiment, I'm always open to
-              discussing new engineering challenges.
-            </p>
           </div>
         </div>
       </section>
