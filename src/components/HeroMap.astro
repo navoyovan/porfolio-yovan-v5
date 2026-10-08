@@ -631,16 +631,25 @@ const scrimPresets = [
         }
       };
 
-      const updateTileTheme = () => {
+      let lastThemeMode = '';
+      const updateTileTheme = (force = false) => {
         const activeTheme = localStorage.getItem('hero_map_theme') || 'default';
+        const isDark = document.documentElement.classList.contains('dark');
+        const themeStateKey = `${activeTheme}_${isDark ? 'dark' : 'light'}`;
+
+        if (!force && themeStateKey === lastThemeMode && currentBaseLayer) {
+          return; // No change in theme or dark mode: keep tiles intact!
+        }
+
+        lastThemeMode = themeStateKey;
         if (currentBaseLayer) {
           map.removeLayer(currentBaseLayer);
         }
         currentBaseLayer = getThemeTileLayer(activeTheme).addTo(map);
       };
 
-      updateTileTheme();
-      window.addEventListener('portfolio:map-theme-change', updateTileTheme);
+      updateTileTheme(true);
+      window.addEventListener('portfolio:map-theme-change', () => updateTileTheme(true));
 
       // Location Toggle (Bogor <-> Jabodetabek) via City Button
       const badgeBox = document.getElementById('hero-map-badge');
@@ -789,24 +798,12 @@ const scrimPresets = [
       };
       window.addEventListener('resize', handleResize, { passive: true });
 
-      // Observe parent & map container to automatically reload tiles during dynamic height compression
-      if ('ResizeObserver' in window) {
-        const ro = new ResizeObserver(() => {
-          if (map) {
-            map.invalidateSize({ debounceMoveend: true });
-          }
-        });
-        ro.observe(mapEl);
-        if (widget) ro.observe(widget);
-      }
-
       // Staged invalidation to guarantee full tile grid coverage on initial paint
-      setTimeout(() => map.invalidateSize(), 50);
-      setTimeout(() => map.invalidateSize(), 200);
-      setTimeout(() => map.invalidateSize(), 600);
+      setTimeout(() => map.invalidateSize(), 100);
 
+      // Only reload tiles when dark mode actually toggles
       const observer = new MutationObserver(() => {
-        updateTileTheme();
+        updateTileTheme(false);
       });
       observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
     });

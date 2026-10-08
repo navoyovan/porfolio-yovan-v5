@@ -48,7 +48,7 @@ const secondaryStack = [
 ---
 
 <!-- Sticky Scroll Wrapper for Smooth Hero Compression (Offset for 3.5rem Navbar) -->
-<div class="relative w-full" id="hero-scroll-wrapper" style="height: calc(100vh - 3.5rem + 75vh);">
+<div class="relative w-full" id="hero-scroll-wrapper" style="height: calc(100vh - 3.5rem + 42vh);">
   <!-- Unified Sticky Pinned Container (Holds both compressed map stage AND locked marquee) -->
   <div class="sticky top-[3.5rem] w-full flex flex-col z-10">
     <main
@@ -56,8 +56,8 @@ const secondaryStack = [
       id="hero-main-stage"
       style="height: calc(100vh - 3.5rem); min-height: calc((100vh - 3.5rem) * 0.618);"
     >
-    <!-- Full-Bleed Ambient Map Background with Parallax (Anchored fixed height to prevent Leaflet tile invalidation during stage compression) -->
-    <div id="hero-map-parallax" class="absolute inset-x-0 -top-12 h-[115vh] z-10 pointer-events-none overflow-hidden will-change-transform" style="contain: paint; backface-visibility: hidden;">
+    <!-- Full-Bleed Ambient Map Background with Rich Dynamic Parallax -->
+    <div id="hero-map-parallax" class="absolute inset-x-0 -top-28 -bottom-28 z-10 pointer-events-none overflow-hidden will-change-transform">
       <HeroMap interactive={false} />
       <!-- Subtle OLED Radial Vignette -->
       <div
@@ -90,7 +90,7 @@ const secondaryStack = [
       >
         <!-- Row 1: Yovan; -->
         <div id="hero-title-r1" class="relative inline-flex items-baseline whitespace-nowrap">
-          <span>{cleanFirstName}</span><span id="hero-semi" class="transition-colors hover:text-[#52FF1A] cursor-pointer">;</span>
+          <span>{cleanFirstName}</span><span id="hero-semi" class="transition-colors hover:text-[#52FF1A] cursor-default">;</span>
         </div>
 
         <!-- Row 2: Gunardio. -->
@@ -105,11 +105,11 @@ const secondaryStack = [
         )}
       </h1>
 
-      <!-- Halved State Content: Bio & Action Buttons (Staggered reveal: emerges together after main telemetry fades out) -->
+      <!-- Bio & Action Buttons (State-triggered reveal on scroll: 100% interactable once unhidden) -->
       <div
         id="hero-halved-bio"
-        class="max-w-2xl opacity-0 pointer-events-none will-change-[opacity,transform] pt-2 flex flex-col gap-3.5 sm:gap-4"
-        style="transform: translate3d(0, 14px, 0);"
+        data-revealed="false"
+        class="max-w-2xl opacity-0 translate-y-3 pointer-events-none transition-[opacity,transform] duration-300 ease-out pt-2 flex flex-col gap-3.5 sm:gap-4 data-[revealed=true]:opacity-100 data-[revealed=true]:translate-y-0 data-[revealed=true]:pointer-events-auto"
       >
         <p
           data-en="Software Engineer & systems builder turning ideas into working products; from landing pages and web apps to touchscreen kiosks and the hardware behind them."
@@ -282,6 +282,62 @@ const secondaryStack = [
       </div>
     </div>
   </div>
+
+  <!-- Section 01 Numbering Header Bar (Pinned with compressed map and marquee) -->
+  <div
+    id="hero-overview-header-bar"
+    class="w-full bg-[#fcfbf9] dark:bg-[#090909] border-t border-neutral-200/80 dark:border-neutral-800/80 transition-colors pt-8 sm:pt-12 lg:pt-16 pb-6 sm:pb-8 select-none"
+  >
+    <div class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto flex items-stretch gap-0 pb-1">
+      <!-- Big Section Numeral "1" (Sliced vertically in half by container boundary) -->
+      <div
+        id="overview-numeral-crop"
+        class="relative overflow-hidden flex items-center justify-end select-none shrink-0"
+        style="width: 85px; contain: paint;"
+      >
+        <span
+          id="overview-numeral"
+          class="relative font-heading font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-tighter shrink-0 select-none"
+          aria-hidden="true"
+          style="font-size: 92px; left: 13px; top: -6px; display: inline-block;"
+        >
+          1
+        </span>
+      </div>
+
+      <!-- Vertical Divider Line (Exact Slice Axis) -->
+      <div class="w-px bg-neutral-300 dark:bg-neutral-800 shrink-0 self-stretch my-0.5" aria-hidden="true"></div>
+
+      <!-- Right Side: Denser Overview label with horizontal line + Headline -->
+      <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
+        <!-- Top: Overview label with horizontal rule -->
+        <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
+          <span class="font-heading font-bold text-[10.5px] sm:text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
+            OVERVIEW
+          </span>
+        </div>
+
+        <!-- Section Headline -->
+        <h2
+          id="heading-intro"
+          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.08] font-heading w-full m-0"
+        >
+          <span
+            id="heading-intro-carousel"
+            class="relative inline-flex overflow-hidden align-baseline will-change-[width]"
+          >
+            <span
+              id="heading-intro-track"
+              class="inline-flex items-baseline whitespace-nowrap will-change-transform"
+            >
+              <span id="heading-intro-he" class="pr-2 sm:pr-3 shrink-0 leading-tight" data-en="He builds" data-id="Dia membuat">He builds</span>
+              <span id="heading-intro-i" class="pr-2 sm:pr-3 shrink-0 leading-tight" data-en="I build" data-id="Aku membuat">I build</span>
+            </span>
+          </span><span id="heading-intro-suffix" data-en="software that makes ideas real." data-id="software dan mengubah imajinasi menjadi nyata.">software that makes ideas real.</span>
+        </h2>
+      </div>
+    </div>
+  </div>
   </div>{/* End sticky pinned container */}
 </div>{/* End hero-scroll-wrapper */}
 
@@ -336,6 +392,8 @@ const secondaryStack = [
 </style>
 
 <script>
+  import { animate, scroll } from "motion";
+
   let cleanupHero: (() => void) | null = null;
 
   const setupHeroInteractions = () => {
@@ -344,7 +402,7 @@ const secondaryStack = [
       cleanupHero = null;
     }
 
-    // 1. Dynamic Architectural Scale Ruler
+    // 1. Dynamic Architectural Scale Ruler & Header Telemetry
     const mapEl = document.getElementById('hero-leaflet-map');
     const ruler = document.getElementById('hero-ruler-container');
     const midLabel = document.getElementById('hero-ruler-mid');
@@ -361,9 +419,11 @@ const secondaryStack = [
 
     if (mapEl && ruler && midLabel && maxLabel && ratioLabel) {
       let currentView = 'bogor';
-      let coordRaf: number | null = null;
       let currentLat = -6.6271;
       let currentLng = 106.7607;
+      let coordAnimation: any = null;
+      let carouselWidthAnim: any = null;
+      let trackTransformAnim: any = null;
 
       const formatCoords = (lat: number, lng: number) => {
         const absLat = Math.abs(lat);
@@ -385,45 +445,56 @@ const secondaryStack = [
         const targetWidth = isJkt ? locJakarta.offsetWidth : (locBogor.offsetWidth - 24); // subtract pr-6 gap
         const slideOffset = locBogor.offsetWidth; // slide past Bogor + gap
 
-        carousel.style.transition = isAnimated ? 'width 500ms cubic-bezier(0.16, 1, 0.3, 1)' : 'none';
-        track.style.transition = isAnimated ? 'transform 500ms cubic-bezier(0.16, 1, 0.3, 1)' : 'none';
+        if (carouselWidthAnim) carouselWidthAnim.stop();
+        if (trackTransformAnim) trackTransformAnim.stop();
 
-        carousel.style.width = `${targetWidth}px`;
-        track.style.transform = isJkt ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)';
+        if (!isAnimated) {
+          carousel.style.width = `${targetWidth}px`;
+          track.style.transform = isJkt ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)';
+          return;
+        }
+
+        carouselWidthAnim = animate(
+          carousel,
+          { width: `${targetWidth}px` },
+          { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+        );
+        trackTransformAnim = animate(
+          track,
+          { transform: isJkt ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)' },
+          { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+        );
       };
 
-      // Continuous 60fps coordinate rolling ticker during map flight
-      const animateCoordsTo = (targetLat: number, targetLng: number, durationMs = 1400) => {
-        if (coordRaf) cancelAnimationFrame(coordRaf);
+      // Continuous coordinate rolling ticker driven by Motion during map flight
+      const animateCoordsTo = (targetLat: number, targetLng: number, duration = 1.4) => {
+        if (coordAnimation) coordAnimation.stop();
         const startLat = currentLat;
         const startLng = currentLng;
-        const startTime = performance.now();
 
-        const tick = (now: number) => {
-          const elapsed = now - startTime;
-          const progress = Math.min(elapsed / durationMs, 1);
-          const ease = 1 - Math.pow(1 - progress, 3);
+        coordAnimation = animate(0, 1, {
+          duration,
+          ease: [0.16, 1, 0.3, 1],
+          onUpdate: (progress) => {
+            currentLat = startLat + (targetLat - startLat) * progress;
+            currentLng = startLng + (targetLng - startLng) * progress;
 
-          currentLat = startLat + (targetLat - startLat) * ease;
-          currentLng = startLng + (targetLng - startLng) * ease;
-
-          if (headerCoords) {
-            headerCoords.textContent = formatCoords(currentLat, currentLng);
-          }
-
-          if (progress < 1) {
-            coordRaf = requestAnimationFrame(tick);
-          } else {
-            currentLat = targetLat;
-            currentLng = targetLng;
             if (headerCoords) {
               headerCoords.textContent = formatCoords(currentLat, currentLng);
             }
-            coordRaf = null;
-          }
-        };
+          },
+        });
 
-        coordRaf = requestAnimationFrame(tick);
+        coordAnimation.then(() => {
+          currentLat = targetLat;
+          currentLng = targetLng;
+          if (headerCoords) {
+            headerCoords.textContent = formatCoords(currentLat, currentLng);
+          }
+          coordAnimation = null;
+        }).catch(() => {
+          // Animation cancelled/stopped
+        });
       };
 
       // Initial layout setup
@@ -505,9 +576,9 @@ const secondaryStack = [
               if (detail.view === 'jabodetabek') {
                 const isMobile = window.innerWidth < 768;
                 const targetCenter = isMobile ? { lat: -6.44, lng: 106.8270 } : { lat: -6.22, lng: 106.5270 };
-                animateCoordsTo(targetCenter.lat, targetCenter.lng, 1400);
+                animateCoordsTo(targetCenter.lat, targetCenter.lng, 1.4);
               } else {
-                animateCoordsTo(-6.6271, 106.7607, 1400);
+                animateCoordsTo(-6.6271, 106.7607, 1.4);
               }
             }
             updateScale();
@@ -527,7 +598,7 @@ const secondaryStack = [
       pollMap();
     }
 
-    // 2. Smooth Sticky Scroll Compression & Time-Decoupled Marquee Momentum Ease
+    // 2. Smooth Sticky Scroll Compression & Motion-Driven Marquee Momentum Easing
     const heroMain = document.getElementById('hero-main-stage');
     const heroWrapper = document.getElementById('hero-scroll-wrapper');
     const typoStage = document.getElementById('hero-typography-stage');
@@ -538,41 +609,46 @@ const secondaryStack = [
     const mapParallax = document.getElementById('hero-map-parallax');
 
     if (heroMain && heroWrapper) {
-      let ticking = false;
       let currentPlaybackRate = 1.0;
       let targetPlaybackRate = 1.0;
-      let speedLerpRaf: number | null = null;
+      let speedAnimation: any = null;
       const marqueeGroups = Array.from(heroWrapper.querySelectorAll<HTMLElement>('.marquee-group'));
 
-      const applyPlaybackRate = () => {
+      const applyPlaybackRate = (rate: number) => {
         for (let i = 0; i < marqueeGroups.length; i++) {
           const anims = marqueeGroups[i].getAnimations();
           for (let j = 0; j < anims.length; j++) {
-            anims[j].playbackRate = currentPlaybackRate;
+            anims[j].playbackRate = rate;
           }
-        }
-      };
-
-      const tickSpeedLerp = () => {
-        const diff = targetPlaybackRate - currentPlaybackRate;
-        if (Math.abs(diff) > 0.005) {
-          // Smooth time-based momentum ease on its own rAF clock (independent of scroll ticks)
-          currentPlaybackRate += diff * 0.045;
-          applyPlaybackRate();
-          speedLerpRaf = requestAnimationFrame(tickSpeedLerp);
-        } else {
-          currentPlaybackRate = targetPlaybackRate;
-          applyPlaybackRate();
-          speedLerpRaf = null;
         }
       };
 
       const setTargetSpeedRate = (newTarget: number) => {
         if (Math.abs(targetPlaybackRate - newTarget) > 0.02) {
           targetPlaybackRate = newTarget;
-          if (!speedLerpRaf) {
-            speedLerpRaf = requestAnimationFrame(tickSpeedLerp);
-          }
+          if (speedAnimation) speedAnimation.stop();
+
+          const startRate = currentPlaybackRate;
+          const isDecelerating = newTarget < startRate;
+          // Longer, graceful inertia ease for the slowdown trigger (1.5s)
+          const duration = isDecelerating ? 1.5 : 0.8;
+
+          speedAnimation = animate(0, 1, {
+            duration,
+            ease: [0.16, 1, 0.3, 1],
+            onUpdate: (progress) => {
+              currentPlaybackRate = startRate + (newTarget - startRate) * progress;
+              applyPlaybackRate(currentPlaybackRate);
+            },
+          });
+
+          speedAnimation.then(() => {
+            currentPlaybackRate = newTarget;
+            applyPlaybackRate(currentPlaybackRate);
+            speedAnimation = null;
+          }).catch(() => {
+            // Animation interrupted
+          });
         }
       };
 
@@ -590,7 +666,7 @@ const secondaryStack = [
         heroMain.style.height = `${currentHeight}px`;
 
         if (mapParallax) {
-          const mapOffsetY = progress * -40;
+          const mapOffsetY = progress * -95;
           mapParallax.style.transform = `translate3d(0, ${mapOffsetY}px, 0)`;
         }
 
@@ -607,7 +683,7 @@ const secondaryStack = [
         }
         if (badgeBox) {
           badgeBox.style.opacity = mainDataOpacity.toString();
-          badgeBox.style.pointerEvents = mainDataOpacity === 0 ? 'none' : 'auto';
+          badgeBox.style.visibility = mainDataOpacity === 0 ? 'hidden' : 'visible';
         }
 
         // 2. Title scales down slightly
@@ -616,44 +692,116 @@ const secondaryStack = [
           typoStage.style.transform = `scale(${scale})`;
         }
 
-        // 3. Bio Paragraph emerges AFTER main data fades out (0.42 to 1.0 progress)
+        // 3. Bio & Action Buttons: Unhides cleanly on scroll, fully interactable once triggered
         if (bioEl) {
-          const bioProgress = Math.min(Math.max((progress - 0.42) / 0.58, 0), 1);
-          const bioEase = 1 - Math.pow(1 - bioProgress, 2);
-          bioEl.style.opacity = bioProgress.toString();
-          const translateY = (1 - bioEase) * 14;
-          bioEl.style.transform = `translate3d(0, ${translateY}px, 0)`;
-          bioEl.style.pointerEvents = bioProgress > 0.6 ? 'auto' : 'none';
+          const isRevealed = progress > 0.35;
+          if (bioEl.dataset.revealed !== String(isRevealed)) {
+            bioEl.dataset.revealed = String(isRevealed);
+          }
         }
 
-        // 4. Time-Decoupled Marquee Velocity Easing (avoid offsetHeight reflow thrashing)
-        const totalTrackScroll = window.innerHeight * 0.75;
-        if (scrollY > compressDistance) {
-          const dwellProgress = Math.min(Math.max((scrollY - compressDistance) / (totalTrackScroll - compressDistance), 0), 1);
-          if (dwellProgress < 0.85) {
-            // Pinned dwell reading zone: eases down to calm 0.28x speed
-            setTargetSpeedRate(0.28);
-          } else {
-            // As Section 01 pushes in: smoothly ramps back to full 1.0x speed
-            setTargetSpeedRate(1.0);
-          }
+        // 4. Motion-Decoupled Marquee Velocity Easing
+        if (progress > 0.15) {
+          // Decelerates smoothly when scrolled and stays calm all the way down
+          const slowTarget = 0.25;
+          setTargetSpeedRate(slowTarget);
         } else {
-          // Top state
+          // Normal speed only at initial top position
           setTargetSpeedRate(1.0);
         }
 
-        ticking = false;
+        // 5. Dynamic Phrasing: "He builds..." on initial map reveal -> "I build..." when portrait appears
+        updateIntroHeadingPhrase();
       };
 
-      const onScroll = () => {
-        if (!ticking) {
-          requestAnimationFrame(updateHeroOnScroll);
-          ticking = true;
+      const introCarousel = document.getElementById('heading-intro-carousel');
+      const introTrack = document.getElementById('heading-intro-track');
+      const introHe = document.getElementById('heading-intro-he');
+      const introI = document.getElementById('heading-intro-i');
+      const introSuffix = document.getElementById('heading-intro-suffix');
+      const portraitEl = document.querySelector('#intro img') || document.querySelector('#intro');
+
+      let currentIntroMode: 'he' | 'i' = 'he';
+      let introCarouselWidthAnim: any = null;
+      let introTrackTransformAnim: any = null;
+
+      const updateIntroCarouselLayout = (targetMode: 'he' | 'i', isAnimated = true) => {
+        if (!introCarousel || !introTrack || !introHe || !introI) return;
+        if (currentIntroMode === targetMode && isAnimated) return;
+        currentIntroMode = targetMode;
+
+        const isI = targetMode === 'i';
+        const targetWidth = isI ? introI.offsetWidth : introHe.offsetWidth;
+        const slideOffset = introHe.offsetWidth;
+
+        if (introCarouselWidthAnim) introCarouselWidthAnim.stop();
+        if (introTrackTransformAnim) introTrackTransformAnim.stop();
+
+        if (!isAnimated) {
+          introCarousel.style.width = `${targetWidth}px`;
+          introTrack.style.transform = isI ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)';
+          return;
+        }
+
+        introCarouselWidthAnim = animate(
+          introCarousel,
+          { width: `${targetWidth}px` },
+          { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+        );
+        introTrackTransformAnim = animate(
+          introTrack,
+          { transform: isI ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)' },
+          { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+        );
+      };
+
+      const updateIntroHeadingPhrase = (isAnimated = true) => {
+        const portraitShown = portraitEl
+          ? portraitEl.getBoundingClientRect().top < window.innerHeight * 0.82
+          : window.scrollY > window.innerHeight * 0.65;
+
+        updateIntroCarouselLayout(portraitShown ? 'i' : 'he', isAnimated);
+      };
+
+      const updateIntroLang = () => {
+        if (!introHe || !introI || !introSuffix) return;
+        const isId = document.documentElement.lang === 'id';
+        introHe.textContent = isId ? (introHe.dataset.id ?? 'Dia membuat') : (introHe.dataset.en ?? 'He builds');
+        introI.textContent = isId ? (introI.dataset.id ?? 'Aku membuat') : (introI.dataset.en ?? 'I build');
+        introSuffix.textContent = isId ? (introSuffix.dataset.id ?? 'software dan mengubah imajinasi menjadi nyata.') : (introSuffix.dataset.en ?? 'software that makes ideas real.');
+        updateIntroCarouselLayout(currentIntroMode, false);
+      };
+
+      window.addEventListener('portfolio:lang-change', updateIntroLang);
+      disposers.push(() => window.removeEventListener('portfolio:lang-change', updateIntroLang));
+
+      const onResize = () => {
+        updateIntroCarouselLayout(currentIntroMode, false);
+      };
+      window.addEventListener('resize', onResize);
+      disposers.push(() => window.removeEventListener('resize', onResize));
+
+      // Initial layout setup
+      updateIntroCarouselLayout('he', false);
+
+      // Bind scroll via Motion
+      const stopScroll = scroll(() => {
+        updateHeroOnScroll();
+      });
+      disposers.push(stopScroll);
+
+      // Hook Lenis scroll engine for sub-pixel 120fps parallax synchronization if present
+      const bindLenis = () => {
+        const lenis = (window as any).__lenis;
+        if (lenis && typeof lenis.on === 'function') {
+          const onLenis = () => updateHeroOnScroll();
+          lenis.on('scroll', onLenis);
+          disposers.push(() => lenis.off('scroll', onLenis));
         }
       };
+      bindLenis();
+      setTimeout(bindLenis, 300);
 
-      window.addEventListener('scroll', onScroll, { passive: true });
-      disposers.push(() => window.removeEventListener('scroll', onScroll));
       updateHeroOnScroll();
     }
 
