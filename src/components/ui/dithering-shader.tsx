@@ -60,7 +60,7 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
     return 0; // Default: Cyber Wave
   });
 
-  // Default: Directional Wave (index 0)
+  // Default: Radial Halo (index 1) - concentric glow behind portrait
   const [activePatternIndex, setActivePatternIndex] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("dither_pattern_idx");
@@ -71,7 +71,7 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
         }
       }
     }
-    return 0; // Default: Directional Wave
+    return 0; // Default: Directional Wave (Cyber Wave)
   });
 
   // Default: 1px scale
@@ -170,12 +170,21 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
       63/64, 31/64, 55/64, 23/64, 61/64, 29/64, 53/64, 21/64,
     ];
 
+    const bayer8x8Bytes = new Uint8Array(8 * 8 * 4);
+    for (let i = 0; i < 64; i++) {
+      const val = Math.round(bayer8x8[i] * 255);
+      bayer8x8Bytes[i * 4 + 0] = val; // R
+      bayer8x8Bytes[i * 4 + 1] = val; // G
+      bayer8x8Bytes[i * 4 + 2] = val; // B
+      bayer8x8Bytes[i * 4 + 3] = 255; // A
+    }
+
     const ditherTexture = new THREE.DataTexture(
-      new Float32Array(bayer8x8),
+      bayer8x8Bytes,
       8,
       8,
-      THREE.RedFormat,
-      THREE.FloatType
+      THREE.RGBAFormat,
+      THREE.UnsignedByteType
     );
     ditherTexture.magFilter = THREE.NearestFilter;
     ditherTexture.minFilter = THREE.NearestFilter;
@@ -266,16 +275,13 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
           vec2 edgeDist = min(uv, 1.0 - uv);
           float edgeAlpha = smoothstep(0.0, 0.15, edgeDist.x) * smoothstep(0.0, 0.15, edgeDist.y);
 
-          // Modulate luminance by edge falloff so the dither dot density naturally thins out at the edges
-          lum *= edgeAlpha;
-
           // Sample 8x8 Bayer matrix
           vec2 ditherUv = fract(coord / (8.0 * uPxSize));
           float threshold = texture2D(uDitherMap, ditherUv).r;
 
           float dither = step(threshold, lum);
-          // Invisible transparent background, foreground dots smoothly feather out
-          gl_FragColor = vec4(uColorFront, dither * edgeAlpha);
+          vec3 finalColor = mix(uColorBack, uColorFront, dither);
+          gl_FragColor = vec4(finalColor, edgeAlpha * 0.95);
         }
       `,
     });
@@ -287,10 +293,10 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
 
     let animationFrameId: number;
     let isVisible = true;
-    const clock = new THREE.Clock();
+    const startTime = performance.now();
 
     const renderFrame = () => {
-      material.uniforms.uTime.value = clock.getElapsedTime();
+      material.uniforms.uTime.value = (performance.now() - startTime) * 0.001;
       renderer.render(scene, camera);
     };
 
@@ -313,6 +319,11 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
 
     window.addEventListener("resize", handleResize);
 
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+    resizeObserver.observe(container);
+
     // Pause render loop when offscreen or tab is hidden to save GPU cycles & battery
     const observer = new IntersectionObserver(
       (entries) => {
@@ -331,6 +342,7 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
       observer.disconnect();
+      resizeObserver.disconnect();
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
       geometry.dispose();

@@ -29,3 +29,7 @@ graphify-out/
 .graphify/
 .graphify*
 
+# raw font files
+*.otf
+*.ttf
+

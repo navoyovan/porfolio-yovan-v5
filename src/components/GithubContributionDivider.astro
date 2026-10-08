@@ -1,0 +1,232 @@
+---
+import fallbackData from '../data/github-contributions-all.json';
+
+interface ContributionDay {
+  date: string;
+  count: number;
+  level: number;
+  placeholder?: boolean;
+}
+
+let allContributions: ContributionDay[] = fallbackData.contributions;
+
+try {
+  const res = await fetch('https://github-contributions-api.jogruber.de/v4/navoyovan', {
+    signal: AbortSignal.timeout(2500),
+    headers: { 'User-Agent': 'navoyovan-portfolio-build' },
+  });
+  if (res.ok) {
+    const json = await res.json();
+    if (json?.contributions && json.contributions.length > 0) {
+      allContributions = json.contributions;
+    }
+  }
+} catch {
+  // Gracefully use local cached fallback
+}
+
+const todayStr = new Date().toISOString().split('T')[0];
+
+// Sort chronologically ascending
+const sorted = allContributions.slice().sort((a, b) => a.date.localeCompare(b.date));
+
+// Filter up to today
+const filtered = sorted.filter((c) => c.date <= todayStr);
+
+// Take ~2 years (730 days) and align to previous Sunday
+const approx = filtered.slice(-730);
+const firstDate = new Date(approx[0].date);
+const dayOfWeek = firstDate.getDay();
+const startIndex = filtered.length - 730 - dayOfWeek;
+const days: ContributionDay[] = filtered.slice(startIndex);
+
+// Pad end of last week to Saturday so every column has exactly 7 rows
+const remainder = days.length % 7;
+const padCount = remainder === 0 ? 0 : 7 - remainder;
+for (let i = 0; i < padCount; i++) {
+  days.push({ date: '', count: 0, level: 0, placeholder: true });
+}
+
+const availableWeeks = Math.ceil(days.length / 7);
+
+// Responsive span tiers:
+// Desktop (>= 1300px): 95 weeks (1.8y), gap 4px
+// Medium (640px - 1299px, 4:3 screens & split windows): 64 weeks (1.2y), gap 3px
+// Mobile (< 640px): 52 weeks (1.0y), gap 3px
+const DESKTOP_WEEKS = 95;
+const MEDIUM_WEEKS = 64;
+const MOBILE_WEEKS = 52;
+
+const startWeekOffset = Math.max(0, availableWeeks - DESKTOP_WEEKS);
+
+// Build 95 weeks of 7-day columns
+const weeks: ContributionDay[][] = [];
+for (let w = 0; w < DESKTOP_WEEKS; w++) {
+  const sliceStart = (startWeekOffset + w) * 7;
+  weeks.push(days.slice(sliceStart, sliceStart + 7));
+}
+
+function formatDate(dateStr: string) {
+  if (!dateStr) return '';
+  const [year, month, day] = dateStr.split('-');
+  const d = new Date(Number(year), Number(month) - 1, Number(day));
+  return d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+---
+
+<section
+  id="github-contrib-section"
+  aria-label="GitHub Contributions Telemetry"
+  class="w-full bg-[#fcfbf9] dark:bg-[#0e0e0e] transition-colors duration-200 py-0 overflow-hidden"
+>
+  <!-- Telemetry Header -->
+  <div class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto py-2">
+    <div class="flex items-center justify-end gap-3 min-h-[1.5rem]">
+      <!-- Level Legend (Borderless) -->
+      <div
+        class="hidden sm:flex items-center gap-1.5 text-[10px] font-mono text-neutral-400 dark:text-neutral-500 select-none"
+        aria-hidden="true"
+      >
+        <span>Less</span>
+        <span class="w-2.5 h-2.5 rounded-[2px] bg-neutral-200 dark:bg-[#1c1c1c]"></span>
+        <span class="w-2.5 h-2.5 rounded-[2px] bg-[#9be9a8] dark:bg-[#0e4429]"></span>
+        <span class="w-2.5 h-2.5 rounded-[2px] bg-[#40c463] dark:bg-[#006d32]"></span>
+        <span class="w-2.5 h-2.5 rounded-[2px] bg-[#30a14e] dark:bg-[#26a641]"></span>
+        <span class="w-2.5 h-2.5 rounded-[2px] bg-[var(--color-accent,#1b7f3b)] dark:bg-[var(--color-accent,#52FF1A)]"></span>
+        <span>More</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heatmap: Pure borderless grid with locked-in editorial name overlay -->
+  <div class="relative w-full overflow-hidden">
+    <div class="w-full overflow-x-auto scrollbar-none px-0 py-2.5 md:py-3.5 xl:py-5">
+      <div
+        id="github-contrib-grid"
+        class="flex flex-row w-full px-0 select-none min-w-full gap-[3px] xl:gap-[4px]"
+      >
+        {
+          weeks.map((weekDays, wIdx) => {
+            // Responsive week visibility:
+            // Weeks 0..30 (first 31 weeks): desktop only (>= 1280px / xl)
+            // Weeks 31..42 (next 12 weeks): medium (split screen / 4:3, 768px-1279px / md) & desktop
+            // Weeks 43..94 (last 52 weeks): all viewports (mobile, medium, desktop)
+            let visibilityClass = 'flex';
+            if (wIdx < DESKTOP_WEEKS - MEDIUM_WEEKS) {
+              visibilityClass = 'hidden xl:flex';
+            } else if (wIdx < DESKTOP_WEEKS - MOBILE_WEEKS) {
+              visibilityClass = 'hidden md:flex';
+            }
+
+            return (
+              <div
+                class={`${visibilityClass} flex-col flex-1 gap-[3px] xl:gap-[4px] min-w-0`}
+                data-week={wIdx}
+              >
+                {weekDays.map((day) => {
+                  if (day.placeholder) {
+                    return (
+                      <div
+                        class="aspect-square w-full opacity-0 pointer-events-none"
+                        aria-hidden="true"
+                      />
+                    );
+                  }
+                  const formattedDate = formatDate(day.date);
+                  const countText = `${day.count} contribution${day.count === 1 ? '' : 's'}`;
+                  const label = `${countText} on ${formattedDate}`;
+
+                  let levelClasses = 'bg-neutral-200 dark:bg-[#1c1c1c]';
+                  if (day.level === 1)
+                    levelClasses = 'bg-[#9be9a8] dark:bg-[#0e4429]';
+                  else if (day.level === 2)
+                    levelClasses = 'bg-[#40c463] dark:bg-[#006d32]';
+                  else if (day.level === 3)
+                    levelClasses = 'bg-[#30a14e] dark:bg-[#26a641]';
+                  else if (day.level >= 4)
+                    levelClasses = 'bg-[var(--color-accent,#1b7f3b)] dark:bg-[var(--color-accent,#52FF1A)] dark:shadow-[0_0_8px_rgba(82,255,26,0.35)]';
+
+                  return (
+                    <div
+                      tabindex="0"
+                      role="gridcell"
+                      aria-label={label}
+                      data-count={day.count}
+                      data-date={formattedDate}
+                      data-label={label}
+                      class={`aspect-square w-full rounded-[1px] sm:rounded-[2px] transition-transform duration-100 hover:scale-130 hover:z-10 hover:shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white cursor-pointer ${levelClasses}`}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+
+    <!-- Floating Cursor-Following Tooltip -->
+    <div
+      id="github-contrib-tooltip"
+      class="pointer-events-none fixed z-50 px-2.5 py-1 rounded bg-neutral-950/90 text-white dark:bg-white/95 dark:text-neutral-950 font-mono text-[11px] font-medium shadow-md border border-neutral-800/80 dark:border-neutral-200/80 backdrop-blur-xs transition-opacity duration-150 opacity-0 whitespace-nowrap -translate-x-1/2 -translate-y-[calc(100%+10px)]"
+      aria-hidden="true"
+    ></div>
+
+    <!-- Editorial Name Overlay: Yovan; Gunardio. (Syne 900, Capitalized, Adaptive Shadow) -->
+    <div
+      class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-8 lg:pl-12 pointer-events-none select-none z-20"
+      aria-hidden="true"
+    >
+      <div
+        class="font-heading font-black tracking-[-1px] capitalize leading-[0.86] text-neutral-950 dark:text-white drop-shadow-[0_2px_10px_rgba(255,255,255,0.85)] dark:drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)] text-[22px] md:text-[30px] xl:text-[42px]"
+      >
+        <div>Yovan<span class="text-[var(--color-accent,#52FF1A)]">;</span></div>
+        <div class="text-neutral-500 dark:text-neutral-400">Gunardio.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script is:inline>
+  (function () {
+    function setupTelemetry() {
+      const grid = document.getElementById('github-contrib-grid');
+      const tooltip = document.getElementById('github-contrib-tooltip');
+      if (!grid) return;
+
+      function showTooltip(e) {
+        const target = e.target.closest('[data-label]');
+        if (target) {
+          const label = target.getAttribute('data-label');
+          if (label && tooltip) {
+            tooltip.textContent = label;
+            tooltip.style.left = `${e.clientX}px`;
+            tooltip.style.top = `${e.clientY}px`;
+            tooltip.style.opacity = '1';
+          }
+        } else {
+          hideTooltip();
+        }
+      }
+
+      function hideTooltip() {
+        if (tooltip) tooltip.style.opacity = '0';
+      }
+
+      grid.addEventListener('mouseover', showTooltip);
+      grid.addEventListener('mousemove', showTooltip);
+      grid.addEventListener('mouseleave', hideTooltip);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupTelemetry);
+    } else {
+      setupTelemetry();
+    }
+    document.addEventListener('astro:page-load', setupTelemetry);
+  })();
+</script>

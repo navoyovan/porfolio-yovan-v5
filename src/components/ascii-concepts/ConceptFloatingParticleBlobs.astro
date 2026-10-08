@@ -1,0 +1,145 @@
+---
+// Concept 2: Lightweight Floating Particle Blobs with Orbiting Satellite Nodes
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`relative w-full h-full overflow-hidden select-none pointer-events-auto bg-[#121214] ${className}`} id="concept-particles-container">
+  <canvas id="concept-particles-canvas" class="w-full h-full block" style="display: block; width: 100%; height: 100%;"></canvas>
+</div>
+
+<script is:inline>
+  (function () {
+    function init() {
+      const canvas = document.getElementById('concept-particles-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let w = (canvas.width = canvas.parentElement?.clientWidth || window.innerWidth);
+      let h = (canvas.height = canvas.parentElement?.clientHeight || window.innerHeight);
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = canvas.parentElement?.clientWidth || window.innerWidth;
+        h = canvas.height = canvas.parentElement?.clientHeight || window.innerHeight;
+      });
+
+      const GLYPH_CHARS = ['.', ':', ';', 'x', 'X', 'h', 'A', '1', '8', 'M', '%'];
+      const NUM_BLOBS = 16;
+      const blobs = [];
+
+      for (let b = 0; b < NUM_BLOBS; b++) {
+        const isLarge = b < 5;
+        const nodeCount = isLarge ? 14 : 7;
+        const nodes = [];
+        for (let n = 0; n < nodeCount; n++) {
+          nodes.push({
+            angle: (n / nodeCount) * Math.PI * 2,
+            distRatio: 0.2 + Math.random() * 0.8,
+            speed: (Math.random() - 0.5) * 0.8,
+            pulseFreq: 0.6 + Math.random() * 1.4,
+            pulseOffset: Math.random() * Math.PI * 2
+          });
+        }
+        blobs.push({
+          cx: Math.random() * w,
+          cy: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          baseRadius: isLarge ? 55 + Math.random() * 40 : 22 + Math.random() * 20,
+          morphSpeed: 0.3 + Math.random() * 0.4,
+          nodes: nodes
+        });
+      }
+
+      const dustCount = 45;
+      const dust = [];
+      for (let d = 0; d < dustCount; d++) {
+        dust.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: (Math.random() - 0.5) * 0.2,
+          char: Math.random() > 0.5 ? '.' : ':',
+          alpha: 0.15 + Math.random() * 0.35
+        });
+      }
+
+      let last = performance.now();
+
+      function loop(t) {
+        const time = t * 0.001;
+        const dt = Math.min((t - last) / 1000, 0.05);
+        last = t;
+
+        ctx.fillStyle = '#121214';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.font = '12px Consolas, monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        for (let i = 0; i < dust.length; i++) {
+          const d = dust[i];
+          d.x += d.vx * 60 * dt;
+          d.y += d.vy * 60 * dt;
+          if (d.x < 0) d.x = w;
+          if (d.x > w) d.x = 0;
+          if (d.y < 0) d.y = h;
+          if (d.y > h) d.y = 0;
+          ctx.fillStyle = `rgba(200, 200, 210, ${d.alpha.toFixed(2)})`;
+          ctx.fillText(d.char, d.x, d.y);
+        }
+
+        for (let b = 0; b < blobs.length; b++) {
+          const blob = blobs[b];
+          blob.cx += blob.vx * 60 * dt;
+          blob.cy += blob.vy * 60 * dt;
+
+          const pad = blob.baseRadius + 50;
+          if (blob.cx < -pad) blob.cx = w + pad;
+          if (blob.cx > w + pad) blob.cx = -pad;
+          if (blob.cy < -pad) blob.cy = h + pad;
+          if (blob.cy > h + pad) blob.cy = -pad;
+
+          const coreShimmer = Math.sin(time * 2 + b);
+          const coreAlpha = 0.55 + coreShimmer * 0.2;
+          ctx.fillStyle = `rgba(240, 240, 250, ${coreAlpha.toFixed(2)})`;
+          ctx.fillText(b % 3 === 0 ? ':Mr' : (b % 2 === 0 ? '%88' : 'hA'), blob.cx, blob.cy);
+
+          const radius = blob.baseRadius * (1 + Math.sin(time * blob.morphSpeed + b) * 0.18);
+
+          for (let n = 0; n < blob.nodes.length; n++) {
+            const node = blob.nodes[n];
+            node.angle += node.speed * dt;
+            const radialDeform = Math.sin(time * node.pulseFreq + node.pulseOffset) * 0.25;
+            const r = radius * Math.max(0.2, node.distRatio + radialDeform);
+            const px = blob.cx + Math.cos(node.angle) * r;
+            const py = blob.cy + Math.sin(node.angle) * r;
+
+            const normDist = r / (radius * 1.25);
+            const charIdx = Math.min(GLYPH_CHARS.length - 1, Math.max(0, Math.floor((1 - normDist) * (GLYPH_CHARS.length - 1))));
+            const ch = GLYPH_CHARS[charIdx];
+            const alpha = Math.max(0.18, Math.min(0.85, (1 - normDist * 0.7)));
+            ctx.fillStyle = `rgba(225, 225, 235, ${alpha.toFixed(2)})`;
+            ctx.fillText(ch, px, py);
+          }
+        }
+
+        requestAnimationFrame(loop);
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    document.addEventListener('astro:page-load', init);
+  })();
+</script>
