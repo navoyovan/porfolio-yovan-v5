@@ -65,7 +65,7 @@ const scrimPresets = [
     style="transform: translateZ(0);"
   ></div>
 
-  <!-- Interactive Map Location Toggle Rectangle (Sharp Accent Patch & Typography) -->
+  <!-- Interactive Archival Viewfinder Toggle (Swiss Overlapping Wireframe Rectangles) -->
   <button
     type="button"
     id="hero-map-badge"
@@ -76,29 +76,39 @@ const scrimPresets = [
     title="Click to expand view to Greater Jakarta"
     data-title-en="Click to expand view to Greater Jakarta"
     data-title-id="Klik untuk memperluas tampilan ke Jabodetabek"
-    class="absolute right-[8%] sm:right-[12%] lg:right-[16%] top-[5%] sm:top-[20%] lg:top-[22%] flex flex-col items-center pointer-events-auto cursor-pointer z-30 select-none group/maptarget focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] p-1 bg-transparent border-0 data-[view=jabodetabek]:translate-x-0 data-[view=jabodetabek]:translate-y-0 sm:data-[view=jabodetabek]:-translate-x-44 sm:data-[view=jabodetabek]:translate-y-40 lg:data-[view=jabodetabek]:-translate-x-64 lg:data-[view=jabodetabek]:translate-y-52 transition-[opacity,transform] duration-300 ease-out"
+    class="absolute right-[4%] sm:right-[6%] lg:right-[8%] top-[6%] sm:top-[10%] lg:top-[12%] pointer-events-auto cursor-pointer z-30 select-none group/maptarget focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 dark:focus-visible:ring-white p-0 bg-transparent border-0 data-[view=jabodetabek]:translate-x-0 data-[view=jabodetabek]:translate-y-0 sm:data-[view=jabodetabek]:-translate-x-44 sm:data-[view=jabodetabek]:translate-y-40 lg:data-[view=jabodetabek]:-translate-x-64 lg:data-[view=jabodetabek]:translate-y-52 transition-[opacity,transform] duration-300 ease-out"
   >
-    <!-- Sharp Borderless Rectangle with hover feedback -->
+    <!-- Stepped Archival Wireframe (286 x 297 Reference Proportion) -->
     <div
-      class="w-[110px] sm:w-[150px] lg:w-[190px] h-[75px] sm:h-[100px] lg:h-[125px] bg-neutral-900/[0.08] dark:bg-[color-mix(in_srgb,var(--color-accent,#52FF1A)_8%,transparent)] group-hover/maptarget:bg-neutral-900/[0.15] dark:group-hover/maptarget:bg-[color-mix(in_srgb,var(--color-accent,#52FF1A)_15%,transparent)] transition-colors duration-200 rounded-none"
-    ></div>
+      class="relative w-[280px] sm:w-[380px] lg:w-[460px] h-[291px] sm:h-[395px] lg:h-[478px] pointer-events-none"
+    >
+      <!-- Frame 1 (Vertical / Portrait Rectangle: Upper-Right) -->
+      <div
+        class="absolute right-0 top-0 w-[54.9%] h-[73.1%] border-[1.5px] border-neutral-950/70 dark:border-white/70 group-hover/maptarget:border-neutral-950 dark:group-hover/maptarget:border-white bg-neutral-950/[0.01] dark:bg-white/[0.01] group-hover/maptarget:bg-neutral-950/[0.03] dark:group-hover/maptarget:bg-white/[0.03] transition-colors duration-200 rounded-none"
+      ></div>
 
-    <!-- Centered Typography Directly Under Rectangle (Less Visible Muted Contrast) -->
-    <div class="flex flex-col items-center justify-center text-center pt-2 sm:pt-2.5 gap-0.5">
-      <span
-        id="hero-map-location-title"
-        class="font-heading font-bold text-xs sm:text-sm lg:text-base uppercase tracking-wider text-neutral-400 dark:text-neutral-500 group-hover/maptarget:text-neutral-950 dark:group-hover/maptarget:text-white transition-colors duration-200 leading-tight"
+      <!-- Frame 2 (Horizontal / Landscape Rectangle: Lower-Left) -->
+      <div
+        class="absolute left-0 top-[73.1%] w-[63.6%] h-[26.9%] border-[1.5px] border-neutral-950/70 dark:border-white/70 group-hover/maptarget:border-neutral-950 dark:group-hover/maptarget:border-white bg-neutral-950/[0.01] dark:bg-white/[0.01] group-hover/maptarget:bg-neutral-950/[0.03] dark:group-hover/maptarget:bg-white/[0.03] transition-colors duration-200 rounded-none"
+      ></div>
+
+      <!-- Middle Notch ITSELF is the Label Container for City Name -->
+      <div
+        class="absolute top-[73.1%] left-[45.1%] w-[18.5%] min-w-[55px] sm:min-w-[65px] lg:min-w-[75px] -translate-y-1/2 z-20 flex items-center justify-center bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 px-2 py-0.5 sm:py-1 font-mono font-medium text-[8px] sm:text-[9px] lg:text-[10px] tracking-wider uppercase leading-none pointer-events-auto select-none rounded-none"
       >
-        BOGOR
-      </span>
-      <span
-        id="hero-map-timezone"
-        data-en="UTC+7"
-        data-id="WIB"
-        class="font-mono text-[9px] sm:text-[10px] lg:text-[11px] font-medium text-neutral-400/80 dark:text-neutral-600 tracking-wider group-hover/maptarget:text-neutral-600 dark:group-hover/maptarget:text-neutral-400 transition-colors duration-200"
+        <span id="hero-map-location-title">BOGOR</span>
+      </div>
+
+      <!-- Bottom Notch ITSELF is the Label Container for Live Time -->
+      <div
+        class="absolute bottom-0 left-0 w-[25.2%] min-w-[85px] sm:min-w-[95px] lg:min-w-[105px] -translate-y-1/2 z-20 flex items-center justify-center bg-neutral-950 text-white dark:bg-white dark:text-neutral-950 px-2 py-0.5 sm:py-1 font-mono font-medium text-[7.5px] sm:text-[8.5px] lg:text-[9px] tracking-wider leading-none pointer-events-auto select-none rounded-none"
       >
-        {initialTime} UTC+7
-      </span>
+        <span
+          id="hero-map-timezone"
+          data-en="UTC+7"
+          data-id="WIB"
+        >{initialTime} UTC+7</span>
+      </div>
     </div>
   </button>
 
