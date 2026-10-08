@@ -196,6 +196,19 @@ function formatDate(dateStr: string) {
     <span id="val-letter-spacing" class="font-bold text-neutral-900 dark:text-neutral-100 w-12">-1px</span>
   </label>
 
+  <label class="flex items-center gap-1.5 text-neutral-700 dark:text-neutral-300">
+    <span>Shadow:</span>
+    <select
+      id="tune-shadow"
+      class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 rounded px-2 py-1 text-xs cursor-pointer text-neutral-900 dark:text-white font-mono"
+    >
+      <option value="adaptive" selected>Adaptive (Light Glow / Dark Shade)</option>
+      <option value="light-glow">Light Glow (High Contrast)</option>
+      <option value="dark-shade">Dark Shadow</option>
+      <option value="none">None</option>
+    </select>
+  </label>
+
   <div id="custom-text-wrapper" class="hidden items-center gap-1.5">
     <input
       id="tune-custom-text"
@@ -352,7 +365,7 @@ function formatDate(dateStr: string) {
     >
       <div
         id="name-overlay-content"
-        class="font-heading font-black tracking-tight uppercase leading-[0.86] text-neutral-950 dark:text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]"
+        class="font-heading font-black tracking-tight uppercase leading-[0.86] text-neutral-950 dark:text-white drop-shadow-[0_2px_12px_rgba(252,251,249,0.95)] dark:drop-shadow-[0_2px_14px_rgba(0,0,0,0.95)]"
         style="font-size: 36px;"
       >
         <div>YOVAN<span class="text-[var(--color-accent,#52FF1A)]">;</span></div>
@@ -378,6 +391,7 @@ function formatDate(dateStr: string) {
       const weightSelect = document.getElementById('tune-font-weight');
       const trackingInput = document.getElementById('tune-letter-spacing');
       const trackingVal = document.getElementById('val-letter-spacing');
+      const shadowSelect = document.getElementById('tune-shadow');
       const customWrapper = document.getElementById('custom-text-wrapper');
       const customInput = document.getElementById('tune-custom-text');
       const output = document.getElementById('tune-output');
@@ -450,11 +464,24 @@ function formatDate(dateStr: string) {
           }
 
           const fontLabel = fontSelect ? fontSelect.options[fontSelect.selectedIndex].text : 'Neue Machina';
-          output.value = `font: "${fontLabel}"; variant: "${preset}"; transform: "${textTransform}"; size: ${fontSize}px; weight: ${fontWeight}; tracking: ${tracking}px;`;
+          const shadow = shadowSelect ? shadowSelect.value : 'adaptive';
+
+          if (shadow === 'light-glow') {
+            overlay.style.filter = 'drop-shadow(0 2px 12px rgba(252, 251, 249, 0.95))';
+          } else if (shadow === 'dark-shade') {
+            overlay.style.filter = 'drop-shadow(0 2px 14px rgba(0, 0, 0, 0.95))';
+          } else if (shadow === 'none') {
+            overlay.style.filter = 'none';
+          } else {
+            overlay.style.filter = '';
+          }
+
+          output.value = `font: "${fontLabel}"; variant: "${preset}"; transform: "${textTransform}"; size: ${fontSize}px; weight: ${fontWeight}; tracking: ${tracking}px; shadow: "${shadow}";`;
         };
 
         if (fontSelect) fontSelect.onchange = updateNameTuner;
         presetSelect.onchange = updateNameTuner;
+        if (shadowSelect) shadowSelect.onchange = updateNameTuner;
         upperCheck.onchange = () => {
           if (upperCheck.checked) capCheck.checked = false;
           updateNameTuner();
