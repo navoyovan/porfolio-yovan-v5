@@ -258,9 +258,9 @@
 .dark,
 :root.dark,
 html.dark {
-  --bg-primary: #0e0e0e;
-  --bg-secondary: #141414;
-  --bg-card: #0e0e0e;
+  --bg-primary: #090909;
+  --bg-secondary: #121212;
+  --bg-card: #090909;
   --border-color: #262626;
   --border-dark: #e5e5e5;
 
@@ -333,11 +333,11 @@ body,
 }
 
 .hero-h1 {
-  font-size: var(--hero-size-h1, clamp(2.4rem, 11vw, 8rem));
+  font-size: var(--hero-size-h1, clamp(2.4rem, 9.5vw, 6.4rem));
 }
 
 .hero-h2 {
-  font-size: var(--hero-size-h2, clamp(2.0rem, 9vw, 6rem));
+  font-size: var(--hero-size-h2, clamp(2.4rem, 9.5vw, 6.4rem));
 }
 
 .hero-h3 {

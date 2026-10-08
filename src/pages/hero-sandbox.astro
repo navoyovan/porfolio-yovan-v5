@@ -1,0 +1,362 @@
+---
+import RootLayout from '../layouts/RootLayout.astro';
+import HeroMap from '../components/HeroMap.astro';
+import ActionButton from '../components/ActionButton.astro';
+
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase.endsWith('/') ? rawBase.slice(0, -1) : rawBase;
+---
+
+<RootLayout
+  title="Hero Laboratory & Visual Log Sandbox"
+  description="Dedicated sandbox to design, stylize, and tune the cartographic telemetry hero"
+  noindex={true}
+  hideNavbar={true}
+>
+  <!-- Sticky Scroll Wrapper for Smooth Hero Compression -->
+  <div class="relative w-full" id="hero-scroll-wrapper" style="height: 100vh;">
+    <main
+      class="sticky top-0 w-full bg-[#090909] text-white overflow-hidden flex flex-col justify-between selection:bg-white selection:text-black will-change-[height]"
+      id="sandbox-main"
+      style="height: 100vh; min-height: 46vh;"
+    >
+      <!-- Full-Bleed Ambient Map Background with Parallax -->
+      <div id="hero-map-parallax" class="absolute -inset-x-0 -top-24 -bottom-24 z-0 pointer-events-none overflow-hidden will-change-transform">
+        <HeroMap interactive={false} />
+        <!-- Pure Clean Subtle OLED Radial Vignette -->
+        <div
+          class="absolute inset-0 z-10 pointer-events-none"
+          style="background: radial-gradient(ellipse 110% 90% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.4) 70%, #000000 100%);"
+        ></div>
+      </div>
+
+      <!-- Minimal Header (Geographic Location) - Absolute to avoid phantom scroll gaps -->
+      <header class="absolute top-0 inset-x-0 z-20 w-full px-6 sm:px-8 lg:px-12 pt-6 sm:pt-8 flex items-center justify-between font-sans text-xs tracking-wider text-neutral-400 select-none">
+        <div class="flex items-center gap-3">
+          <span class="text-neutral-200 font-medium">Bogor, West Java</span>
+          <span class="text-neutral-600">•</span>
+          <span class="text-neutral-500 font-mono text-[11px]">6°35′ S, 106°47′ E</span>
+        </div>
+      </header>
+
+      <!-- Center Stage: Balanced Position (~12.5vw from left) -->
+      <div class="relative z-20 w-full pl-[10vw] sm:pl-[12vw] lg:pl-[13vw] pr-6 my-auto flex flex-col items-start transition-transform duration-75 origin-left" id="hero-typography-stage">
+        <!-- Main Title (Neue Machina Light 300 @ 8.8rem) -->
+        <h1
+          id="hero-name-container"
+          class="flex flex-col leading-[0.88] m-0 p-0 text-white transition-all duration-150 select-none"
+          style="font-family: 'Neue Machina', sans-serif !important; font-size: clamp(3rem, 12vw, 8.8rem); letter-spacing: -0.02em; font-weight: 300;"
+        >
+          <!-- Row 1: Yovan; -->
+          <div id="sandbox-h1" class="relative inline-flex items-baseline whitespace-nowrap" style="font-family: 'Neue Machina', sans-serif !important;">
+            <span id="sandbox-text-r1" style="font-family: 'Neue Machina', sans-serif !important;">Yovan</span><span id="sandbox-punct-r1" class="transition-colors hover:text-[#52FF1A] cursor-pointer" style="font-family: 'Neue Machina', sans-serif !important;">;</span>
+          </div>
+
+          <!-- Row 2: Gunardio. -->
+          <div id="sandbox-h2" class="inline-flex items-baseline whitespace-nowrap" style="margin-top: -1rem; font-family: 'Neue Machina', sans-serif !important;">
+            <span id="sandbox-text-r2" style="font-family: 'Neue Machina', sans-serif !important;">Gunardio.</span>
+          </div>
+        </h1>
+      </div>
+
+      <!-- Clean Editorial Footer with Scale Ruler - Absolute to avoid phantom scroll gaps -->
+      <footer class="absolute bottom-0 inset-x-0 z-20 w-full px-6 sm:px-8 lg:px-12 pb-6 sm:pb-8 flex items-end justify-between font-sans text-[11px] text-neutral-500 select-none">
+        <div class="flex flex-col items-start gap-1">
+          <span>Personal Portfolio & Systems Archive</span>
+          <span class="font-mono text-[10px] text-neutral-600">Edition 2026</span>
+        </div>
+
+        <div class="flex flex-col items-end gap-2">
+          <!-- Dynamic Architectural Scale Ruler (Bottom Right) -->
+          <div id="hero-ruler-container" class="flex flex-col gap-1 w-36 sm:w-44" aria-label="Cartographic Scale">
+            <div class="flex items-center justify-between font-mono text-[9px] tracking-widest text-neutral-400">
+              <span>0</span>
+              <span id="hero-ruler-mid">1.5</span>
+              <span id="hero-ruler-max">3 KM</span>
+            </div>
+            <!-- Architectural notched scale line -->
+            <div class="relative h-[5px] w-full border-b border-neutral-600 flex items-end justify-between">
+              <span class="w-px h-full bg-neutral-400"></span>
+              <span class="w-px h-[3px] bg-neutral-600"></span>
+              <span class="w-px h-full bg-neutral-500"></span>
+              <span class="w-px h-[3px] bg-neutral-600"></span>
+              <span class="w-px h-full bg-neutral-400"></span>
+            </div>
+          </div>
+          <span id="hero-ruler-ratio" class="text-neutral-500 text-[10px] tracking-wide font-sans">1:50,000 Architectural Scale</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Revealed Hero Narrative & CTAs Section (Compact Swiss Editorial Layout) -->
+  <section class="relative z-20 w-full bg-[#090909] text-white px-6 sm:px-8 lg:px-12 pt-2 pb-12 sm:pb-16">
+    <div class="max-w-4xl mx-auto flex flex-col items-start gap-5 sm:gap-6">
+      <!-- Section Header / Meta Tag -->
+      <div class="flex items-center gap-2.5 font-mono text-[10px] sm:text-[11px] tracking-wider text-neutral-500 uppercase select-none">
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#52FF1A]"></span>
+        <span class="text-neutral-300 font-semibold">00 // OVERVIEW</span>
+        <span class="text-neutral-700">•</span>
+        <span>Systems Architecture & Interactive Engineering</span>
+      </div>
+
+      <!-- Main Bio & Narrative (Compact) -->
+      <div class="max-w-xl">
+        <p class="font-sans text-sm sm:text-base md:text-lg text-neutral-300 font-normal leading-relaxed">
+          Software Engineer & systems builder turning ideas into working products; from landing pages and web apps to touchscreen kiosks and the hardware behind them.
+        </p>
+      </div>
+
+      <!-- Action Buttons & Social Suite (Compact Inline Row) -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 w-full pt-2">
+        <!-- Primary Navigation CTAs -->
+        <div class="flex items-center gap-2.5">
+          <ActionButton
+            variant="primary"
+            size="sm"
+            href="#projects"
+            class="group overflow-hidden !rounded-none !py-2 !px-4"
+          >
+            <div class="inline-flex items-center gap-1.5">
+              <span class="font-heading font-bold text-xs tracking-wider">FEATURED WORK</span>
+              <span class="transition-transform duration-200 group-hover:translate-y-0.5">↓</span>
+            </div>
+          </ActionButton>
+
+          <ActionButton
+            variant="secondary"
+            size="sm"
+            href={`${base}/portfolio-index`}
+            class="group overflow-hidden !rounded-none !py-2 !px-4"
+          >
+            <div class="inline-flex items-center gap-1.5">
+              <span class="font-heading font-bold text-xs tracking-wider">PORTFOLIO INDEX</span>
+              <span class="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
+            </div>
+          </ActionButton>
+        </div>
+
+        <!-- Social Icons & Resume Download -->
+        <div class="flex items-center gap-1.5">
+          <ActionButton
+            href="https://github.com/navoyovan"
+            target="_blank"
+            rel="noopener noreferrer"
+            ariaLabel="GitHub Profile"
+            variant="secondary"
+            size="micro"
+            class="!rounded-none !w-7 !h-7 !min-w-[28px] !min-h-[28px] border-neutral-800 hover:border-neutral-200"
+          >
+            <i class="ti ti-brand-github text-xs" aria-hidden="true"></i>
+          </ActionButton>
+
+          <ActionButton
+            href="https://linkedin.com/in/yovan-g-d-22379ba7/"
+            target="_blank"
+            rel="noopener noreferrer"
+            ariaLabel="LinkedIn Profile"
+            variant="secondary"
+            size="micro"
+            class="!rounded-none !w-7 !h-7 !min-w-[28px] !min-h-[28px] border-neutral-800 hover:border-neutral-200"
+          >
+            <i class="ti ti-brand-linkedin text-xs" aria-hidden="true"></i>
+          </ActionButton>
+
+          <ActionButton
+            href="mailto:yovangunardio@gmail.com"
+            ariaLabel="Send Email"
+            variant="secondary"
+            size="micro"
+            class="!rounded-none !w-7 !h-7 !min-w-[28px] !min-h-[28px] border-neutral-800 hover:border-neutral-200"
+          >
+            <i class="ti ti-mail text-xs" aria-hidden="true"></i>
+          </ActionButton>
+
+          <a
+            href="https://docs.google.com/document/d/1dlUKA5EGLI3qPxEOfJ3acjt4tA39oxKy_Fs1Z_JM0Pk/export?format=pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Yovan_Gunardio_Resume.pdf"
+            class="h-7 min-h-[28px] px-2.5 inline-flex items-center gap-1.5 border border-neutral-800 hover:border-neutral-200 bg-transparent text-neutral-300 hover:text-white transition-colors duration-150 select-none font-mono text-[10px] tracking-wider uppercase"
+          >
+            <i class="ti ti-download text-[11px]" aria-hidden="true"></i>
+            <span>Resume</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Core Disciplines Grid (Compact) -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 w-full pt-4 border-t border-neutral-900/60">
+        <div class="flex flex-col gap-1.5 p-3.5 bg-neutral-950/60 border border-neutral-900">
+          <span class="font-mono text-[10px] text-neutral-500 uppercase tracking-widest">// 01 SYSTEMS</span>
+          <span class="font-heading font-bold text-xs text-neutral-200">Distributed & Backend</span>
+          <p class="font-sans text-[11px] text-neutral-400 leading-normal">
+            High-throughput architectures, microservices, cloud orchestration, and reliable data pipelines.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1.5 p-3.5 bg-neutral-950/60 border border-neutral-900">
+          <span class="font-mono text-[10px] text-neutral-500 uppercase tracking-widest">// 02 INTERFACES</span>
+          <span class="font-heading font-bold text-xs text-neutral-200">UI Engineering</span>
+          <p class="font-sans text-[11px] text-neutral-400 leading-normal">
+            Fluid interactions, accessible Swiss typography, tactile animations, and clean state machines.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-1.5 p-3.5 bg-neutral-950/60 border border-neutral-900">
+          <span class="font-mono text-[10px] text-neutral-500 uppercase tracking-widest">// 03 DESKTOP</span>
+          <span class="font-heading font-bold text-xs text-neutral-200">WPF, Electron & Kiosk OS</span>
+          <p class="font-sans text-[11px] text-neutral-400 leading-normal">
+            Touchscreen kiosks, hardware integrations, thermal printers, and native Windows runtimes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Continuation Spacer (simulating rest of page scroll) -->
+  <div class="w-full min-h-[150vh] bg-[#090909]"></div>
+
+
+
+  <script>
+    const setupDynamicScaleRuler = () => {
+      const mapEl = document.getElementById('hero-leaflet-map');
+      const ruler = document.getElementById('hero-ruler-container');
+      const midLabel = document.getElementById('hero-ruler-mid');
+      const maxLabel = document.getElementById('hero-ruler-max');
+      const ratioLabel = document.getElementById('hero-ruler-ratio');
+
+      if (!mapEl || !ruler || !midLabel || !maxLabel || !ratioLabel) return;
+
+      const map = (mapEl as any)._leaflet_map;
+      if (!map) {
+        setTimeout(setupDynamicScaleRuler, 150);
+        return;
+      }
+
+      const updateScale = () => {
+        // Measure exact ground distance spanned by ruler width in pixels
+        const rulerWidthPx = ruler.offsetWidth;
+        if (!rulerWidthPx) return;
+
+        const center = map.getCenter();
+        const pt1 = map.latLngToContainerPoint(center);
+        const pt2 = L.point(pt1.x + rulerWidthPx, pt1.y);
+        const latLng2 = map.containerPointToLatLng(pt2);
+
+        const distanceMeters = center.distanceTo(latLng2);
+
+        // Format nice round numbers for the architectural bar
+        let maxVal: string;
+        let midVal: string;
+
+        if (distanceMeters >= 1000) {
+          const km = distanceMeters / 1000;
+          if (km >= 10) {
+            maxVal = `${Math.round(km)} KM`;
+            midVal = `${Math.round(km / 2)}`;
+          } else {
+            maxVal = `${km.toFixed(1)} KM`;
+            midVal = `${(km / 2).toFixed(1)}`;
+          }
+        } else {
+          maxVal = `${Math.round(distanceMeters)} M`;
+          midVal = `${Math.round(distanceMeters / 2)}`;
+        }
+
+        maxLabel.textContent = maxVal;
+        midLabel.textContent = midVal;
+
+        // Compute representative architectural ratio (standard 96 DPI: 1 px ≈ 0.264583 mm)
+        const distanceMm = distanceMeters * 1000;
+        const screenWidthMm = rulerWidthPx * 0.264583;
+        const scaleRatio = Math.round(distanceMm / screenWidthMm / 1000) * 1000;
+        const formattedRatio = scaleRatio >= 1000 ? scaleRatio.toLocaleString('en-US') : Math.round(distanceMm / screenWidthMm);
+
+        ratioLabel.textContent = `1:${formattedRatio} Architectural Scale`;
+      };
+
+      updateScale();
+      window.addEventListener('resize', updateScale);
+    };
+
+    // Butter-smooth rAF scroll narrowing (zero map reflow or jank)
+    const setupScrollNarrowing = () => {
+      const heroMain = document.getElementById('sandbox-main');
+      const heroWrapper = document.getElementById('hero-scroll-wrapper');
+      const typoStage = document.getElementById('hero-typography-stage');
+      const headerEl = heroMain?.querySelector('header');
+      const footerEl = heroMain?.querySelector('footer');
+      const badgeBox = document.getElementById('hero-map-badge');
+      const mapParallax = document.getElementById('hero-map-parallax');
+      if (!heroMain || !heroWrapper) return;
+
+      let ticking = false;
+
+      const updateHeroOnScroll = () => {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const vhPx = window.innerHeight;
+        // Exact compress distance: 54% of viewport height (100vh -> 46vh)
+        const compressDistance = vhPx * 0.54;
+        const progress = Math.min(Math.max(scrollY / compressDistance, 0), 1);
+
+        // Smooth cubic ease-out
+        const ease = 1 - Math.pow(1 - progress, 2.5);
+
+        // Compress from 100vh down to 46vh
+        const currentVh = 100 - (ease * 54);
+        heroMain.style.height = `${currentVh}vh`;
+
+        // Parallax depth: gentle sub-rate travel
+        if (mapParallax) {
+          const mapOffsetY = progress * -40;
+          mapParallax.style.transform = `translate3d(0, ${mapOffsetY}px, 0)`;
+        }
+
+        // Fast clean fade out for header, footer & viewfinder
+        const labelOpacity = Math.max(1 - (progress * 2.2), 0);
+
+        if (headerEl) {
+          headerEl.style.opacity = labelOpacity.toString();
+          headerEl.style.pointerEvents = labelOpacity === 0 ? 'none' : 'auto';
+        }
+        if (footerEl) {
+          footerEl.style.opacity = labelOpacity.toString();
+          footerEl.style.pointerEvents = labelOpacity === 0 ? 'none' : 'auto';
+        }
+        if (badgeBox) {
+          badgeBox.style.opacity = labelOpacity.toString();
+          badgeBox.style.pointerEvents = labelOpacity === 0 ? 'none' : 'auto';
+        }
+
+        if (typoStage) {
+          const scale = 1 - (ease * 0.15);
+          typoStage.style.transform = `scale(${scale})`;
+        }
+
+        ticking = false;
+      };
+
+      const onScroll = () => {
+        if (!ticking) {
+          requestAnimationFrame(updateHeroOnScroll);
+          ticking = true;
+        }
+      };
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      updateHeroOnScroll();
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setupDynamicScaleRuler();
+        setupScrollNarrowing();
+      });
+    } else {
+      setupDynamicScaleRuler();
+      setupScrollNarrowing();
+    }
+  </script>
+</RootLayout>
