@@ -12,7 +12,7 @@
 
 @font-face {
   font-family: 'Neue Machina';
-  src: url('./fonts/neuemachina-light.otf') format('opentype');
+  src: url('./fonts/PPNeueMachina-InktrapLight.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -20,7 +20,7 @@
 
 @font-face {
   font-family: 'Neue Machina';
-  src: url('./fonts/neuemachina-regular.otf') format('opentype');
+  src: url('./fonts/PPNeueMachina-InktrapRegular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -28,7 +28,127 @@
 
 @font-face {
   font-family: 'Neue Machina';
-  src: url('./fonts/neuemachina-ultrabold.otf') format('opentype');
+  src: url('./fonts/PPNeueMachina-InktrapUltrabold.woff2') format('woff2');
+  font-weight: 700 800 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina';
+  src: url('./fonts/PPNeueMachina-InktrapLight.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina';
+  src: url('./fonts/PPNeueMachina-InktrapRegular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Machina';
+  src: url('./fonts/PPNeueMachina-InktrapUltrabold.woff2') format('woff2');
+  font-weight: 700 800 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina Plain';
+  src: url('./fonts/PPNeueMachina-PlainLight.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina Plain';
+  src: url('./fonts/PPNeueMachina-PlainRegular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina Plain';
+  src: url('./fonts/PPNeueMachina-PlainUltrabold.woff2') format('woff2');
+  font-weight: 700 800 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v1';
+  src: url('./fonts/NeueMachina-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v1';
+  src: url('./fonts/NeueMachina-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v1';
+  src: url('./fonts/NeueMachina-Ultrabold.woff2') format('woff2');
+  font-weight: 700 800 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v2 Inktrap';
+  src: url('./fonts/PPNeueMachina-InktrapLight.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v2 Inktrap';
+  src: url('./fonts/PPNeueMachina-InktrapRegular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v2 Inktrap';
+  src: url('./fonts/PPNeueMachina-InktrapUltrabold.woff2') format('woff2');
+  font-weight: 700 800 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v2 Plain';
+  src: url('./fonts/PPNeueMachina-PlainLight.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v2 Plain';
+  src: url('./fonts/PPNeueMachina-PlainRegular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Neue Machina v2 Plain';
+  src: url('./fonts/PPNeueMachina-PlainUltrabold.woff2') format('woff2');
   font-weight: 700 800 900;
   font-style: normal;
   font-display: swap;
@@ -40,6 +160,7 @@
   --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: 'Syne', sans-serif;
   --font-hero: 'Syne', sans-serif;
+  --font-machina: 'Neue Machina', sans-serif;
   --font-pixel: 'Press Start 2P', monospace;
 
   --color-accent: var(--accent-color, #52FF1A);
