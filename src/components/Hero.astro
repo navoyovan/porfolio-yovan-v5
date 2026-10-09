@@ -20,30 +20,46 @@ const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
 
 const cleanFirstName = firstName.replace(/;$/, "");
 
-const primaryStack = [
+const stackFrameworks = [
+  { name: "Laravel", icon: "ti-brand-laravel" },
   { name: "React", icon: "ti-brand-react" },
   { name: "Electron", icon: "ti-atom-2" },
-  { name: "Laravel", icon: "ti-brand-laravel" },
-  { name: "TypeScript", icon: "ti-brand-typescript" },
-  { name: "Tailwind CSS", icon: "ti-brand-tailwind" },
   { name: "Astro", icon: "ti-brand-astro" },
+  { name: "TypeScript", icon: "ti-brand-typescript" },
+  { name: "JavaScript", icon: "ti-brand-javascript" },
+  { name: "PHP", icon: "ti-brand-php" },
+  { name: "C# / .NET", icon: "ti-brand-c-sharp" },
+  { name: "Node.js", icon: "ti-brand-nodejs" },
+  { name: "WPF & WebView2", icon: "ti-app-window" },
+  { name: "Docker", icon: "ti-brand-docker" },
+  { name: "Google Cloud Platform", icon: "ti-cloud" },
+  { name: "Tailwind CSS", icon: "ti-brand-tailwind" },
+  { name: "Filament", icon: "ti-layout-dashboard" },
 ];
 
-const secondaryStack = [
-  { name: "Docker", icon: "ti-brand-docker" },
-  { name: "Google Cloud", icon: "ti-cloud" },
-  { name: "Node.js", icon: "ti-brand-nodejs" },
-  { name: "Vite", icon: "ti-brand-vite" },
-  { name: "Git", icon: "ti-brand-git" },
+const librariesTechniques = [
   { name: "Zustand", icon: "ti-database-cog" },
-  { name: "REST API", icon: "ti-api" },
-  { name: "SQLite", icon: "ti-database" },
-  { name: "Three.js", icon: "ti-brand-threejs" },
+  { name: "Vite", icon: "ti-brand-vite" },
   { name: "WebSockets", icon: "ti-broadcast" },
-  { name: "C# / .NET", icon: "ti-brand-c-sharp" },
-  { name: "PHP", icon: "ti-brand-php" },
-  { name: "Leaflet.js", icon: "ti-map-2" },
+  { name: "RESTful APIs", icon: "ti-api" },
+  { name: "IPC Architecture", icon: "ti-arrows-exchange" },
+  { name: "ESP32 & IoT", icon: "ti-cpu" },
+  { name: "SQLite", icon: "ti-database" },
   { name: "MySQL", icon: "ti-brand-mysql" },
+  { name: "Google Cloud Storage", icon: "ti-cloud-upload" },
+  { name: "SNAP API", icon: "ti-credit-card" },
+  { name: "Three.js", icon: "ti-brand-threejs" },
+  { name: "Framer Motion", icon: "ti-brand-framer-motion" },
+  { name: "GSAP", icon: "ti-keyframes" },
+  { name: "Anime.js", icon: "ti-sparkles" },
+  { name: "Leaflet.js", icon: "ti-map-2" },
+  { name: "Chart.js", icon: "ti-chart-line" },
+  { name: "CSS Modules", icon: "ti-brand-css3" },
+  { name: "Git & GitHub", icon: "ti-brand-github" },
+  { name: "GitHub Pages", icon: "ti-brand-git" },
+  { name: "Accessibility (a11y)", icon: "ti-accessible" },
+  { name: "SEO & Metadata", icon: "ti-search" },
+  { name: "OWASP Guidelines", icon: "ti-shield-check" },
 ];
 ---
 
@@ -242,10 +258,10 @@ const secondaryStack = [
     class="relative w-full overflow-hidden py-4 sm:py-5 flex flex-col gap-3 sm:gap-4 select-none pointer-events-auto border-t border-neutral-800/60 bg-black/40 backdrop-blur-md hero-stack-marquee-wrapper"
     aria-label="Technology Stack Archive"
   >
-    <!-- Row 1: Core Primary Stack (Continuous seamless leftward scroll) -->
+    <!-- Row 1: Core Stacks & Frameworks (Continuous seamless leftward scroll) -->
     <div class="marquee-row group flex overflow-hidden w-full">
       <div class="marquee-group flex shrink-0 items-center gap-8 sm:gap-12 pr-8 sm:pr-12 animate-marquee-left group-hover:[animation-play-state:paused]">
-        {primaryStack.concat(primaryStack).concat(primaryStack).map((item) => (
+        {stackFrameworks.concat(stackFrameworks).map((item) => (
           <div class="flex items-center gap-2.5 opacity-90 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
             <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
             <span class="font-sans text-xs sm:text-sm text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
@@ -253,7 +269,7 @@ const secondaryStack = [
         ))}
       </div>
       <div class="marquee-group flex shrink-0 items-center gap-8 sm:gap-12 pr-8 sm:pr-12 animate-marquee-left group-hover:[animation-play-state:paused]" aria-hidden="true">
-        {primaryStack.concat(primaryStack).concat(primaryStack).map((item) => (
+        {stackFrameworks.concat(stackFrameworks).map((item) => (
           <div class="flex items-center gap-2.5 opacity-90 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
             <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
             <span class="font-sans text-xs sm:text-sm text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
@@ -262,10 +278,10 @@ const secondaryStack = [
       </div>
     </div>
 
-    <!-- Row 2: Secondary Tools & Utilities (Continuous seamless rightward reverse scroll) -->
+    <!-- Row 2: Libraries, Techniques & Ecosystem (Continuous seamless rightward reverse scroll) -->
     <div class="marquee-row group flex overflow-hidden w-full">
       <div class="marquee-group flex shrink-0 items-center gap-7 sm:gap-10 pr-7 sm:pr-10 animate-marquee-right group-hover:[animation-play-state:paused]">
-        {secondaryStack.concat(secondaryStack).map((item) => (
+        {librariesTechniques.concat(librariesTechniques).map((item) => (
           <div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
             <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-300 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
             <span class="font-sans text-[11px] sm:text-xs text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
@@ -273,7 +289,7 @@ const secondaryStack = [
         ))}
       </div>
       <div class="marquee-group flex shrink-0 items-center gap-7 sm:gap-10 pr-7 sm:pr-10 animate-marquee-right group-hover:[animation-play-state:paused]" aria-hidden="true">
-        {secondaryStack.concat(secondaryStack).map((item) => (
+        {librariesTechniques.concat(librariesTechniques).map((item) => (
           <div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
             <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-300 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
             <span class="font-sans text-[11px] sm:text-xs text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
@@ -292,14 +308,14 @@ const secondaryStack = [
       <!-- Big Section Numeral "1" (Sliced vertically in half by container boundary) -->
       <div
         id="overview-numeral-crop"
-        class="relative overflow-hidden flex items-center justify-end select-none shrink-0"
+        class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
         style="width: 85px; contain: paint;"
       >
         <span
           id="overview-numeral"
-          class="relative font-heading font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-tighter shrink-0 select-none"
+          class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
           aria-hidden="true"
-          style="font-size: 92px; left: 13px; top: -6px; display: inline-block;"
+          style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
         >
           1
         </span>
@@ -312,7 +328,7 @@ const secondaryStack = [
       <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
         <!-- Top: Overview label with horizontal rule -->
         <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
-          <span class="font-heading font-bold text-[10.5px] sm:text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
+          <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
             OVERVIEW
           </span>
         </div>
@@ -320,7 +336,7 @@ const secondaryStack = [
         <!-- Section Headline -->
         <h2
           id="heading-intro"
-          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.08] font-heading w-full m-0"
+          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
         >
           <span
             id="heading-intro-carousel"
@@ -757,8 +773,8 @@ const secondaryStack = [
 
       const updateIntroHeadingPhrase = (isAnimated = true) => {
         const portraitShown = portraitEl
-          ? portraitEl.getBoundingClientRect().top < window.innerHeight * 0.82
-          : window.scrollY > window.innerHeight * 0.65;
+          ? portraitEl.getBoundingClientRect().top < window.innerHeight * 0.75
+          : window.scrollY > window.innerHeight * 0.70;
 
         updateIntroCarouselLayout(portraitShown ? 'i' : 'he', isAnimated);
       };

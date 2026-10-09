@@ -1,14 +1,12 @@
-@import "tailwindcss";
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,600,700,800,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.cdnfonts.com/css/pp-neue-montreal');
 
-@import "@fontsource/outfit/300.css";
-@import "@fontsource/outfit/400.css";
-@import "@fontsource/outfit/500.css";
-@import "@fontsource/outfit/600.css";
-@import "@fontsource/outfit/700.css";
+@import "tailwindcss";
 
 @import "@fontsource/syne/700.css";
 @import "@fontsource/syne/800.css";
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 @font-face {
   font-family: 'Neue Machina';
@@ -157,8 +155,11 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-heading: 'Syne', sans-serif;
+  --font-subheading: 'Newsreader', Georgia, Cambria, serif;
+  --font-serif: 'Newsreader', Georgia, Cambria, serif;
+  --font-montreal: 'PP Neue Montreal', 'Neue Montreal', sans-serif;
   --font-hero: 'Syne', sans-serif;
   --font-machina: 'Neue Machina', sans-serif;
   --font-pixel: 'Press Start 2P', monospace;

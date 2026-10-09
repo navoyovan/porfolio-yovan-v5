@@ -229,11 +229,11 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
       {category}
     </p>
 
-    <!-- Syne Title -->
+    <!-- Newsreader Title -->
     <h3
       id={titleId}
       class:list={[
-        "text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight transition-colors font-heading m-0 flex items-center gap-1.5",
+        "text-xl sm:text-2xl font-semibold text-neutral-950 dark:text-white tracking-tight leading-tight transition-colors font-subheading m-0 flex items-center gap-1.5",
         (brand === 'mctextureghost' || title.toLowerCase().includes('mctextureghost'))
           ? "group-hover:text-[#52FF1A]"
           : "group-hover:text-[var(--color-accent,#52FF1A)]"

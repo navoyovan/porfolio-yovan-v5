@@ -109,14 +109,14 @@ const capabilities = [
           <!-- Big Section Numeral "3" (Sliced vertically in half by container boundary) -->
           <div
             id="capabilities-numeral-crop"
-            class="relative overflow-hidden flex items-center justify-end select-none shrink-0"
+            class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
             style="width: 85px; contain: paint;"
           >
             <span
               id="capabilities-numeral"
-              class="relative font-heading font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-tighter shrink-0 select-none"
+              class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
               aria-hidden="true"
-              style="font-size: 92px; left: 13px; top: -6px; display: inline-block;"
+              style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
             >
               3
             </span>
@@ -129,7 +129,7 @@ const capabilities = [
           <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
             <!-- Top: Category label with horizontal rule -->
             <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
-              <span class="font-heading font-bold text-[10.5px] sm:text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
+              <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
                 WHAT I CAN BUILD
               </span>
             </div>
@@ -140,7 +140,7 @@ const capabilities = [
                 id="heading-capabilities"
                 data-en="From simple pages to systems that do stuff."
                 data-id="Dari halaman sederhana sampai sistem yang beneran kerja."
-                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.08] font-heading w-full m-0"
+                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
               >
                 From simple pages to systems that do stuff.
               </h2>
@@ -164,7 +164,7 @@ const capabilities = [
                       <h3
                         data-en={item.title}
                         data-id={item.titleId || item.title}
-                        class="text-lg sm:text-xl font-heading font-bold text-neutral-950 dark:text-white group-hover:text-[var(--color-accent,#52FF1A)] transition-colors m-0"
+                        class="text-xl sm:text-2xl font-subheading font-semibold text-neutral-950 dark:text-white group-hover:text-[var(--color-accent,#52FF1A)] transition-colors m-0"
                       >
                         {item.title}
                       </h3>
@@ -208,14 +208,14 @@ const capabilities = [
           <!-- Big Section Numeral "4" (Sliced vertically in half by container boundary) -->
           <div
             id="philosophy-numeral-crop"
-            class="relative overflow-hidden flex items-center justify-end select-none shrink-0"
+            class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
             style="width: 85px; contain: paint;"
           >
             <span
               id="philosophy-numeral"
-              class="relative font-heading font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-tighter shrink-0 select-none"
+              class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
               aria-hidden="true"
-              style="font-size: 92px; left: 13px; top: -6px; display: inline-block;"
+              style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
             >
               4
             </span>
@@ -228,7 +228,7 @@ const capabilities = [
           <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
             <!-- Top: Category label with horizontal rule -->
             <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
-              <span class="font-heading font-bold text-[10.5px] sm:text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
+              <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
                 PHILOSOPHY
               </span>
             </div>
@@ -239,14 +239,14 @@ const capabilities = [
                 id="heading-philosophy"
                 data-en="I build for the thing, not the stack."
                 data-id="Aku bikin produk, bukan sekedar stacknya doang."
-                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.08] font-heading w-full m-0"
+                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
               >
                 I build for the thing, not the stack.
               </h2>
               <p
                 data-en="Understanding the whole problem before deciding how to solve it. The interface, the backend, the hardware, the weird edge cases; they're all part of the same product."
                 data-id="Dengan memahami masalahnya secara menyeluruh sebelum milih jalan solusinya. Antarmuka, backend, hardware, sampai kasus unik yang ga kepikiran, semuanya tetap bagian dari satu produk."
-                class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal max-w-3xl m-0"
+                class="font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal tracking-[0.5px] max-w-3xl m-0"
               >
                 Understanding the whole problem before deciding how to solve it.
                 The interface, the backend, the hardware, the weird edge cases;
@@ -387,7 +387,7 @@ const capabilities = [
                 class="p-6 sm:p-7 border-l-4 border-[var(--color-accent,#52FF1A)] bg-[#f6f4ee] dark:bg-[#141414] border-y border-r border-neutral-300/60 dark:border-neutral-800 space-y-3"
               >
                 <blockquote
-                  class="text-2xl sm:text-3xl md:text-4xl font-bold italic tracking-tight text-neutral-950 dark:text-white font-heading"
+                  class="text-2xl sm:text-3xl md:text-4xl font-normal italic tracking-tight text-neutral-950 dark:text-white font-subheading"
                 >
                   "_"
                 </blockquote>
@@ -421,14 +421,14 @@ const capabilities = [
           <!-- Big Section Numeral "5" (Sliced vertically in half by container boundary) -->
           <div
             id="about-numeral-crop"
-            class="relative overflow-hidden flex items-center justify-end select-none shrink-0"
+            class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
             style="width: 85px; contain: paint;"
           >
             <span
               id="about-numeral"
-              class="relative font-heading font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-tighter shrink-0 select-none"
+              class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
               aria-hidden="true"
-              style="font-size: 92px; left: 13px; top: -6px; display: inline-block;"
+              style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
             >
               5
             </span>
@@ -441,7 +441,7 @@ const capabilities = [
           <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
             <!-- Top: Category label with horizontal rule -->
             <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
-              <span class="font-heading font-bold text-[10.5px] sm:text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
+              <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
                 ABOUT
               </span>
             </div>
@@ -452,7 +452,7 @@ const capabilities = [
                 id="heading-about"
                 data-en="A little bit about myself."
                 data-id="Sedikit cerita tentang aku."
-                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.08] font-heading w-full m-0"
+                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
               >
                 A little bit about myself.
               </h2>

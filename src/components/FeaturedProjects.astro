@@ -21,14 +21,14 @@ const { base } = Astro.props;
     <!-- Big Section Numeral "2" (Sliced vertically in half by container boundary) -->
     <div
       id="projects-numeral-crop"
-      class="relative overflow-hidden flex items-center justify-end select-none shrink-0"
+      class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
       style="width: 85px; contain: paint;"
     >
       <span
         id="projects-numeral"
-        class="relative font-heading font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-tighter shrink-0 select-none"
+        class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
         aria-hidden="true"
-        style="font-size: 92px; left: 13px; top: -6px; display: inline-block;"
+        style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
       >
         2
       </span>
@@ -41,7 +41,7 @@ const { base } = Astro.props;
     <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
       <!-- Top: Category label with horizontal rule -->
       <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
-        <span class="font-heading font-bold text-[10.5px] sm:text-xs uppercase tracking-widest text-neutral-500 dark:text-neutral-400">
+        <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
           FEATURED WORK
         </span>
         <a
@@ -69,14 +69,14 @@ const { base } = Astro.props;
           id="heading-projects"
           data-en="Things I've built"
           data-id="Beberapa karya yang aku bikin"
-          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.08] font-heading w-full m-0"
+          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
         >
           Things I've built
         </h2>
         <p
           data-en="A collection of projects and products where I tried to solve a problem, learn something new, or just casually build a SaaS multi-tenant B2B ecosystem."
           data-id="Kumpulan proyek dan produk tempat aku mencoba menyelesaikan masalah, belajar hal baru, atau sekedar membangun ekosistem SaaS multi-tenant B2B."
-          class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal max-w-3xl m-0"
+          class="font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal tracking-[0.5px] max-w-3xl m-0"
         >
           A collection of projects and products where I tried to solve a problem, learn something new, or just casually build a SaaS multi-tenant B2B ecosystem.
         </p>
@@ -96,7 +96,7 @@ const { base } = Astro.props;
       <div class="space-y-1">
         <h3
           id="heading-hypebox"
-          class="text-2xl sm:text-3xl font-black tracking-tight text-neutral-950 dark:text-white leading-none font-heading"
+          class="text-2xl sm:text-3xl font-black tracking-tight text-neutral-950 dark:text-white leading-none font-heading uppercase"
         >
           HYPE-BOX
         </h3>
@@ -192,7 +192,7 @@ const { base } = Astro.props;
             Edge &rarr; API
           </p>
           <h4
-            class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
+            class="text-xl sm:text-2xl font-semibold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-subheading m-0"
           >
             Touch &amp; QRIS Payment
           </h4>
@@ -252,7 +252,7 @@ const { base } = Astro.props;
             Camera Engine
           </p>
           <h4
-            class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
+            class="text-xl sm:text-2xl font-semibold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-subheading m-0"
           >
             Viewfinder &amp; FX
           </h4>
@@ -312,7 +312,7 @@ const { base } = Astro.props;
             Live Reverb &amp; GCS
           </p>
           <h4
-            class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
+            class="text-xl sm:text-2xl font-semibold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-subheading m-0"
           >
             WebSocket Push &amp; GCS
           </h4>
@@ -378,7 +378,7 @@ const { base } = Astro.props;
             STANDALONE APP
           </p>
           <h4
-            class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
+            class="text-xl sm:text-2xl font-semibold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-subheading m-0"
           >
             Touchscreen Kiosk Client
           </h4>
@@ -562,7 +562,7 @@ const { base } = Astro.props;
             FLEET MANAGER
           </p>
           <h4
-            class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
+            class="text-xl sm:text-2xl font-semibold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-subheading m-0"
           >
             Vendor Portal &amp; Telemetry
           </h4>
@@ -654,7 +654,7 @@ const { base } = Astro.props;
   <div class="pt-8 space-y-4">
     <div class="flex items-center justify-between">
       <h3
-        class="text-xl sm:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white font-heading"
+        class="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-950 dark:text-white font-subheading"
       >
         Other(s)
       </h3>
