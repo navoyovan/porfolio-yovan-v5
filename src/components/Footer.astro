@@ -8,7 +8,7 @@ const currentYear = new Date().getFullYear();
 
 <GithubContributionDivider />
 <footer
-  class="w-full bg-[#fcfbf9] dark:bg-[#0e0e0e] text-neutral-600 dark:text-neutral-400 font-sans transition-colors duration-200 border-t border-neutral-200/60 dark:border-neutral-800/60"
+  class="w-full bg-[#fcfbf9] dark:bg-[#0e0e0e] text-neutral-600 dark:text-neutral-400 font-sans transition-colors duration-200"
   style="--cell: 28px;"
 >
   <div class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto">
@@ -42,17 +42,10 @@ const currentYear = new Date().getFullYear();
         <!-- Vertical Divider Line (Exact Slice Axis) -->
         <div class="w-px bg-neutral-300 dark:bg-neutral-800 shrink-0 self-stretch my-0.5" aria-hidden="true"></div>
 
-        <!-- Right Side: Section label with horizontal rule + Headline & Actions -->
-        <div class="flex-1 flex flex-col justify-center min-w-0 pl-2.5 sm:pl-4 lg:pl-5 py-0.5 gap-2">
-          <!-- Top: Category label with horizontal rule -->
-          <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
-            <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
-              CONNECT
-            </span>
-          </div>
-
+        <!-- Right Side: Headline & Actions -->
+        <div class="flex-1 flex flex-col justify-center min-w-0 pl-2.5 sm:pl-4 lg:pl-5 py-0.5">
           <!-- Section Content: Headline + Subtext + Action Buttons -->
-          <div class="pt-0.5 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div class="space-y-2 max-w-xl">
               <h2
                 id="heading-contact"
