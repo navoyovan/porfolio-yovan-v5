@@ -1,6 +1,7 @@
 ---
 // Overview.astro - Curated 01 // Overview Section
 import simpleIcons from "../data/simpleIcons.json";
+import { DitheringShader } from "./ui/dithering-shader";
 
 interface Props {
   base?: string;
@@ -92,6 +93,18 @@ const supportingStack = [
         class="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center border-b border-neutral-300/80 dark:border-neutral-800 overflow-hidden"
         style="transform: translateZ(0); contain: paint;"
       >
+        <div
+          class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+          style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
+        >
+          <DitheringShader
+            client:visible
+            shape="wave"
+            type="8x8"
+            pxSize={1}
+            speed={0.6}
+          />
+        </div>
         <img
           src={`${base}/images/v.png`}
           alt="Portrait of Yovan Gunardio Darmawan"
@@ -150,14 +163,36 @@ const supportingStack = [
         </div>
       </div>
 
-      <!-- Lyrical Footnote -->
+      <!-- Lyrical Footnote: 3-line cycling rotator -->
       <div class="pt-5 border-t border-neutral-200/80 dark:border-neutral-800/80">
-        <blockquote class="font-serif italic text-sm sm:text-[15px] text-neutral-500 dark:text-neutral-400 leading-relaxed m-0">
-          “A little bit of webapp in my life, a little bit of solder all night long...”
-        </blockquote>
-        <span class="font-sans text-xs text-neutral-400 dark:text-neutral-500 block pt-1.5">
-          — Personal cadence & systems craft
-        </span>
+        <div class="pl-3.5 border-l-2 border-[var(--color-accent,#1b7f3b)]/60 dark:border-[var(--color-accent,#52FF1A)]/60">
+          <div
+            id="lyrics-rotator-container"
+            class="overflow-hidden relative transition-[height] duration-300 ease-out"
+            aria-live="polite"
+          >
+            <div
+              id="lyrics-rotator-track"
+              class="relative space-y-1 font-serif italic text-sm sm:text-[15px] text-neutral-600 dark:text-neutral-300 leading-relaxed transition-transform duration-600 ease-out"
+            >
+              <p class="m-0">“A little bit of webapp in my life,</p>
+              <p class="m-0">a little bit of vscode by my side,</p>
+              <p class="m-0">a little bit of dashboard all I need,</p>
+              <p class="m-0">a little bit of touchscreen kiosk what I see,</p>
+              <p class="m-0">a little bit of 12v in the sun,</p>
+              <p class="m-0">a little bit of solder all night long,</p>
+              <p class="m-0">a little bit of LED, here I am,</p>
+              <p class="m-0">a little bit of git makes me your guy...”</p>
+              <!-- Seamless wrap clones -->
+              <p class="m-0" aria-hidden="true">“A little bit of webapp in my life,</p>
+              <p class="m-0" aria-hidden="true">a little bit of vscode by my side,</p>
+              <p class="m-0" aria-hidden="true">a little bit of dashboard all I need,</p>
+            </div>
+          </div>
+          <span class="font-sans text-xs text-neutral-400 dark:text-neutral-500 block pt-1.5">
+            — Personal cadence & systems craft
+          </span>
+        </div>
       </div>
 
       <!-- Tech Stack Layout (Original unboxed breathing grid down below) -->
@@ -265,3 +300,95 @@ const supportingStack = [
     </div>
   </div>
 </section>
+
+<script>
+  function setupLyricsRotator() {
+    const container = document.getElementById("lyrics-rotator-container");
+    const track = document.getElementById("lyrics-rotator-track");
+    if (!container || !track) return;
+
+    const items = track.children as HTMLCollectionOf<HTMLElement>;
+    if (items.length < 4) return;
+
+    let currentIndex = 0;
+    const totalLines = 8;
+    let isPaused = false;
+    let intervalId: any = null;
+
+    function updateHeight() {
+      if (!items[currentIndex]) return;
+      const startItem = items[currentIndex];
+      const endItem = items[Math.min(currentIndex + 2, items.length - 1)];
+      const h = (endItem.offsetTop + endItem.offsetHeight) - startItem.offsetTop;
+      if (h > 0) {
+        container.style.height = `${h}px`;
+      }
+    }
+
+    function step() {
+      if (isPaused) return;
+      currentIndex++;
+      track.style.transition = "transform 600ms cubic-bezier(0.16, 1, 0.3, 1)";
+      const targetOffset = items[currentIndex]?.offsetTop || 0;
+      track.style.transform = `translateY(-${targetOffset}px)`;
+      updateHeight();
+
+      if (currentIndex >= totalLines) {
+        setTimeout(() => {
+          track.style.transition = "none";
+          currentIndex = 0;
+          track.style.transform = "translateY(0)";
+          updateHeight();
+        }, 650);
+      }
+    }
+
+    updateHeight();
+    if ("fonts" in document) {
+      document.fonts.ready.then(updateHeight);
+    }
+
+    const onResize = () => updateHeight();
+    window.addEventListener("resize", onResize, { passive: true });
+
+    container.addEventListener("mouseenter", () => {
+      isPaused = true;
+    });
+    container.addEventListener("mouseleave", () => {
+      isPaused = false;
+    });
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!prefersReducedMotion) {
+      intervalId = setInterval(step, 3200);
+    }
+
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = null;
+      } else if (!prefersReducedMotion && !intervalId) {
+        intervalId = setInterval(step, 3200);
+        updateHeight();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
+
+    document.addEventListener(
+      "astro:before-swap",
+      () => {
+        if (intervalId) clearInterval(intervalId);
+        window.removeEventListener("resize", onResize);
+        document.removeEventListener("visibilitychange", onVisibilityChange);
+      },
+      { once: true }
+    );
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupLyricsRotator);
+  } else {
+    setupLyricsRotator();
+  }
+  document.addEventListener("astro:page-load", setupLyricsRotator);
+</script>
