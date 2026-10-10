@@ -19,6 +19,7 @@ const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
 
 const cleanFirstName = firstName.replace(/;$/, "");
+const cleanMiddleName = middleName.replace(/\.$/, "");
 
 const stackFrameworks = [
   { name: "Laravel", icon: "ti-brand-laravel" },
@@ -75,10 +76,9 @@ const librariesTechniques = [
     <!-- Full-Bleed Ambient Map Background with Rich Dynamic Parallax -->
     <div id="hero-map-parallax" class="absolute inset-x-0 -top-28 -bottom-28 z-10 pointer-events-none overflow-hidden will-change-transform">
       <HeroMap interactive={false} />
-      <!-- Subtle OLED Radial Vignette -->
+      <!-- Dynamic Light & Dark Ambient Radial Vignette -->
       <div
-        class="absolute inset-0 z-10 pointer-events-none"
-        style="background: radial-gradient(ellipse 110% 90% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.4) 70%, #000000 100%);"
+        class="hero-map-vignette absolute inset-0 z-10 pointer-events-none transition-colors duration-300"
       ></div>
     </div>
 
@@ -106,17 +106,17 @@ const librariesTechniques = [
       >
         <!-- Row 1: Yovan; -->
         <div id="hero-title-r1" class="relative inline-flex items-baseline whitespace-nowrap">
-          <span>{cleanFirstName}</span><span id="hero-semi" class="transition-colors hover:text-[#52FF1A] cursor-default">;</span>
+          <span id="hero-name-first" class="inline-block">{cleanFirstName}</span><span id="hero-semi" class="inline-block transition-colors hover:text-[#52FF1A] cursor-default">;</span>
         </div>
 
         <!-- Row 2: Gunardio. -->
         <div id="hero-title-r2" class="inline-flex items-baseline whitespace-nowrap" style="margin-top: -0.8rem;">
-          <span>{middleName}</span>
+          <span id="hero-name-middle" class="inline-block">{cleanMiddleName}</span><span id="hero-dot" class="inline-block transition-colors hover:text-[#52FF1A] cursor-default">.</span>
         </div>
 
         {lastName && (
           <div id="hero-title-r3" class="relative inline-flex items-baseline whitespace-nowrap text-neutral-700 dark:text-neutral-300">
-            <span>{lastName}</span>
+            <span id="hero-name-last" class="inline-block">{lastName}</span>
           </div>
         )}
       </h1>
@@ -255,7 +255,7 @@ const librariesTechniques = [
 
   <!-- Lower Viewport Stack Marquee: Two-Tier Techno-Editorial Infinite Marquee -->
   <div
-    class="relative w-full overflow-hidden py-4 sm:py-5 flex flex-col gap-3 sm:gap-4 select-none pointer-events-auto border-t border-neutral-800/60 bg-black/40 backdrop-blur-md hero-stack-marquee-wrapper"
+    class="relative w-full overflow-hidden py-4 sm:py-5 flex flex-col gap-3 sm:gap-4 select-none pointer-events-auto border-t border-neutral-200/80 dark:border-neutral-800/60 bg-[#fcfbf9]/70 dark:bg-black/40 backdrop-blur-md hero-stack-marquee-wrapper"
     aria-label="Technology Stack Archive"
   >
     <!-- Row 1: Core Stacks & Frameworks (Continuous seamless leftward scroll) -->
@@ -263,16 +263,16 @@ const librariesTechniques = [
       <div class="marquee-group flex shrink-0 items-center gap-8 sm:gap-12 pr-8 sm:pr-12 animate-marquee-left group-hover:[animation-play-state:paused]">
         {stackFrameworks.concat(stackFrameworks).map((item) => (
           <div class="flex items-center gap-2.5 opacity-90 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
-            <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
-            <span class="font-sans text-xs sm:text-sm text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
+            <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
+            <span class="font-sans text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
           </div>
         ))}
       </div>
       <div class="marquee-group flex shrink-0 items-center gap-8 sm:gap-12 pr-8 sm:pr-12 animate-marquee-left group-hover:[animation-play-state:paused]" aria-hidden="true">
         {stackFrameworks.concat(stackFrameworks).map((item) => (
           <div class="flex items-center gap-2.5 opacity-90 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
-            <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
-            <span class="font-sans text-xs sm:text-sm text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
+            <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
+            <span class="font-sans text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
           </div>
         ))}
       </div>
@@ -282,17 +282,17 @@ const librariesTechniques = [
     <div class="marquee-row group flex overflow-hidden w-full">
       <div class="marquee-group flex shrink-0 items-center gap-7 sm:gap-10 pr-7 sm:pr-10 animate-marquee-right group-hover:[animation-play-state:paused]">
         {librariesTechniques.concat(librariesTechniques).map((item) => (
-          <div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
-            <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-300 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
-            <span class="font-sans text-[11px] sm:text-xs text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
+          <div class="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-600 dark:text-neutral-400 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
+            <span class="font-sans text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
           </div>
         ))}
       </div>
       <div class="marquee-group flex shrink-0 items-center gap-7 sm:gap-10 pr-7 sm:pr-10 animate-marquee-right group-hover:[animation-play-state:paused]" aria-hidden="true">
         {librariesTechniques.concat(librariesTechniques).map((item) => (
-          <div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
-            <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-300 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
-            <span class="font-sans text-[11px] sm:text-xs text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
+          <div class="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-600 dark:text-neutral-400 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
+            <span class="font-sans text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
           </div>
         ))}
       </div>
@@ -358,6 +358,15 @@ const librariesTechniques = [
 </div>{/* End hero-scroll-wrapper */}
 
 <style>
+  .hero-map-vignette {
+    background: radial-gradient(ellipse 110% 90% at 50% 50%, transparent 40%, rgba(252, 251, 249, 0.4) 70%, #fcfbf9 100%);
+  }
+
+  :global(.dark) .hero-map-vignette,
+  :global(html.dark) .hero-map-vignette {
+    background: radial-gradient(ellipse 110% 90% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.4) 70%, #000000 100%);
+  }
+
   .hero-stack-marquee-wrapper {
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
@@ -467,18 +476,22 @@ const librariesTechniques = [
         if (!isAnimated) {
           carousel.style.width = `${targetWidth}px`;
           track.style.transform = isJkt ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)';
+          track.style.filter = 'blur(0px)';
           return;
         }
 
         carouselWidthAnim = animate(
           carousel,
           { width: `${targetWidth}px` },
-          { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+          { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
         );
         trackTransformAnim = animate(
           track,
-          { transform: isJkt ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)' },
-          { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+          {
+            transform: isJkt ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)',
+            filter: ['blur(0px)', 'blur(3.5px)', 'blur(0px)'],
+          },
+          { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
         );
       };
 
@@ -756,18 +769,22 @@ const librariesTechniques = [
         if (!isAnimated) {
           introCarousel.style.width = `${targetWidth}px`;
           introTrack.style.transform = isI ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)';
+          introTrack.style.filter = 'blur(0px)';
           return;
         }
 
         introCarouselWidthAnim = animate(
           introCarousel,
           { width: `${targetWidth}px` },
-          { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+          { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
         );
         introTrackTransformAnim = animate(
           introTrack,
-          { transform: isI ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)' },
-          { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+          {
+            transform: isI ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)',
+            filter: ['blur(0px)', 'blur(4px)', 'blur(0px)'],
+          },
+          { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
         );
       };
 
@@ -799,6 +816,113 @@ const librariesTechniques = [
 
       // Initial layout setup
       updateIntroCarouselLayout('he', false);
+
+      // On-load Hero Headline: Physical Staggered Layout Flow via Motion (Elements physically push each other in flow)
+      const nameFirst = document.getElementById('hero-name-first');
+      const semi = document.getElementById('hero-semi');
+      const nameMiddle = document.getElementById('hero-name-middle');
+      const dot = document.getElementById('hero-dot');
+      const nameLast = document.getElementById('hero-name-last');
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const initialWait = 0.44; // Doubled initial wait before physical collapse begins
+        const easeDecel = [0.16, 1, 0.3, 1];
+
+        const staggerStep = 0.225; // 125% of previous stagger step (0.18s -> 0.225s)
+
+        // 1. First Name ("Yovan") - physically pushes semicolon rightwards when expanded
+        if (nameFirst) {
+          nameFirst.style.willChange = 'font-size, opacity';
+          const a1 = animate(
+            nameFirst,
+            {
+              fontSize: ['1.35em', '1em'],
+              opacity: [0.2, 1],
+            },
+            {
+              duration: 0.75,
+              delay: initialWait,
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a1.stop());
+        }
+
+        // 2. Semicolon (";") - physically contracts its glyph box & pops accent color
+        if (semi) {
+          semi.style.transformOrigin = 'center';
+          semi.style.willChange = 'font-size, transform, color';
+          const a2 = animate(
+            semi,
+            {
+              fontSize: ['1.55em', '1em'],
+              transform: ['rotate(14deg)', 'rotate(0deg)'],
+              color: ['#52FF1A', 'currentColor'],
+            },
+            {
+              duration: 0.7,
+              delay: initialWait + staggerStep,
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a2.stop());
+        }
+
+        // 3. Middle Name ("Gunardio") - physically pushes dot rightwards when expanded
+        if (nameMiddle) {
+          nameMiddle.style.willChange = 'font-size, opacity';
+          const a3 = animate(
+            nameMiddle,
+            {
+              fontSize: ['1.35em', '1em'],
+              opacity: [0.2, 1],
+            },
+            {
+              duration: 0.75,
+              delay: initialWait + (staggerStep * 2),
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a3.stop());
+        }
+
+        // 4. Period / Dot (".") - physically contracts and pops accent color
+        if (dot) {
+          dot.style.transformOrigin = 'center';
+          dot.style.willChange = 'font-size, color';
+          const a4 = animate(
+            dot,
+            {
+              fontSize: ['1.6em', '1em'],
+              color: ['#52FF1A', 'currentColor'],
+            },
+            {
+              duration: 0.65,
+              delay: initialWait + (staggerStep * 3),
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a4.stop());
+        }
+
+        // 5. Last Name (if present)
+        if (nameLast) {
+          nameLast.style.willChange = 'font-size, opacity';
+          const a5 = animate(
+            nameLast,
+            {
+              fontSize: ['1.3em', '1em'],
+              opacity: [0.2, 1],
+            },
+            {
+              duration: 0.75,
+              delay: initialWait + (staggerStep * 4),
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a5.stop());
+        }
+      }
 
       // Bind scroll via Motion
       const stopScroll = scroll(() => {
