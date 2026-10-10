@@ -144,7 +144,7 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
     const height = container.clientHeight || 300;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
 
     const renderer = new THREE.WebGLRenderer({
       alpha: true,
@@ -300,8 +300,11 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
       renderer.render(scene, camera);
     };
 
+    // Render immediate initial frame so canvas is painted on mount
+    renderFrame();
+
     const animate = () => {
-      if (isVisible) {
+      if (!document.hidden && isVisible) {
         renderFrame();
       }
       animationFrameId = requestAnimationFrame(animate);
@@ -314,7 +317,7 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
       const h = container.clientHeight || 300;
       renderer.setSize(w, h);
       material.uniforms.uResolution.value.set(w * dpr, h * dpr);
-      if (!isVisible) renderFrame();
+      renderFrame();
     };
 
     window.addEventListener("resize", handleResize);
@@ -328,9 +331,11 @@ export const DitheringShader: React.FC<DitheringShaderProps> = ({
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        isVisible = entry ? entry.isIntersecting && !document.hidden : !document.hidden;
+        if (entry) {
+          isVisible = entry.isIntersecting || entry.intersectionRatio > 0;
+        }
       },
-      { threshold: 0.05 }
+      { threshold: 0 }
     );
     observer.observe(container);
 
