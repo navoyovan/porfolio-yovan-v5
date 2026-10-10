@@ -46,7 +46,7 @@ const { base } = Astro.props;
         </span>
         <a
           href={`${base}/portfolio-index`}
-          class="group/action inline-flex items-center gap-1 font-heading font-bold text-[10.5px] sm:text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 hover:text-[var(--color-accent,#52FF1A)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded px-1"
+          class="group/action inline-flex items-center gap-1 font-mono text-[10.5px] sm:text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 hover:text-[var(--color-accent,#52FF1A)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded px-1"
         >
           <span
             class="group-hover/action:underline underline-offset-4 decoration-[var(--color-accent,#52FF1A)]"
@@ -656,7 +656,16 @@ const { base } = Astro.props;
       <h3
         class="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-950 dark:text-white font-subheading"
       >
-        Other(s)
+        <button
+          type="button"
+          data-easter="first-landing"
+          class="cursor-pointer hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded bg-transparent border-0 p-0 text-inherit font-inherit inline-block"
+          aria-label="Unlock First Landing Page Cool Stuff"
+          data-aria-en="Unlock First Landing Page Cool Stuff"
+          data-aria-id="Buka Cool Stuff Landing Page Pertama"
+        >
+          Other(s)
+        </button>
       </h3>
     </div>
 
