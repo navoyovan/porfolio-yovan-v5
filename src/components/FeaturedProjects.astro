@@ -1,6 +1,6 @@
 ---
 import ActionButton from "./ActionButton.astro";
-import ProjectTile from "./ProjectTile.astro";
+import MorphingProjectCard from "./MorphingProjectCard.astro";
 import HoverExpandButton from "./HoverExpandButton.astro";
 
 interface Props {
@@ -14,7 +14,7 @@ const { base } = Astro.props;
 <section
   id="projects"
   aria-labelledby="heading-projects"
-  class="scroll-mt-24 pt-16 space-y-10"
+  class="scroll-mt-24 pt-16 space-y-10 relative z-30"
 >
   <!-- Section 02 Sliced Numeral Header Bar -->
   <div class="flex items-stretch gap-0 pb-1">
@@ -46,7 +46,7 @@ const { base } = Astro.props;
         </span>
         <a
           href={`${base}/portfolio-index`}
-          class="group/action inline-flex items-center gap-1 font-heading font-bold text-[10.5px] sm:text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 hover:text-[var(--color-accent,#52FF1A)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded px-1"
+          class="group/action inline-flex items-center gap-1 font-mono text-[10.5px] sm:text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 hover:text-[var(--color-accent,#52FF1A)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded px-1"
         >
           <span
             class="group-hover/action:underline underline-offset-4 decoration-[var(--color-accent,#52FF1A)]"
@@ -656,137 +656,133 @@ const { base } = Astro.props;
       <h3
         class="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-950 dark:text-white font-subheading"
       >
-        Other(s)
+        <button
+          type="button"
+          data-easter="first-landing"
+          class="cursor-pointer hover:underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded bg-transparent border-0 p-0 text-inherit font-inherit inline-block"
+          aria-label="Unlock First Landing Page Cool Stuff"
+          data-aria-en="Unlock First Landing Page Cool Stuff"
+          data-aria-id="Buka Cool Stuff Landing Page Pertama"
+        >
+          Other(s)
+        </button>
       </h3>
     </div>
 
     <!-- Full-bleed seamless horizontal container -->
     <div
-      class="relative w-screen left-1/2 -translate-x-1/2 overflow-hidden py-1"
+      class="relative w-screen left-1/2 -translate-x-1/2 py-2 z-30"
     >
       <div
         id="others-scroll-container"
-        class="flex flex-nowrap overflow-x-auto gap-4 sm:gap-5 pb-5 pt-2 pl-[4%] sm:pl-[7%] lg:pl-[10%] pr-[4%] sm:pr-[7%] lg:pr-[10%] no-scrollbar scroll-smooth"
+        class="relative flex flex-nowrap overflow-x-auto gap-4 sm:gap-5 pt-14 pl-6 pr-6 sm:pl-12 sm:pr-12 no-scrollbar items-start"
+        style="margin-top: -24px; padding-bottom: 340px; margin-bottom: -340px;"
       >
-        <div
-          class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-        >
-          <ProjectTile
-            title="mcTextureGhost"
-            brand="mctextureghost"
-            category="DESKTOP & GAMEDEV"
-            categoryId="DESKTOP & GAMEDEV"
-            imageSrc={`${base}/images/mctextureghost-workspace.webp`}
-            description="Minecraft Bedrock texture workspace & ghost asset scanner with live 3D block and entity visualizers."
-            descriptionId="Workspace tekstur Minecraft Bedrock dan pemindai aset ghost dengan visualisator 3D blok dan entitas live."
-            tags={[
-              "C# / WPF",
-              "WebView2",
-              "React 19",
-              "Three.js",
-              "GSAP",
-              "Zustand",
-            ]}
-            metaText="mctextureghost.git"
-            actionText="VIEW REPO"
-            actionTextId="LIHAT REPO"
-            href="https://github.com/navoyovan/mcTextureGhost"
-          />
-        </div>
-        <div
-          class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-        >
-          <ProjectTile
-            title="Component Library"
-            brand="portfolio"
-            category="DESIGN SYSTEM"
-            categoryId="DESIGN SYSTEM"
-            description="Design system, typography specimens, color tokens, and interactive UI primitives architected for this Portfolio."
-            descriptionId="Design system, typography, color tokens, dan komponen UI interaktif yang dirancang untuk Portfolio ini."
-            tags={["Astro v5", "Tailwind v4", "UI Tokens", "Components"]}
-            metaText="component-library"
-            actionText="EXPLORE SYSTEM"
-            actionTextId="JELAJAHI SISTEM"
-            href={`${base}/component-library`}
-            videoSrc={`${base}/images/component-library.webm`}
-          />
-        </div>
-        <div
-          class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-        >
-          <ProjectTile
-            title="Interactive Map"
-            category="GIS & SPATIAL"
-            categoryId="GIS & SPATIAL"
-            description="Geospatial visualization and tracking platform with custom assets and telemetry."
-            descriptionId="Platform visualisasi dan pelacakan geospasial dengan aset kustom dan telemetri."
-            status="PROTOTYPE"
-            statusId="PROTOTIPE"
-            statusVariant="neutral"
-            tags={["Laravel", "Leaflet.js", "AJAX", "Tailwind"]}
-            metaText="interactive-map.git"
-            actionText="VIEW REPO"
-            actionTextId="LIHAT REPO"
-            href="https://github.com/navoyovan/interactive-map"
-          />
-        </div>
-        <div
-          class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-        >
-          <ProjectTile
-            title="Frame & Cutout Studio"
-            brand="hypebox"
-            category="PHOTOBOOTH ASSETS"
-            categoryId="ASET PHOTOBOOTH"
-            videoSrc={`${base}/images/frame-editor-showcase_converted.webm`}
-            description="Interactive photobooth frame cutout layout editor with drag-and-drop slot positioning, and alpha mask detection."
-            descriptionId="Editor layout bingkai photobooth interaktif dengan pemosisian slot drag-and-drop, dan alpha mask detection."
-            tags={[
-              "React 19",
-              "Canvas API",
-              "Layout Telemetry",
-              "Vector Masks",
-            ]}
-            metaText="frame-cutout-studio"
-            actionText="EXPLORE STUDIO"
-            actionTextId="JELAJAHI STUDIO"
-            href="https://navoyovan.github.io/photobooth-kiosk-demo/?step=2&tab=upload"
-          />
-        </div>
-        <div
-          class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-        >
-          <ProjectTile
-            title="Color Grading & Textures"
-            brand="hypebox"
-            category="IMAGE PROCESSING"
-            categoryId="PEMROSESAN GAMBAR"
-            videoSrc={`${base}/images/color-grading-showcase_converted.webm`}
-            description="Realtime CSS filter color grading studio with grain, scratches, and custom texture blend mode layering."
-            descriptionId="Studio color grading, edit secara langsung pakai layer blend mode dengan tekstur seperti grain, scratches, dan custom textures."
-            tags={[
-              "CSS Filters",
-              "SVG Noise",
-              "Blend Modes",
-              "Color Lab",
-            ]}
-            metaText="color-grading-engine"
-          />
-        </div>
+        <MorphingProjectCard
+          index="01"
+          title="mcTextureGhost"
+          brand="mctextureghost"
+          category="DESKTOP & GAMEDEV"
+          categoryId="DESKTOP & GAMEDEV"
+          imageSrc={`${base}/images/mctextureghost-workspace.webp`}
+          description="Minecraft Bedrock texture workspace & ghost asset scanner with live 3D block and entity visualizers."
+          descriptionId="Workspace tekstur Minecraft Bedrock dan pemindai aset ghost dengan visualisator 3D blok dan entitas live."
+          tags={[
+            "C# / WPF",
+            "WebView2",
+            "React 19",
+            "Three.js",
+            "GSAP",
+            "Zustand",
+          ]}
+          metaText="mctextureghost.git"
+          actionText="View Repo"
+          actionTextId="Lihat Repo"
+          href="https://github.com/navoyovan/mcTextureGhost"
+        />
+        <MorphingProjectCard
+          index="02"
+          title="Component Library"
+          brand="portfolio"
+          category="DESIGN SYSTEM"
+          categoryId="DESIGN SYSTEM"
+          description="Design system, typography specimens, color tokens, and interactive UI primitives architected for this Portfolio."
+          descriptionId="Design system, typography, color tokens, dan komponen UI interaktif yang dirancang untuk Portfolio ini."
+          tags={["Astro v5", "Tailwind v4", "UI Tokens", "Components"]}
+          metaText="component-library"
+          actionText="Explore System"
+          actionTextId="Jelajahi Sistem"
+          actionArrow="→"
+          href={`${base}/component-library`}
+          videoSrc={`${base}/images/component-library.webm`}
+        />
+        <MorphingProjectCard
+          index="03"
+          title="Interactive Map"
+          category="GIS & SPATIAL"
+          categoryId="GIS & SPATIAL"
+          description="Geospatial visualization and tracking platform with custom assets and telemetry."
+          descriptionId="Platform visualisasi dan pelacakan geospasial dengan aset kustom dan telemetri."
+          status="PROTOTYPE"
+          statusId="PROTOTIPE"
+          statusVariant="neutral"
+          tags={["Laravel", "Leaflet.js", "AJAX", "Tailwind"]}
+          metaText="interactive-map.git"
+          actionText="View Repo"
+          actionTextId="Lihat Repo"
+          href="https://github.com/navoyovan/interactive-map"
+        />
+        <MorphingProjectCard
+          index="04"
+          title="Frame & Cutout Studio"
+          brand="hypebox"
+          category="PHOTOBOOTH ASSETS"
+          categoryId="ASET PHOTOBOOTH"
+          videoSrc={`${base}/images/frame-editor-showcase_converted.webm`}
+          description="Interactive photobooth frame cutout layout editor with drag-and-drop slot positioning, and alpha mask detection."
+          descriptionId="Editor layout bingkai photobooth interaktif dengan pemosisian slot drag-and-drop, dan alpha mask detection."
+          tags={[
+            "React 19",
+            "Canvas API",
+            "Layout Telemetry",
+            "Vector Masks",
+          ]}
+          metaText="frame-cutout-studio"
+          actionText="Explore Studio"
+          actionTextId="Jelajahi Studio"
+          href="https://navoyovan.github.io/photobooth-kiosk-demo/?step=2&tab=upload"
+        />
+        <MorphingProjectCard
+          index="05"
+          title="Color Grading & Textures"
+          brand="hypebox"
+          category="IMAGE PROCESSING"
+          categoryId="PEMROSESAN GAMBAR"
+          videoSrc={`${base}/images/color-grading-showcase_converted.webm`}
+          description="Realtime CSS filter color grading studio with grain, scratches, and custom texture blend mode layering."
+          descriptionId="Studio color grading, edit secara langsung pakai layer blend mode dengan tekstur seperti grain, scratches, dan custom textures."
+          tags={[
+            "CSS Filters",
+            "SVG Noise",
+            "Blend Modes",
+            "Color Lab",
+          ]}
+          metaText="color-grading-engine"
+        />
       </div>
 
       <!-- Custom Horizontal Scrollbar Matching Page Scrollbar (Zero layout shift reserved height) -->
       <div
-        class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto h-4 my-2 flex items-center justify-center"
+        class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto h-4 my-2 flex items-center justify-center relative z-40 pointer-events-auto"
       >
         <div
           id="others-scrollbar-track"
-          class="w-48 sm:w-64 h-1.5 hover:h-3.5 active:h-3.5 bg-neutral-200/80 dark:bg-neutral-800/80 rounded-full cursor-pointer relative overflow-hidden group transition-[height,background-color] duration-200 flex items-center"
+          class="w-48 sm:w-64 h-1.5 hover:h-3.5 active:h-3.5 bg-neutral-200/80 dark:bg-neutral-800/80 rounded-full cursor-pointer relative overflow-hidden group transition-[height,background-color] duration-200 flex items-center pointer-events-auto select-none"
           aria-hidden="true"
         >
           <div
             id="others-scrollbar-thumb"
-            class="h-full bg-neutral-900/30 dark:bg-white/30 group-hover:bg-neutral-900/60 dark:group-hover:bg-white/60 active:bg-neutral-900/80 dark:active:bg-white/80 rounded-full cursor-grab active:cursor-grabbing transition-[background-color] duration-200 absolute top-0 left-0"
+            class="h-full bg-neutral-900/30 dark:bg-white/30 group-hover:bg-neutral-900/60 dark:group-hover:bg-white/60 active:bg-neutral-900/80 dark:active:bg-white/80 rounded-full cursor-grab active:cursor-grabbing transition-[background-color] duration-200 absolute top-0 left-0 pointer-events-auto"
             style="width: 25%; transform: translateX(0px);"
           >
           </div>
@@ -797,6 +793,8 @@ const { base } = Astro.props;
 </section>
 
 <script>
+  import { animate } from "motion";
+
   function setupOthersHorizontalScroll() {
     const container = document.getElementById("others-scroll-container");
     const track = document.getElementById("others-scrollbar-track");
@@ -815,7 +813,7 @@ const { base } = Astro.props;
         track.style.display = "none";
         return;
       }
-      track.style.display = "block";
+      track.style.display = "flex";
 
       const trackWidth = track.clientWidth;
       const thumbWidth = Math.max(
@@ -833,25 +831,32 @@ const { base } = Astro.props;
       thumb.style.transform = `translateX(${currentThumbX}px)`;
     };
 
-    container.addEventListener(
-      "scroll",
-      () => {
-        requestAnimationFrame(updateThumb);
-      },
-      { passive: true },
-    );
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateThumb();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
 
-    window.addEventListener("resize", updateThumb);
+    container.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     requestAnimationFrame(updateThumb);
-    setTimeout(updateThumb, 400);
+    setTimeout(updateThumb, 300);
 
-    // Scrollbar Thumb Dragging
+    // Scrollbar Thumb Dragging (Instant 1:1 Response)
     thumb.addEventListener("mousedown", (e) => {
       if (e.button !== 0) return;
       isDraggingThumb = true;
       startThumbX = e.clientX;
       initialThumbX = currentThumbX;
+      container.style.scrollBehavior = "auto";
       document.body.classList.add("select-none", "cursor-grabbing");
+      e.preventDefault();
+      e.stopPropagation();
 
       const onMouseMove = (moveEvent: MouseEvent) => {
         if (!isDraggingThumb) return;
@@ -866,6 +871,7 @@ const { base } = Astro.props;
           0,
           Math.min(maxThumbTravel, initialThumbX + deltaX),
         );
+        currentThumbX = newThumbX;
         thumb.style.transform = `translateX(${newThumbX}px)`;
 
         const scrollProgress = newThumbX / maxThumbTravel;
@@ -874,6 +880,7 @@ const { base } = Astro.props;
 
       const onMouseUp = () => {
         isDraggingThumb = false;
+        container.style.scrollBehavior = "";
         document.body.classList.remove("select-none", "cursor-grabbing");
         window.removeEventListener("mousemove", onMouseMove);
         window.removeEventListener("mouseup", onMouseUp);
@@ -906,16 +913,436 @@ const { base } = Astro.props;
     });
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      setupOthersHorizontalScroll,
-    );
-  } else {
-    setupOthersHorizontalScroll();
+  function setupMorphingCards() {
+    const container = document.getElementById("others-scroll-container");
+    const slots = document.querySelectorAll<HTMLElement>("[data-project-slot]");
+    if (!slots.length || !container) return;
+
+    const activeAnimations = new WeakMap<HTMLElement, { stop: () => void }>();
+    const isTouch = window.matchMedia("(hover: none)").matches;
+
+    // Touch media-player controls: tap media to reveal logo overlay + zoom
+    // button, auto-fade after 3s idle (group-hover never fires without hover).
+    const controlsTimers = new WeakMap<HTMLElement, number>();
+
+    const hideMediaControls = (media: HTMLElement) => {
+      const t = controlsTimers.get(media);
+      if (t) {
+        window.clearTimeout(t);
+        controlsTimers.delete(media);
+      }
+      media.classList.remove("controls-visible");
+    };
+
+    const showMediaControls = (media: HTMLElement) => {
+      const t = controlsTimers.get(media);
+      if (t) window.clearTimeout(t);
+      media.classList.add("controls-visible");
+      controlsTimers.set(
+        media,
+        window.setTimeout(() => {
+          media.classList.remove("controls-visible");
+          controlsTimers.delete(media);
+        }, 3000),
+      );
+    };
+
+    // Video autoplay, one at a time on every viewport: visibility is measured
+    // against the screen (viewport root), so only the most-visible tile on
+    // screen plays and the rest stay paused (saves decode/battery). Expanded
+    // tile owns its own playback via expand/collapse and is left alone here.
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if ("IntersectionObserver" in window) {
+      const visibility = new Map<HTMLElement, number>();
+      slots.forEach((slot) => visibility.set(slot, 0));
+
+      const updatePlayback = () => {
+        const anyExpanded = Array.from(slots).some(
+          (s) => (s as HTMLElement).getAttribute("data-is-expanded") === "true",
+        );
+        let bestSlot: HTMLElement | null = null;
+        let bestRatio = 0;
+        visibility.forEach((ratio, slot) => {
+          // Skip picture tiles — only video tiles compete for autoplay
+          if (ratio > bestRatio && slot.querySelector("video.morph-video")) {
+            bestRatio = ratio;
+            bestSlot = slot;
+          }
+        });
+        slots.forEach((slot) => {
+          const el = slot as HTMLElement;
+          const video = el.querySelector<HTMLVideoElement>("video.morph-video");
+          if (!video) return;
+          if (el.getAttribute("data-is-expanded") === "true") return;
+          if (anyExpanded || reduceMotion || el !== bestSlot || bestRatio < 0.35) {
+            if (!video.paused) video.pause();
+            return;
+          }
+          if (video.paused) {
+            video.muted = true;
+            video.play().catch(() => {});
+          }
+        });
+      };
+
+      const videoObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            visibility.set(
+              entry.target as HTMLElement,
+              entry.isIntersecting ? entry.intersectionRatio : 0,
+            );
+          });
+          updatePlayback();
+        },
+        { root: null, threshold: [0, 0.35, 0.6, 1] }
+      );
+      slots.forEach((slot) => videoObserver.observe(slot));
+
+      // Background tab: pause everything; resume the most-visible on return
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          slots.forEach((slot) => {
+            const video = (slot as HTMLElement).querySelector<HTMLVideoElement>("video.morph-video");
+            if (video && !video.paused) video.pause();
+          });
+        } else {
+          updatePlayback();
+        }
+      });
+    }
+
+    const collapseSlot = (slot: HTMLElement) => {
+      const card = slot.querySelector<HTMLElement>("[data-morph-card]");
+      const content = slot.querySelector<HTMLElement>("[data-morph-content]");
+      const video = slot.querySelector<HTMLVideoElement>("video.morph-video");
+
+      if (!card || !content) return;
+
+      const prevCardAnim = activeAnimations.get(card);
+      if (prevCardAnim) prevCardAnim.stop();
+      const prevContentAnim = activeAnimations.get(content);
+      if (prevContentAnim) prevContentAnim.stop();
+
+      card.style.transform = "";
+      card.style.zIndex = "10";
+      card.style.backgroundColor = "transparent";
+
+      // Freeze auto height (mobile adaptive) to px so Motion can animate back to 100%
+      if (!card.style.height || card.style.height === "auto") {
+        card.style.height = `${card.offsetHeight}px`;
+        void card.offsetHeight;
+      }
+
+      card.classList.add("is-morphing");
+      const cardAnim = animate(
+        card,
+        {
+          width: "100%",
+          left: "0px",
+          top: "0px",
+          height: "100%",
+          boxShadow: "0 0 0 0 rgba(0,0,0,0)",
+        },
+        {
+          duration: 0.35,
+          ease: [0.16, 1, 0.3, 1],
+        },
+      );
+      activeAnimations.set(card, cardAnim);
+      cardAnim.then(() => {
+        card.classList.remove("is-morphing");
+      });
+
+      const metaLabel = slot.querySelector<HTMLElement>(".morph-meta-label");
+      if (metaLabel) metaLabel.style.opacity = "";
+
+      // Hide expanded details with Motion
+      content.style.pointerEvents = "none";
+      content.setAttribute("aria-hidden", "true");
+      const contentAnim = animate(
+        content,
+        {
+          opacity: 0,
+        },
+        {
+          duration: 0.2,
+          ease: [0.16, 1, 0.3, 1],
+        },
+      );
+      activeAnimations.set(content, contentAnim);
+
+      if (video) video.pause();
+
+      const slotMedia = slot.querySelector<HTMLElement>("[data-morph-media]");
+      if (slotMedia) hideMediaControls(slotMedia);
+
+      card.setAttribute("aria-expanded", "false");
+      slot.setAttribute("data-is-expanded", "false");
+    };
+
+    const expandSlot = (slot: HTMLElement) => {
+      // 1. Collapse all other open slots (zero push on siblings)
+      slots.forEach((otherSlot) => {
+        if (otherSlot !== slot && otherSlot.getAttribute("data-is-expanded") === "true") {
+          collapseSlot(otherSlot);
+        }
+      });
+
+      const card = slot.querySelector<HTMLElement>("[data-morph-card]");
+      const content = slot.querySelector<HTMLElement>("[data-morph-content]");
+      const video = slot.querySelector<HTMLVideoElement>("video.morph-video");
+
+      if (!card || !content) return;
+
+      const prevCardAnim = activeAnimations.get(card);
+      if (prevCardAnim) prevCardAnim.stop();
+      const prevContentAnim = activeAnimations.get(content);
+      if (prevContentAnim) prevContentAnim.stop();
+
+      // Immediately set expanded state so media hover effects and inactive styles switch instantly
+      card.setAttribute("aria-expanded", "true");
+      slot.setAttribute("data-is-expanded", "true");
+
+      // 2. Real geometric morph: physically animate width, height, top, left using Motion
+      const media = slot.querySelector<HTMLElement>("[data-morph-media]");
+      const mediaH = media ? media.offsetHeight : Math.round((card.offsetWidth * 9) / 16);
+      const topOffset = Math.round(mediaH * 0.125); // keeps middle point of image pinned
+
+      card.style.transform = "none";
+      card.style.zIndex = "60";
+      card.style.boxShadow = "none";
+      card.style.backgroundColor = document.documentElement.classList.contains("dark")
+        ? "#141414"
+        : "#f6f4ee";
+
+      card.classList.add("is-morphing");
+      // Mobile: grow vertically in place (no horizontal bleed — viewport is
+      // already ~slot width, so 125% would overshoot both sides). Desktop
+      // keeps the 125% / -12.5% horizontal bloom.
+      // Mobile height is adaptive: measure the card's natural content height
+      // instead of the fixed 670px desktop height, so short cards don't leave
+      // a long empty bottom.
+      const isMobile = window.innerWidth < 640;
+      let targetHeight = 670;
+      if (isMobile) {
+        const prevHeight = card.style.height;
+        card.style.height = "auto";
+        const naturalH = card.scrollHeight;
+        card.style.height = prevHeight || "";
+        void card.offsetHeight;
+        targetHeight = Math.ceil(Math.min(Math.max(naturalH, 380), 720));
+      }
+      // Edge-aware bloom: middle tiles bloom centered (±12.5%), but the first
+      // tile blooms rightward and the last tile leftward so nothing clips off
+      // the viewport edge (scroll can't go negative past the flush edge).
+      const slotIndex = Array.from(slots).indexOf(slot);
+      let leftFactor = 0;
+      let rightFactor = 0;
+      if (!isMobile) {
+        leftFactor = 0.125;
+        rightFactor = 0.125;
+        if (slotIndex === 0) {
+          leftFactor = 0;
+          rightFactor = 0.25;
+        } else if (slotIndex === slots.length - 1) {
+          leftFactor = 0.25;
+          rightFactor = 0;
+        }
+      }
+      const expandedGeometry = {
+        width: `${(1 + leftFactor + rightFactor) * 100}%`,
+        left: leftFactor === 0 ? "0px" : `${-leftFactor * 100}%`,
+        top: `-${topOffset}px`,
+        height: isMobile ? `${targetHeight}px` : "670px",
+        boxShadow: "none",
+      };
+      const cardAnim = animate(card, expandedGeometry, {
+          duration: 0.4,
+          ease: [0.16, 1, 0.3, 1],
+        },
+      );
+      activeAnimations.set(card, cardAnim);
+      cardAnim.then(() => {
+        card.classList.remove("is-morphing");
+        // Stay adaptive after the morph (language toggle / font load reflows
+        // naturally instead of clipping inside a fixed px height).
+        if (isMobile) card.style.height = "auto";
+      });
+
+      const metaLabel = slot.querySelector<HTMLElement>(".morph-meta-label");
+      if (metaLabel) metaLabel.style.opacity = "1";
+
+      // 3. Reveal expanded details smoothly with Motion
+      content.style.pointerEvents = "auto";
+      content.setAttribute("aria-hidden", "false");
+      const contentAnim = animate(
+        content,
+        {
+          opacity: [0, 1],
+          y: [8, 0],
+        },
+        {
+          duration: 0.32,
+          delay: 0.08,
+          ease: [0.16, 1, 0.3, 1],
+        },
+      );
+      activeAnimations.set(content, contentAnim);
+
+      if (video) video.play().catch(() => {});
+
+      // Touch: flash media-player controls (logo + zoom), auto-hide when idle
+      if (isTouch && media) showMediaControls(media);
+
+      // 4. ALONGSIDE THE MIDDLE ANCHOR: Ensure expanded card is ALWAYS fully in the viewport!
+      // A. Horizontal scroll container alignment
+      if (container) {
+        const slotLeft = slot.offsetLeft;
+        const slotWidth = slot.offsetWidth;
+        const expandedWidth = slotWidth * (1 + leftFactor + rightFactor);
+        const expandedLeft = slotLeft - slotWidth * leftFactor;
+        const expandedRight = expandedLeft + expandedWidth;
+
+        const currentScroll = container.scrollLeft;
+        const containerWidth = container.clientWidth;
+        const maxScroll = container.scrollWidth - containerWidth;
+        const padding = 28;
+
+        let targetScroll = currentScroll;
+
+        if (expandedWidth > containerWidth - padding * 2) {
+          targetScroll = (expandedLeft + expandedRight) / 2 - containerWidth / 2;
+        } else if (expandedLeft - padding < currentScroll) {
+          targetScroll = expandedLeft - padding;
+        } else if (expandedRight + padding > currentScroll + containerWidth) {
+          targetScroll = expandedRight + padding - containerWidth;
+        }
+
+        const clampedScroll = Math.max(0, Math.min(targetScroll, maxScroll));
+        if (Math.abs(clampedScroll - currentScroll) > 2) {
+          container.scrollTo({
+            left: clampedScroll,
+            behavior: "smooth",
+          });
+        }
+      }
+
+      // B. Vertical window viewport alignment
+      const slotRect = slot.getBoundingClientRect();
+      const cardHeight = isMobile ? targetHeight : 670;
+      const expandedTop = slotRect.top - topOffset;
+      const expandedBottom = expandedTop + cardHeight;
+      const vh = window.innerHeight;
+      const navClearance = 85;
+      const bottomClearance = 25;
+
+      let windowDeltaY = 0;
+      if (expandedBottom > vh - bottomClearance) {
+        windowDeltaY = expandedBottom - (vh - bottomClearance);
+      }
+      if (expandedTop - windowDeltaY < navClearance) {
+        windowDeltaY = expandedTop - navClearance;
+      }
+
+      if (Math.abs(windowDeltaY) > 6) {
+        window.scrollBy({
+          top: windowDeltaY,
+          behavior: "smooth",
+        });
+      }
+    };
+
+    slots.forEach((slot) => {
+      const card = slot.querySelector<HTMLElement>("[data-morph-card]");
+      const closeButtons = slot.querySelectorAll<HTMLElement>("[data-close-card]");
+      const media = slot.querySelector<HTMLElement>("[data-morph-media]");
+
+      // Touch: tap expanded media toggles player controls (tap zoom/modal
+      // buttons still pass through). Guarded against double-binding on
+      // astro:page-load re-init.
+      if (media && !media.hasAttribute("data-controls-bound")) {
+        media.setAttribute("data-controls-bound", "true");
+        media.addEventListener("click", (e) => {
+          if (!isTouch) return;
+          if (slot.getAttribute("data-is-expanded") !== "true") return;
+          const target = e.target as HTMLElement;
+          if (target.closest("button, a")) return;
+          if (media.classList.contains("controls-visible")) {
+            hideMediaControls(media);
+          } else {
+            showMediaControls(media);
+          }
+        });
+      }
+
+      if (card) {
+        card.addEventListener("click", (e) => {
+          const target = e.target as HTMLElement;
+          if (target.closest("[data-close-card]")) return;
+          if (target.closest("a")) return;
+          if (target.closest("button")) return;
+
+          const isExpanded = slot.getAttribute("data-is-expanded") === "true";
+          if (!isExpanded) {
+            expandSlot(slot);
+          }
+        });
+
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            const target = e.target as HTMLElement;
+            if (target.closest("[data-close-card]")) return;
+            if (target.closest("a")) return;
+            if (target.closest("button")) return;
+            e.preventDefault();
+            const isExpanded = slot.getAttribute("data-is-expanded") === "true";
+            if (!isExpanded) {
+              expandSlot(slot);
+            }
+          }
+        });
+      }
+
+      closeButtons.forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          collapseSlot(slot);
+        });
+      });
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        slots.forEach((slot) => {
+          if (slot.getAttribute("data-is-expanded") === "true") {
+            collapseSlot(slot);
+          }
+        });
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest("[data-project-slot]") && !target.closest(".tile-modal")) {
+        slots.forEach((slot) => {
+          if (slot.getAttribute("data-is-expanded") === "true") {
+            collapseSlot(slot);
+          }
+        });
+      }
+    });
   }
-  document.addEventListener(
-    "astro:page-load",
-    setupOthersHorizontalScroll,
-  );
+
+  function initOthersSection() {
+    setupOthersHorizontalScroll();
+    setupMorphingCards();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initOthersSection);
+  } else {
+    initOthersSection();
+  }
+  document.addEventListener("astro:page-load", initOthersSection);
 </script>

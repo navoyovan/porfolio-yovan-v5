@@ -1,4 +1,6 @@
 ---
+import MediaModal from './MediaModal.astro';
+
 interface Props {
   title: string;
   category?: string;
@@ -25,6 +27,7 @@ interface Props {
   footerName?: string;
   date?: string;
   dateLabel?: string;
+  aspect?: string;
   class?: string;
   [key: string]: any;
 }
@@ -58,6 +61,7 @@ const {
   footerName,
   date,
   dateLabel,
+  aspect = 'aspect-video',
   class: className = '',
   ...rest
 } = Astro.props;
@@ -72,7 +76,7 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 <article
   aria-labelledby={titleId}
   class:list={[
-    'group relative flex flex-col bg-[#f6f4ee] dark:bg-[#141414] border border-neutral-300/80 dark:border-neutral-800 transition-all duration-200 hover:border-neutral-400 dark:hover:border-neutral-600 overflow-hidden shadow-sm',
+    'group relative flex flex-col bg-[#f6f4ee] dark:bg-[#141414] rounded-md transition-all duration-200 overflow-hidden shadow-sm',
     className
   ]}
   {...rest}
@@ -80,7 +84,8 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
   <!-- Media / Viewfinder Container (Adapted from Easter Egg Modal) -->
   <div
     class:list={[
-      'tile-media relative w-full aspect-video overflow-hidden border-b border-neutral-300/80 dark:border-neutral-800/80 select-none flex items-center justify-center group/media',
+      'tile-media relative w-full overflow-hidden select-none flex items-center justify-center group/media rounded-t-md',
+      aspect,
       previewBg ? previewBg : 'bg-neutral-200/60 dark:bg-neutral-900'
     ]}
   >
@@ -343,107 +348,16 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
   </div>
 </article>
 
-{(iframeSrc || videoSrc || imageSrc) && (
-  <dialog
-    id={`modal-${titleId}`}
-    class="tile-modal backdrop:bg-black/80 backdrop:backdrop-blur-md bg-transparent p-0 m-auto w-[95vw] max-w-5xl overflow-visible border-0"
-  >
-    <div class="flex flex-col items-center justify-center w-full h-full max-h-[90vh]">
-      <!-- Dismiss Label (Easter egg style) -->
-      <div class="w-full flex justify-end mb-2 px-1">
-        <button
-          type="button"
-          class="tile-modal-close font-mono text-xs text-red-500 hover:text-red-400 hover:underline cursor-pointer select-none transition-colors p-0 bg-transparent border-0 flex items-center gap-1"
-        >
-          <span class="sm:hidden" data-en="↓ Swipe down to dismiss" data-id="↓ Usap ke bawah untuk menutup">↓ Swipe down to dismiss</span>
-          <span class="hidden sm:inline" data-en="Dismiss x [esc]" data-id="Tutup x [esc]">Dismiss x [esc]</span>
-        </button>
-      </div>
-
-      <!-- Scaled Media Card -->
-      <div class="w-full bg-[#fcfbf9] dark:bg-[#0e0e0e] shadow-2xl rounded-sm overflow-hidden aspect-video flex items-center justify-center relative">
-        {iframeSrc ? (
-          <iframe
-            src={iframeSrc}
-            title={title}
-            class="w-full h-full border-0 select-none bg-white"
-            loading="lazy"
-          />
-        ) : videoSrc ? (
-          <video
-            src={videoSrc}
-            loop
-            muted
-            playsinline
-            controls
-            class="tile-modal-video w-full h-full object-contain bg-black"
-          />
-        ) : imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={imageAlt}
-            loading="lazy"
-            class="w-full h-full object-contain bg-neutral-100 dark:bg-neutral-900"
-          />
-        ) : null}
-      </div>
-    </div>
-  </dialog>
-)}
+<MediaModal
+  id={`modal-${titleId}`}
+  title={title}
+  videoSrc={videoSrc}
+  imageSrc={imageSrc}
+  imageAlt={imageAlt}
+  iframeSrc={iframeSrc}
+/>
 
 <style is:global>
-  .tile-modal {
-    --backdrop-progress: 1;
-    opacity: 0;
-    transform: translateY(15px) scale(0.98);
-    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  
-  .tile-modal[open] {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  
-  .tile-modal.is-closing {
-    opacity: 0;
-    transform: translateY(15px) scale(0.98);
-    --backdrop-progress: 0;
-  }
-
-  .tile-modal::backdrop {
-    background-color: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-    transition: background-color 0.25s ease-out, backdrop-filter 0.25s ease-out, -webkit-backdrop-filter 0.25s ease-out;
-  }
-
-  .tile-modal[open]::backdrop {
-    background-color: rgba(0, 0, 0, calc(0.8 * var(--backdrop-progress, 1)));
-    backdrop-filter: blur(calc(12px * var(--backdrop-progress, 1)));
-    -webkit-backdrop-filter: blur(calc(12px * var(--backdrop-progress, 1)));
-  }
-
-  .tile-modal.is-dragging::backdrop {
-    transition: none !important;
-  }
-
-  .tile-modal.is-closing::backdrop {
-    background-color: rgba(0, 0, 0, 0);
-    backdrop-filter: blur(0px);
-    -webkit-backdrop-filter: blur(0px);
-  }
-  
-  @starting-style {
-    .tile-modal[open] {
-      opacity: 0;
-      transform: translateY(15px) scale(0.98);
-    }
-    .tile-modal[open]::backdrop {
-      background-color: rgba(0, 0, 0, 0);
-      backdrop-filter: blur(0px);
-      -webkit-backdrop-filter: blur(0px);
-    }
-  }
 
   @keyframes tile-marquee-scroll {
     0% {
@@ -617,137 +531,6 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
     });
   }
 
-  function initTileModals() {
-    document.querySelectorAll('.tile-scale-btn').forEach(btn => {
-      // Remove old listeners to prevent duplicates on navigation
-      const newBtn = btn.cloneNode(true);
-      btn.parentNode?.replaceChild(newBtn, btn);
-
-      newBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const targetId = (newBtn as HTMLElement).getAttribute('data-modal-target');
-        if (!targetId) return;
-        const dialog = document.getElementById(targetId) as HTMLDialogElement;
-        if (dialog) {
-          dialog.showModal();
-          dialog.style.transform = 'none';
-
-          const modalVideo = dialog.querySelector<HTMLVideoElement>('video.tile-modal-video');
-          if (modalVideo) {
-            modalVideo.currentTime = 0;
-            modalVideo.play().catch(() => {});
-          }
-        }
-      });
-    });
-
-    document.querySelectorAll('.tile-modal').forEach(dialog => {
-      const d = dialog as HTMLDialogElement;
-      const closeModal = (modal: HTMLDialogElement) => {
-        if (!modal.hasAttribute('open')) return;
-        modal.classList.add('is-closing');
-
-        const modalVideo = modal.querySelector<HTMLVideoElement>('video.tile-modal-video');
-        if (modalVideo) {
-          modalVideo.pause();
-        }
-
-        setTimeout(() => {
-          modal.close();
-          modal.classList.remove('is-closing');
-          modal.style.transition = 'none';
-          modal.style.transform = 'none';
-          setTimeout(() => {
-            modal.style.transition = '';
-          }, 50);
-        }, 200);
-      };
-
-      const closeBtn = d.querySelector('.tile-modal-close');
-      if (closeBtn) {
-        const newCloseBtn = closeBtn.cloneNode(true);
-        closeBtn.parentNode?.replaceChild(newCloseBtn, closeBtn);
-        newCloseBtn.addEventListener('click', () => closeModal(d));
-      }
-
-      d.addEventListener('click', (e) => {
-        if (e.target === d) {
-          closeModal(d);
-        }
-      });
-      
-      d.addEventListener('cancel', (e) => {
-        e.preventDefault();
-        closeModal(d);
-      });
-
-      let touchStartY = 0;
-      let currentY = 0;
-      
-      d.addEventListener('touchstart', (e) => {
-        touchStartY = e.touches[0].clientY;
-        d.classList.remove('is-closing');
-      }, { passive: false });
-
-      d.addEventListener('touchmove', (e) => {
-        if (touchStartY === 0) return;
-        currentY = e.touches[0].clientY;
-        const diff = currentY - touchStartY;
-        if (diff > 0) {
-          e.preventDefault(); // Stop page scrolling / pull-to-refresh
-          d.classList.add('is-dragging');
-          d.style.transition = 'none';
-          d.style.transform = `translateY(${diff}px) scale(1)`;
-
-          // Progress scales down from 1 (at 0px) to 0 (at 220px drag)
-          const maxDrag = Math.min(window.innerHeight * 0.4, 220);
-          const progress = Math.max(0, Math.min(1, 1 - (diff / maxDrag)));
-          d.style.setProperty('--backdrop-progress', progress.toFixed(3));
-        }
-      }, { passive: false });
-
-      const handleTouchEnd = () => {
-        if (touchStartY === 0) return;
-        const diff = currentY - touchStartY;
-        d.classList.remove('is-dragging');
-
-        if (diff > 100) {
-          d.style.transition = 'transform 0.2s ease-out, opacity 0.2s ease-out';
-          d.style.transform = 'translateY(100vh) scale(0.95)';
-          d.style.opacity = '0';
-          d.style.setProperty('--backdrop-progress', '0');
-
-          const modalVideo = d.querySelector<HTMLVideoElement>('video.tile-modal-video');
-          if (modalVideo) {
-            modalVideo.pause();
-          }
-
-          setTimeout(() => {
-            d.close();
-            d.style.transition = '';
-            d.style.transform = '';
-            d.style.opacity = '';
-            d.style.removeProperty('--backdrop-progress');
-          }, 200);
-        } else {
-          d.style.transition = 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)';
-          d.style.transform = 'translateY(0) scale(1)';
-          d.style.setProperty('--backdrop-progress', '1');
-          setTimeout(() => {
-            d.style.transition = '';
-            d.style.removeProperty('--backdrop-progress');
-          }, 200);
-        }
-        touchStartY = 0;
-        currentY = 0;
-      };
-
-      d.addEventListener('touchend', handleTouchEnd);
-      d.addEventListener('touchcancel', handleTouchEnd);
-    });
-  }
-
   function initTileTouchInteraction() {
     const mediaContainers = document.querySelectorAll<HTMLElement>('.tile-media');
 
@@ -813,7 +596,6 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
     const initAll = () => {
       initTileMarquees();
-      initTileModals();
       initTileVideoAutoplay();
       initTileTouchInteraction();
     };

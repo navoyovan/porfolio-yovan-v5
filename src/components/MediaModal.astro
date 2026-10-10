@@ -1,0 +1,265 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  videoSrc?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  iframeSrc?: string;
+}
+
+const { id, title, videoSrc, imageSrc, imageAlt = title, iframeSrc } = Astro.props;
+---
+
+{(iframeSrc || videoSrc || imageSrc) && (
+  <dialog
+    id={id}
+    class="tile-modal backdrop:bg-black/80 backdrop:backdrop-blur-md bg-transparent p-0 m-auto w-[95vw] max-w-5xl overflow-visible border-0"
+  >
+    <div class="flex flex-col items-center justify-center w-full h-full max-h-[90vh]">
+      <!-- Dismiss Label -->
+      <div class="w-full flex justify-end mb-2 px-1">
+        <button
+          type="button"
+          class="tile-modal-close font-mono text-xs text-red-500 hover:text-red-400 hover:underline cursor-pointer select-none transition-colors p-0 bg-transparent border-0 flex items-center gap-1"
+        >
+          <span class="sm:hidden" data-en="↓ Swipe down to dismiss" data-id="↓ Usap ke bawah untuk menutup">↓ Swipe down to dismiss</span>
+          <span class="hidden sm:inline" data-en="Dismiss x [esc]" data-id="Tutup x [esc]">Dismiss x [esc]</span>
+        </button>
+      </div>
+
+      <!-- Scaled Media Card -->
+      <div class="w-full bg-[#fcfbf9] dark:bg-[#0e0e0e] shadow-2xl rounded-sm overflow-hidden aspect-video flex items-center justify-center relative">
+        {iframeSrc ? (
+          <iframe
+            src={iframeSrc}
+            title={title}
+            class="w-full h-full border-0 select-none bg-white"
+            loading="lazy"
+          />
+        ) : videoSrc ? (
+          <video
+            src={videoSrc}
+            loop
+            muted
+            playsinline
+            controls
+            class="tile-modal-video w-full h-full object-contain bg-black"
+          />
+        ) : imageSrc ? (
+          <img
+            src={imageSrc}
+            alt={imageAlt}
+            loading="lazy"
+            class="w-full h-full object-contain bg-neutral-100 dark:bg-neutral-900"
+          />
+        ) : null}
+      </div>
+    </div>
+  </dialog>
+)}
+
+<style is:global>
+  .tile-modal {
+    --backdrop-progress: 1;
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  .tile-modal[open] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  
+  .tile-modal.is-closing {
+    opacity: 0;
+    transform: translateY(15px) scale(0.98);
+    --backdrop-progress: 0;
+  }
+
+  .tile-modal::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: background-color 0.25s ease-out, backdrop-filter 0.25s ease-out, -webkit-backdrop-filter 0.25s ease-out;
+  }
+
+  .tile-modal[open]::backdrop {
+    background-color: rgba(0, 0, 0, calc(0.8 * var(--backdrop-progress, 1)));
+    backdrop-filter: blur(calc(12px * var(--backdrop-progress, 1)));
+    -webkit-backdrop-filter: blur(calc(12px * var(--backdrop-progress, 1)));
+  }
+
+  .tile-modal.is-dragging::backdrop {
+    transition: none !important;
+  }
+
+  .tile-modal.is-closing::backdrop {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  
+  @starting-style {
+    .tile-modal[open] {
+      opacity: 0;
+      transform: translateY(15px) scale(0.98);
+    }
+    .tile-modal[open]::backdrop {
+      background-color: rgba(0, 0, 0, 0);
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+    }
+  }
+</style>
+
+<script>
+  let isMediaModalInitialized = false;
+
+  function initMediaModals() {
+    const bindDelegate = !isMediaModalInitialized;
+    isMediaModalInitialized = true;
+
+    // Delegated click handler for triggers, close buttons, and backdrop (bound once)
+    if (bindDelegate) document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target) return;
+
+      // 1. Open Trigger
+      const trigger = target.closest<HTMLElement>('.tile-scale-btn');
+      if (trigger) {
+        const modalId = trigger.getAttribute('data-modal-id') || trigger.getAttribute('data-modal-target');
+        if (!modalId) return;
+        const dialog = document.getElementById(modalId) as HTMLDialogElement | null;
+        if (dialog) {
+          dialog.showModal();
+          dialog.style.transform = 'none';
+          const modalVideo = dialog.querySelector<HTMLVideoElement>('video.tile-modal-video');
+          if (modalVideo) {
+            modalVideo.currentTime = 0;
+            modalVideo.play().catch(() => {});
+          }
+        }
+        return;
+      }
+
+      // 2. Dismiss Button
+      const closeBtn = target.closest<HTMLElement>('.tile-modal-close');
+      if (closeBtn) {
+        const dialog = closeBtn.closest<HTMLDialogElement>('.tile-modal');
+        if (dialog) closeModal(dialog);
+        return;
+      }
+
+      // 3. Backdrop Click
+      if (target.classList.contains('tile-modal') && target.tagName === 'DIALOG') {
+        closeModal(target as HTMLDialogElement);
+      }
+    });
+
+    // Touch gesture to swipe down to dismiss
+    document.querySelectorAll<HTMLDialogElement>('.tile-modal:not([data-modal-bound])').forEach((d) => {
+      d.setAttribute('data-modal-bound', '');
+      d.addEventListener('cancel', (e) => {
+        e.preventDefault();
+        closeModal(d);
+      });
+
+      let touchStartY = 0;
+      let currentY = 0;
+
+      d.addEventListener(
+        'touchstart',
+        (e) => {
+          touchStartY = e.touches[0].clientY;
+          d.classList.remove('is-closing');
+        },
+        { passive: false }
+      );
+
+      d.addEventListener(
+        'touchmove',
+        (e) => {
+          if (touchStartY === 0) return;
+          currentY = e.touches[0].clientY;
+          const diff = currentY - touchStartY;
+          if (diff > 0) {
+            e.preventDefault();
+            d.classList.add('is-dragging');
+            d.style.transition = 'none';
+            d.style.transform = `translateY(${diff}px) scale(1)`;
+
+            const maxDrag = Math.min(window.innerHeight * 0.4, 220);
+            const progress = Math.max(0, Math.min(1, 1 - diff / maxDrag));
+            d.style.setProperty('--backdrop-progress', progress.toFixed(3));
+          }
+        },
+        { passive: false }
+      );
+
+      const handleTouchEnd = () => {
+        if (touchStartY === 0) return;
+        const diff = currentY - touchStartY;
+        d.classList.remove('is-dragging');
+
+        if (diff > 100) {
+          d.style.transition = 'transform 0.2s ease-out, opacity 0.2s ease-out';
+          d.style.transform = 'translateY(100vh) scale(0.95)';
+          d.style.opacity = '0';
+          d.style.setProperty('--backdrop-progress', '0');
+
+          const modalVideo = d.querySelector<HTMLVideoElement>('video.tile-modal-video');
+          if (modalVideo) {
+            modalVideo.pause();
+          }
+
+          setTimeout(() => {
+            d.close();
+            d.style.transition = '';
+            d.style.transform = '';
+            d.style.opacity = '';
+            d.style.removeProperty('--backdrop-progress');
+          }, 200);
+        } else {
+          d.style.transition = 'transform 0.2s ease-out';
+          d.style.transform = 'translateY(0) scale(1)';
+          d.style.removeProperty('--backdrop-progress');
+        }
+
+        touchStartY = 0;
+        currentY = 0;
+      };
+
+      d.addEventListener('touchend', handleTouchEnd);
+      d.addEventListener('touchcancel', handleTouchEnd);
+    });
+
+    function closeModal(dialog: HTMLDialogElement) {
+      if (!dialog.hasAttribute('open')) return;
+      dialog.classList.add('is-closing');
+
+      const modalVideo = dialog.querySelector<HTMLVideoElement>('video.tile-modal-video');
+      if (modalVideo) {
+        modalVideo.pause();
+      }
+
+      setTimeout(() => {
+        dialog.close();
+        dialog.classList.remove('is-closing');
+        dialog.style.transition = 'none';
+        dialog.style.transform = 'none';
+        setTimeout(() => {
+          dialog.style.transition = '';
+        }, 50);
+      }, 200);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMediaModals);
+  } else {
+    initMediaModals();
+  }
+  document.addEventListener('astro:page-load', initMediaModals);
+</script>
