@@ -22,38 +22,22 @@ const isUp = dropDirection === 'up';
   data-lang-switcher-wrapper
   data-direction={dropDirection}
 >
-  <!-- Trigger Button: matches desktop active nav button style -->
+  <!-- Trigger Button: Pure text button without bordered pill outline or button frame -->
   <button
     type="button"
     id={`${id}-trigger`}
     aria-haspopup="menu"
     aria-expanded="false"
     aria-label="Select language"
-    class="lang-trigger group/nav-lang relative inline-flex items-center justify-center text-xs sm:text-sm font-heading font-bold px-3.5 py-2 rounded-md transition-[background-color,color,border-color] duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] text-neutral-950 dark:text-white bg-neutral-100 dark:bg-neutral-900 cursor-pointer select-none gap-1.5"
+    class="lang-trigger group/nav-lang relative inline-flex items-center text-[11px] uppercase tracking-[0.2em] font-medium transition-colors text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white cursor-pointer select-none gap-1 bg-transparent border-0 p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)]"
   >
-    <!-- Globe Icon -->
-    <svg
-      class="w-3.5 h-3.5 text-neutral-500 dark:text-neutral-400 shrink-0"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="10"></circle>
-      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-      <path d="M2 12h20"></path>
-    </svg>
-
-    <!-- Current Code in Syne -->
-    <span class="lang-current-label font-heading font-bold tracking-tight uppercase">EN</span>
+    <!-- Current Code in Satoshi / Sans -->
+    <span class="lang-current-label font-sans font-medium tracking-[0.2em]">EN</span>
 
     <!-- Arrow Indicator -->
     <span
       class:list={[
-        'lang-arrow inline-flex items-center justify-center w-3.5 text-neutral-500 dark:text-neutral-400 group-hover/nav-lang:text-neutral-950 dark:group-hover/nav-lang:text-white transition-[opacity,transform] duration-200 ease-out',
+        'lang-arrow inline-flex items-center justify-center text-[10px] text-neutral-500 dark:text-neutral-400 group-hover/nav-lang:text-neutral-950 dark:group-hover/nav-lang:text-white transition-[opacity,transform] duration-200 ease-out',
         isUp ? 'rotate-180' : ''
       ]}
       aria-hidden="true"
@@ -62,20 +46,19 @@ const isUp = dropDirection === 'up';
     </span>
   </button>
 
-  <!-- Desktop Sections-styled Dropdown Menu -->
+  <!-- Sleek Editorial Dropdown Menu -->
   <div
     id={`${id}-menu`}
     role="menu"
     aria-label="Language Options"
     class:list={[
-      'lang-menu absolute right-0 min-w-[200px] bg-[#fcfbf9]/95 dark:bg-[#0e0e0e]/95 backdrop-blur-xl border border-neutral-200/90 dark:border-neutral-800/90 rounded-lg shadow-xl dark:shadow-2xl p-1.5 z-50 opacity-0 scale-95 pointer-events-none transition-[opacity,transform] duration-200 ease-out origin-top flex flex-col gap-1',
+      'lang-menu absolute right-0 min-w-[180px] bg-[#fcfbf9]/95 dark:bg-black/80 backdrop-blur-md border border-neutral-200/90 dark:border-neutral-800/60 rounded-md shadow-xl dark:shadow-2xl p-1.5 z-50 opacity-0 scale-95 pointer-events-none transition-[opacity,transform] duration-200 ease-out flex flex-col gap-1',
       isUp
         ? 'bottom-full mb-2 origin-bottom translate-y-2'
         : 'top-full mt-2 origin-top -translate-y-2'
     ]}
-    style="-webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);"
   >
-    <div class="px-3 pt-2 pb-1 text-[10px] font-mono uppercase tracking-wider text-neutral-400 dark:text-neutral-500 font-semibold border-b border-neutral-200/60 dark:border-neutral-800/60 select-none">
+    <div class="px-2.5 pt-1.5 pb-1 text-[9.5px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 font-semibold border-b border-neutral-200/60 dark:border-neutral-800/60 select-none">
       // LANGUAGE
     </div>
 
@@ -86,10 +69,10 @@ const isUp = dropDirection === 'up';
           type="button"
           role="menuitem"
           data-lang-option="en"
-          class="lang-item group flex items-center justify-between px-3 py-2 text-xs font-heading font-bold uppercase tracking-tight text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900/80 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
+          class="lang-item group flex items-center justify-between px-2.5 py-1.5 text-xs font-sans font-medium uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
         >
-          <span class="font-heading font-bold uppercase tracking-tight">ENGLISH</span>
-          <span class="lang-meta text-[10px] font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
+          <span class="tracking-wider">ENGLISH</span>
+          <span class="lang-meta text-[10px] font-mono text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
             EN
           </span>
         </button>
@@ -101,10 +84,10 @@ const isUp = dropDirection === 'up';
           type="button"
           role="menuitem"
           data-lang-option="id"
-          class="lang-item group flex items-center justify-between px-3 py-2 text-xs font-heading font-bold uppercase tracking-tight text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-900/80 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
+          class="lang-item group flex items-center justify-between px-2.5 py-1.5 text-xs font-sans font-medium uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
         >
-          <span class="font-heading font-bold uppercase tracking-tight">INDONESIA</span>
-          <span class="lang-meta text-[10px] font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
+          <span class="tracking-wider">INDONESIA</span>
+          <span class="lang-meta text-[10px] font-mono text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
             ID
           </span>
         </button>
