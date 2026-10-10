@@ -185,24 +185,29 @@ const supportingStack = [
           }
         </ul>
 
-        <!-- Supporting Stack Divider & Container -->
+        <!-- Ecosystem & Supporting Tools (Magazine Layout) -->
         <div
-          class="mt-10 pt-8 border-t border-neutral-200/80 dark:border-neutral-800/80"
+          class="mt-10 pt-8 border-t border-neutral-200/80 dark:border-neutral-800/80 space-y-3"
         >
-          <h3
-            class="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block m-0 pb-4"
-          >
-            Ecosystem & Supporting Tech
-          </h3>
+          <div class="flex items-center justify-between">
+            <h3
+              class="font-heading font-bold text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500 m-0"
+            >
+              Ecosystem & Supporting Tools
+            </h3>
+            <span class="font-sans text-[11px] text-neutral-400 dark:text-neutral-500 font-medium">
+              {supportingStack.length} tools
+            </span>
+          </div>
           <ul
-            class="flex flex-wrap items-center gap-x-4 sm:gap-x-5 gap-y-2.5 sm:gap-y-3 list-none m-0 p-0"
+            class="flex flex-wrap items-center gap-x-4 sm:gap-x-5 gap-y-2.5 list-none m-0 p-0"
             aria-label="Ecosystem and Supporting Technologies"
           >
             {
               supportingStack.map((tech) => (
                 <li class="inline-flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors group">
                   <i
-                    class={`ti ${tech.icon} text-sm text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors`}
+                    class={`ti ${tech.icon} text-sm text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors`}
                     aria-hidden="true"
                   />
                   <span class="font-sans font-medium">{tech.name}</span>
