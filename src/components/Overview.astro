@@ -109,83 +109,107 @@ const supportingStack = [
       </div>
     </div>
 
-    <!-- Right Column: Narrative, Tech Stack & Bullets -->
+    <!-- Right Column: Narrative, Dual Craft Architecture & Stack -->
     <div class="lg:col-span-7 xl:col-span-7 space-y-6">
-      <p
-        data-en="Hello, I'm Yovan. I build things for the world wide web and occasionally things that talk to machines."
-        data-id="Halo, aku Yovan. Aku bikin ini dan itu buat di internet, dan sesekali ngoprak ngoprek nyambungin software ke hardware."
-        class="font-sans text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal"
+      <!-- Lead Narrative Headline -->
+      <h2
+        class="font-heading font-bold text-2xl sm:text-3xl lg:text-[2.2rem] text-neutral-950 dark:text-white leading-[1.25] tracking-tight m-0"
       >
-        Hello, I'm Yovan. I build things for the world wide web and
-        occasionally things that talk to machines.
-      </p>
+        <span data-en="Hello, I'm Yovan. I build things for the " data-id="Halo, aku Yovan. Aku bikin ini dan itu buat di ">Hello, I'm Yovan. I build things for the </span>
+        <span class="underline decoration-[var(--color-accent,#52FF1A)] decoration-2 underline-offset-4" data-en="world wide web" data-id="internet">world wide web</span>
+        <span data-en=" and occasionally things that " data-id=" dan sesekali yang "> and occasionally things that </span>
+        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[6px] bg-neutral-900/5 dark:bg-white/10 text-neutral-950 dark:text-neutral-100 font-mono text-[0.88em] font-medium border border-neutral-300 dark:border-neutral-700 align-baseline">
+          <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-accent,#52FF1A)] animate-pulse" aria-hidden="true"></span>
+          <span data-en="talk to machines" data-id="nyambung ke hardware">talk to machines</span>
+        </span>.
+      </h2>
 
-      <ul
-        class="space-y-2.5 py-1.5 pl-4 border-l-2 border-[var(--color-accent,#52FF1A)]/50 font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 list-none m-0 p-0"
-        aria-label="Overview highlights"
-      >
-        <li class="flex items-center gap-2.5">
-          <span
-            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-            aria-hidden="true">›</span
+      <!-- Dual Craft Architecture (Screen & Machine) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+        <!-- 01 / Web & Digital Interfaces -->
+        <div class="p-4 rounded-[10px] border border-neutral-200/90 dark:border-neutral-800/90 bg-neutral-100/50 dark:bg-neutral-900/40 space-y-2">
+          <div class="flex items-center justify-between text-xs font-mono text-neutral-500">
+            <span class="font-semibold text-neutral-700 dark:text-neutral-300">01 // SCREEN</span>
+            <span class="text-[10px] uppercase tracking-wider" data-en="Web & UI" data-id="Web & Antarmuka">Web & UI</span>
+          </div>
+          <p
+            class="font-sans text-[13.5px] leading-relaxed text-neutral-600 dark:text-neutral-400 m-0"
+            data-en="Full-stack web applications, interactive dashboards, accessible client portals, and performance-first landing pages."
+            data-id="Aplikasi web full-stack, dashboard interaktif, portal klien yang aksesibel, dan landing page berkinerja tinggi."
           >
-          <span>A little bit of webapp in my life</span>
-        </li>
-        <li class="flex items-center gap-2.5">
-          <span
-            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-            aria-hidden="true">›</span
+            Full-stack web applications, interactive dashboards, accessible client portals, and performance-first landing pages.
+          </p>
+        </div>
+
+        <!-- 02 / Hardware & Machines -->
+        <div class="p-4 rounded-[10px] border border-neutral-200/90 dark:border-neutral-800/90 bg-neutral-100/50 dark:bg-neutral-900/40 space-y-2">
+          <div class="flex items-center justify-between text-xs font-mono text-neutral-500">
+            <span class="font-semibold text-neutral-700 dark:text-neutral-300">02 // MACHINE</span>
+            <span class="text-[10px] uppercase tracking-wider" data-en="Hardware & IPC" data-id="Hardware & IPC">Hardware & IPC</span>
+          </div>
+          <p
+            class="font-sans text-[13.5px] leading-relaxed text-neutral-600 dark:text-neutral-400 m-0"
+            data-en="Touchscreen kiosks, hardware integrations, microcontrollers (ESP32), payment gateways, and direct serial/IPC protocols."
+            data-id="Touchscreen kiosk, integrasi hardware, mikrokontroler (ESP32), payment gateway, dan protokol serial/IPC."
           >
-          <span>A little bit of vscode by my side</span>
-        </li>
-        <li class="flex items-center gap-2.5">
-          <span
-            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-            aria-hidden="true">›</span
-          >
-          <span>A little bit of dashboard all I need</span>
-        </li>
-        <li class="flex items-center gap-2.5">
-          <span
-            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-            aria-hidden="true">›</span
-          >
-          <span>A little bit of touchscreen kiosk what I see</span>
-        </li>
-        <li class="flex items-center gap-2.5">
-          <span
-            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-            aria-hidden="true">›</span
-          >
-          <span>A little bit of 12v in the sun</span>
-        </li>
-        <li class="flex items-center gap-2.5">
-          <span
-            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-            aria-hidden="true">›</span
-          >
-          <span>A little bit of solder all night long</span>
-        </li>
-        <li class="flex items-center gap-2.5">
-          <span
-            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-            aria-hidden="true">›</span
-          >
-          <span>A little bit of LED, here I am</span>
-        </li>
-        <li class="flex items-center gap-2.5">
-          <span
-            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-            aria-hidden="true">›</span
-          >
-          <span>A little bit of git makes me your guy</span>
-        </li>
-      </ul>
+            Touchscreen kiosks, hardware integrations, microcontrollers (ESP32), payment gateways, and direct serial/IPC protocols.
+          </p>
+        </div>
+      </div>
+
+      <!-- Playful Telemetry / Mambo Parody Drawer -->
+      <details class="group border border-dashed border-neutral-300 dark:border-neutral-800 rounded-[8px] bg-neutral-50/50 dark:bg-neutral-950/40 transition-colors">
+        <summary class="flex items-center justify-between px-3.5 py-2 cursor-pointer select-none text-xs font-mono text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors list-none">
+          <span class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] font-bold">›</span>
+            <span>telemetry_cadence.log</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">easter egg</span>
+          </span>
+          <span class="text-[11px] font-mono group-open:rotate-180 transition-transform duration-200">↓</span>
+        </summary>
+        <ul
+          class="px-4 pb-3 pt-2 space-y-1.5 font-sans text-xs sm:text-[13px] text-neutral-600 dark:text-neutral-400 list-none m-0 border-t border-dashed border-neutral-200 dark:border-neutral-800/80"
+          aria-label="Overview highlights"
+        >
+          <li class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
+            <span>A little bit of webapp in my life</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
+            <span>A little bit of vscode by my side</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
+            <span>A little bit of dashboard all I need</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
+            <span>A little bit of touchscreen kiosk what I see</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
+            <span>A little bit of 12v in the sun</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
+            <span>A little bit of solder all night long</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
+            <span>A little bit of LED, here I am</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
+            <span>A little bit of git makes me your guy</span>
+          </li>
+        </ul>
+      </details>
 
       <p
         data-en="I enjoy building things across the stack, from the interface people see to the systems making everything run behind the scenes."
         data-id="Aku membangun sistem dari ujung ke ujung, dari tampilan yang dilihat orang sampai hiruk pikuk sistem di belakang panggung."
-        class="font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal pt-3 sm:pt-4"
+        class="font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal pt-1"
       >
         I enjoy building things across the stack, from the interface
         people see to the systems making everything run behind the scenes.
