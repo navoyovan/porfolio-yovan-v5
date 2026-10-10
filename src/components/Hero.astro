@@ -166,6 +166,19 @@ const librariesTechniques = [
           </ActionButton>
 
           <ActionButton
+            href="https://21st.dev/@yovan"
+            target="_blank"
+            rel="noopener noreferrer"
+            ariaLabel="21st.dev Profile (opens in new tab)"
+            data-aria-en="21st.dev Profile (opens in new tab)"
+            data-aria-id="Profil 21st.dev (buka di tab baru)"
+            variant="secondary"
+            size="micro"
+          >
+            <i class="ti ti-cube text-sm" aria-hidden="true"></i>
+          </ActionButton>
+
+          <ActionButton
             href="mailto:yovangunardio@gmail.com"
             ariaLabel="Send Email to Yovan"
             data-aria-en="Send Email to Yovan"
@@ -255,24 +268,24 @@ const librariesTechniques = [
 
   <!-- Lower Viewport Stack Marquee: Two-Tier Techno-Editorial Infinite Marquee -->
   <div
-    class="relative w-full overflow-hidden py-4 sm:py-5 flex flex-col gap-3 sm:gap-4 select-none pointer-events-auto border-t border-neutral-200/80 dark:border-neutral-800/60 bg-[#fcfbf9]/70 dark:bg-black/40 backdrop-blur-md hero-stack-marquee-wrapper"
+    class="relative w-full overflow-hidden py-3.5 sm:py-4 flex flex-col gap-2.5 sm:gap-3 select-none pointer-events-auto border-t border-neutral-200/50 dark:border-neutral-800/40 bg-[#fcfbf9]/50 dark:bg-black/30 backdrop-blur-md opacity-75 hover:opacity-100 transition-opacity duration-300 hero-stack-marquee-wrapper"
     aria-label="Technology Stack Archive"
   >
     <!-- Row 1: Core Stacks & Frameworks (Continuous seamless leftward scroll) -->
     <div class="marquee-row group flex overflow-hidden w-full">
       <div class="marquee-group flex shrink-0 items-center gap-8 sm:gap-12 pr-8 sm:pr-12 animate-marquee-left group-hover:[animation-play-state:paused]">
         {stackFrameworks.concat(stackFrameworks).map((item) => (
-          <div class="flex items-center gap-2.5 opacity-90 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
-            <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
-            <span class="font-sans text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
+          <div class="flex items-center gap-2.5 opacity-60 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-xl sm:text-2xl text-neutral-600 dark:text-neutral-400 transition-transform duration-200 hover:scale-105`} aria-hidden="true"></i>
+            <span class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
           </div>
         ))}
       </div>
       <div class="marquee-group flex shrink-0 items-center gap-8 sm:gap-12 pr-8 sm:pr-12 animate-marquee-left group-hover:[animation-play-state:paused]" aria-hidden="true">
         {stackFrameworks.concat(stackFrameworks).map((item) => (
-          <div class="flex items-center gap-2.5 opacity-90 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
-            <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
-            <span class="font-sans text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
+          <div class="flex items-center gap-2.5 opacity-60 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-xl sm:text-2xl text-neutral-600 dark:text-neutral-400 transition-transform duration-200 hover:scale-105`} aria-hidden="true"></i>
+            <span class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
           </div>
         ))}
       </div>
@@ -282,17 +295,17 @@ const librariesTechniques = [
     <div class="marquee-row group flex overflow-hidden w-full">
       <div class="marquee-group flex shrink-0 items-center gap-7 sm:gap-10 pr-7 sm:pr-10 animate-marquee-right group-hover:[animation-play-state:paused]">
         {librariesTechniques.concat(librariesTechniques).map((item) => (
-          <div class="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
-            <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-600 dark:text-neutral-400 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
-            <span class="font-sans text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
+          <div class="flex items-center gap-2 opacity-35 hover:opacity-85 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-sm sm:text-base text-neutral-500 dark:text-neutral-500 transition-transform duration-200 hover:scale-105`} aria-hidden="true"></i>
+            <span class="font-sans text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-500 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
           </div>
         ))}
       </div>
       <div class="marquee-group flex shrink-0 items-center gap-7 sm:gap-10 pr-7 sm:pr-10 animate-marquee-right group-hover:[animation-play-state:paused]" aria-hidden="true">
         {librariesTechniques.concat(librariesTechniques).map((item) => (
-          <div class="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
-            <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-600 dark:text-neutral-400 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
-            <span class="font-sans text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
+          <div class="flex items-center gap-2 opacity-35 hover:opacity-85 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-sm sm:text-base text-neutral-500 dark:text-neutral-500 transition-transform duration-200 hover:scale-105`} aria-hidden="true"></i>
+            <span class="font-sans text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-500 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
           </div>
         ))}
       </div>
@@ -304,18 +317,18 @@ const librariesTechniques = [
     id="hero-overview-header-bar"
     class="w-full bg-[#fcfbf9] dark:bg-[#090909] border-t border-neutral-200/80 dark:border-neutral-800/80 transition-colors pt-8 sm:pt-12 lg:pt-16 pb-6 sm:pb-8 select-none"
   >
-    <div class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto flex items-stretch gap-0 pb-1">
+    <div class="w-[94%] sm:w-[86%] lg:w-[80%] mx-auto flex items-stretch gap-0 pb-1">
       <!-- Big Section Numeral "1" (Sliced vertically in half by container boundary) -->
       <div
         id="overview-numeral-crop"
-        class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
-        style="width: 85px; contain: paint;"
+        class="relative overflow-hidden flex items-start justify-end select-none shrink-0 w-[60px] sm:w-[85px]"
+        style="contain: paint;"
       >
         <span
           id="overview-numeral"
           class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
           aria-hidden="true"
-          style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
+          style="font-size: 92px; left: 8px; top: -6px; display: inline-block;"
         >
           1
         </span>
@@ -325,7 +338,7 @@ const librariesTechniques = [
       <div class="w-px bg-neutral-300 dark:bg-neutral-800 shrink-0 self-stretch my-0.5" aria-hidden="true"></div>
 
       <!-- Right Side: Denser Overview label with horizontal line + Headline -->
-      <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
+      <div class="flex-1 flex flex-col justify-center min-w-0 pl-2.5 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
         <!-- Top: Overview label with horizontal rule -->
         <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
           <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
@@ -336,7 +349,7 @@ const librariesTechniques = [
         <!-- Section Headline -->
         <h2
           id="heading-intro"
-          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
+          class="text-[25px] sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
         >
           <span
             id="heading-intro-carousel"
@@ -358,6 +371,13 @@ const librariesTechniques = [
 </div>{/* End hero-scroll-wrapper */}
 
 <style>
+  @media (max-width: 639px) {
+    #hero-typography-stage {
+      margin-top: auto !important;
+      margin-bottom: 6.5rem !important;
+    }
+  }
+
   .hero-map-vignette {
     background: radial-gradient(ellipse 110% 90% at 50% 50%, transparent 40%, rgba(252, 251, 249, 0.4) 70%, #fcfbf9 100%);
   }
@@ -636,11 +656,13 @@ const librariesTechniques = [
     const footerEl = heroMain?.querySelector('footer');
     const badgeBox = document.getElementById('hero-map-badge');
     const mapParallax = document.getElementById('hero-map-parallax');
+    const vignetteEl = heroMain?.querySelector<HTMLElement>('.hero-map-vignette');
 
     if (heroMain && heroWrapper) {
       let currentPlaybackRate = 1.0;
       let targetPlaybackRate = 1.0;
       let speedAnimation: any = null;
+      let slowTimeout: any = null;
       const marqueeGroups = Array.from(heroWrapper.querySelectorAll<HTMLElement>('.marquee-group'));
 
       const applyPlaybackRate = (rate: number) => {
@@ -655,29 +677,47 @@ const librariesTechniques = [
       const setTargetSpeedRate = (newTarget: number) => {
         if (Math.abs(targetPlaybackRate - newTarget) > 0.02) {
           targetPlaybackRate = newTarget;
-          if (speedAnimation) speedAnimation.stop();
-
-          const startRate = currentPlaybackRate;
-          const isDecelerating = newTarget < startRate;
-          // Longer, graceful inertia ease for the slowdown trigger (1.5s)
-          const duration = isDecelerating ? 1.5 : 0.8;
-
-          speedAnimation = animate(0, 1, {
-            duration,
-            ease: [0.16, 1, 0.3, 1],
-            onUpdate: (progress) => {
-              currentPlaybackRate = startRate + (newTarget - startRate) * progress;
-              applyPlaybackRate(currentPlaybackRate);
-            },
-          });
-
-          speedAnimation.then(() => {
-            currentPlaybackRate = newTarget;
-            applyPlaybackRate(currentPlaybackRate);
+          if (speedAnimation) {
+            speedAnimation.stop();
             speedAnimation = null;
-          }).catch(() => {
-            // Animation interrupted
-          });
+          }
+          if (slowTimeout) {
+            clearTimeout(slowTimeout);
+            slowTimeout = null;
+          }
+
+          const isDecelerating = newTarget < currentPlaybackRate;
+
+          const startAnimation = () => {
+            slowTimeout = null;
+            const startRate = currentPlaybackRate;
+            // Elongated, cinematic inertia ease for the slowdown trigger (2.8s)
+            const duration = isDecelerating ? 2.8 : 1.0;
+
+            speedAnimation = animate(0, 1, {
+              duration,
+              ease: [0.22, 1, 0.36, 1],
+              onUpdate: (progress) => {
+                currentPlaybackRate = startRate + (newTarget - startRate) * progress;
+                applyPlaybackRate(currentPlaybackRate);
+              },
+            });
+
+            speedAnimation.then(() => {
+              currentPlaybackRate = newTarget;
+              applyPlaybackRate(currentPlaybackRate);
+              speedAnimation = null;
+            }).catch(() => {
+              // Animation interrupted
+            });
+          };
+
+          if (isDecelerating) {
+            // Delay 100ms before slowdown ease begins
+            slowTimeout = setTimeout(startAnimation, 100);
+          } else {
+            startAnimation();
+          }
         }
       };
 
@@ -713,6 +753,9 @@ const librariesTechniques = [
         if (badgeBox) {
           badgeBox.style.opacity = mainDataOpacity.toString();
           badgeBox.style.visibility = mainDataOpacity === 0 ? 'hidden' : 'visible';
+        }
+        if (vignetteEl) {
+          vignetteEl.style.opacity = mainDataOpacity.toString();
         }
 
         // 2. Title scales down slightly
@@ -940,7 +983,10 @@ const librariesTechniques = [
         }
       };
       bindLenis();
-      setTimeout(bindLenis, 300);
+      disposers.push(() => {
+        if (slowTimeout) clearTimeout(slowTimeout);
+        if (speedAnimation) speedAnimation.stop();
+      });
 
       updateHeroOnScroll();
     }
