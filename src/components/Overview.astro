@@ -94,15 +94,16 @@ const supportingStack = [
         style="transform: translateZ(0); contain: paint;"
       >
         <div
-          class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+          class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden [&>astro-island]:w-full [&>astro-island]:h-full [&>astro-island]:absolute [&>astro-island]:inset-0 [&>astro-island]:block"
           style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
         >
           <DitheringShader
-            client:visible
+            client:load
             shape="wave"
             type="8x8"
             pxSize={1}
             speed={0.6}
+            className="w-full h-full"
           />
         </div>
         <img
@@ -165,7 +166,7 @@ const supportingStack = [
 
       <!-- Lyrical Footnote: 3-line cycling rotator -->
       <div class="pt-5 border-t border-neutral-200/80 dark:border-neutral-800/80">
-        <div class="pl-3.5 border-l-2 border-[var(--color-accent,#1b7f3b)]/60 dark:border-[var(--color-accent,#52FF1A)]/60">
+        <div>
           <div
             id="lyrics-rotator-container"
             class="overflow-hidden relative transition-[height] duration-300 ease-out"
