@@ -75,8 +75,9 @@ const topThreePctThreshold =
   style="
     --cell: 28px;
     --gap: 3px;
+    --pad: 8px;
     --cell-inner: calc((7 * var(--cell) - 6 * var(--gap)) / 7);
-    height: calc(7 * var(--cell));
+    height: calc(7 * var(--cell) + 2 * var(--pad));
     margin-top: calc(3 * var(--cell));
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 100%);
@@ -84,12 +85,16 @@ const topThreePctThreshold =
 >
   <!-- Heatmap: Borderless grid with seamless edge mask and right-anchored latest view -->
   <div class="relative w-full h-full overflow-hidden">
-    <div id="github-contrib-scroll" class="w-full h-full overflow-x-auto scrollbar-none px-0 py-0 flex justify-end">
+    <div
+      id="github-contrib-scroll"
+      class="w-full h-full overflow-x-auto scrollbar-none flex justify-end items-center"
+      style="padding: var(--pad);"
+    >
       <div
         id="github-contrib-grid"
         role="img"
         aria-label="GitHub contribution activity over the last two years"
-        class="flex flex-row h-full px-0 select-none gap-[var(--gap)] shrink-0 w-max opacity-45 hover:opacity-90 transition-opacity duration-300"
+        class="flex flex-row h-full select-none gap-[var(--gap)] shrink-0 w-max opacity-45 hover:opacity-90 transition-opacity duration-300"
       >
         {
           weeks.map((weekDays) => (
@@ -146,6 +151,11 @@ const topThreePctThreshold =
     gap: var(--gap);
     flex-shrink: 0;
     width: var(--cell-inner);
+    position: relative;
+  }
+
+  #github-contrib-grid .gcd-col:hover {
+    z-index: 20;
   }
 
   #github-contrib-grid .gcd-cell {
@@ -155,6 +165,7 @@ const topThreePctThreshold =
     flex-shrink: 0;
     cursor: default;
     transition: transform 100ms;
+    position: relative;
   }
 
   @media (min-width: 640px) {
@@ -195,8 +206,8 @@ const topThreePctThreshold =
   }
 
   #github-contrib-grid .gcd-cell:hover {
-    transform: scale(1.1);
-    z-index: 10;
+    transform: scale(1.15);
+    z-index: 30;
   }
 
   @media (prefers-reduced-motion: reduce) {
