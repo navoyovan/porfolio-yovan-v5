@@ -70,150 +70,244 @@ const supportingStack = [
   aria-labelledby="heading-intro"
   class="scroll-mt-24 pt-0 space-y-8 overview-section"
 >
-  <div
-    class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pt-0"
-  >
-    <!-- Left Column: Portrait Photo with Technical Halo -->
-    <div
-      class="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-24 flex flex-col items-center justify-center pt-0"
-      style="transform: translateZ(0);"
-    >
-      <div
-        class="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center border-b border-neutral-300/80 dark:border-neutral-800 overflow-hidden"
-        style="transform: translateZ(0); contain: paint;"
+  <!-- Layout Concept Switcher Navigation -->
+  <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-neutral-200/70 dark:border-neutral-800/70">
+    <div class="flex items-center gap-2 text-xs font-mono text-neutral-500">
+      <span class="inline-block w-1.5 h-1.5 rounded-full bg-neutral-900 dark:bg-white"></span>
+      <span class="font-bold tracking-wider">01 // OVERVIEW LAYOUT CONCEPTS</span>
+    </div>
+    <div class="inline-flex items-center gap-1 p-1 rounded-lg bg-neutral-200/60 dark:bg-neutral-900 border border-neutral-300/80 dark:border-neutral-800 text-xs font-sans">
+      <button
+        type="button"
+        data-layout-target="a"
+        class="overview-layout-tab px-3 py-1 rounded-md font-medium transition-all bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white shadow-sm"
       >
-        <!-- Dithering Shader Wave Backdrop -->
+        A. Magazine Spread
+      </button>
+      <button
+        type="button"
+        data-layout-target="b"
+        class="overview-layout-tab px-3 py-1 rounded-md font-medium transition-all text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white"
+      >
+        B. Studio Split
+      </button>
+      <button
+        type="button"
+        data-layout-target="c"
+        class="overview-layout-tab px-3 py-1 rounded-md font-medium transition-all text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white"
+      >
+        C. Wide Manifesto
+      </button>
+    </div>
+  </div>
+
+  <!-- CONCEPT A: THE EDITORIAL MAGAZINE SPREAD -->
+  <div id="overview-variant-a" class="overview-variant-panel space-y-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pt-0">
+      <!-- Left Column: Portrait Photo with Studio Frame -->
+      <div
+        class="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-24 flex flex-col items-center justify-center pt-0"
+        style="transform: translateZ(0);"
+      >
         <div
-          class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-          style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
+          class="overview-portrait-frame relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center border-b border-neutral-300/80 dark:border-neutral-800 overflow-hidden"
+          style="transform: translateZ(0); contain: paint;"
         >
-          <DitheringShader
-            client:load
-            shape="wave"
-            type="8x8"
-            pxSize={1}
-            speed={0.6}
+          <!-- Dithering Shader Wave Backdrop (Toggled via Tuner) -->
+          <div
+            class="overview-backdrop-shader absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden hidden"
+            style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
+          >
+            <DitheringShader
+              client:load
+              shape="wave"
+              type="8x8"
+              pxSize={1}
+              speed={0.6}
+            />
+          </div>
+          <div class="overview-backdrop-gradient absolute inset-0 bg-gradient-to-t from-neutral-200/50 via-transparent to-transparent dark:from-neutral-900/60 pointer-events-none hidden"></div>
+
+          <img
+            src={`${base}/images/v.png`}
+            alt="Portrait of Yovan Gunardio Darmawan"
+            width="540"
+            height="540"
+            class="relative z-10 w-full max-h-[490px] object-contain object-bottom select-none pt-4"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
           />
         </div>
+        <div class="w-full pt-3 flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500 font-sans px-1">
+          <span>Bogor, West Java</span>
+          <span class="font-mono text-[11px]">6°35′ S, 106°47′ E</span>
+        </div>
+      </div>
 
-        <img
-          src={`${base}/images/v.png`}
-          alt="Portrait of Yovan Gunardio Darmawan"
-          width="540"
-          height="540"
-          class="relative z-10 w-full max-h-[500px] sm:max-h-[540px] object-contain object-bottom select-none pt-4"
-          loading="eager"
-          decoding="async"
-          fetchpriority="high"
-        />
+      <!-- Right Column: Unboxed Magazine Content -->
+      <div class="lg:col-span-7 xl:col-span-7 space-y-8">
+        <!-- Lead Headline -->
+        <h2
+          class="overview-headline font-heading font-bold text-2xl sm:text-3xl lg:text-[2.25rem] text-neutral-950 dark:text-white leading-[1.28] tracking-tight m-0"
+        >
+          <span data-en="Hello, I'm Yovan. I build things for the " data-id="Halo, aku Yovan. Aku bikin ini dan itu buat di ">Hello, I'm Yovan. I build things for the </span>
+          <em class="font-serif italic font-normal text-neutral-900 dark:text-neutral-100" data-en="world wide web" data-id="internet">world wide web</em>
+          <span data-en=", and occasionally things that " data-id=", dan sesekali yang ">—and occasionally things that </span>
+          <span class="font-heading font-black tracking-normal" data-en="talk to machines" data-id="nyambung ke hardware">talk to machines</span>.
+        </h2>
+
+        <!-- Unboxed Two Columns -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-4 border-t border-neutral-200/80 dark:border-neutral-800/80">
+          <div class="space-y-2">
+            <h3 class="font-heading font-bold text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500 m-0">
+              The Digital Realm
+            </h3>
+            <p
+              class="font-sans text-[14px] leading-relaxed text-neutral-600 dark:text-neutral-400 m-0"
+              data-en="Full-stack web applications, interactive dashboards, accessible client portals, and performance-first landing pages built with clean semantic structure."
+              data-id="Aplikasi web full-stack, dashboard interaktif, portal klien yang aksesibel, dan landing page berkinerja tinggi dengan struktur semantik rapi."
+            >
+              Full-stack web applications, interactive dashboards, accessible client portals, and performance-first landing pages built with clean semantic structure.
+            </p>
+          </div>
+          <div class="space-y-2">
+            <h3 class="font-heading font-bold text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500 m-0">
+              The Physical Layer
+            </h3>
+            <p
+              class="font-sans text-[14px] leading-relaxed text-neutral-600 dark:text-neutral-400 m-0"
+              data-en="Touchscreen kiosks, connected hardware, microcontrollers (ESP32), payment gateway integrations, and direct serial/IPC protocols."
+              data-id="Touchscreen kiosk, hardware terhubung, mikrokontroler (ESP32), integrasi payment gateway, dan protokol serial/IPC."
+            >
+              Touchscreen kiosks, connected hardware, microcontrollers (ESP32), payment gateway integrations, and direct serial/IPC protocols.
+            </p>
+          </div>
+        </div>
+
+        <!-- Lyrical Footnote -->
+        <div class="overview-lyrics-block pt-6 border-t border-neutral-200/80 dark:border-neutral-800/80">
+          <blockquote class="font-serif italic text-sm sm:text-[15px] text-neutral-500 dark:text-neutral-400 leading-relaxed m-0">
+            “A little bit of webapp in my life, a little bit of solder all night long...”
+          </blockquote>
+          <span class="font-sans text-xs text-neutral-400 dark:text-neutral-500 block pt-1.5">
+            — Personal cadence & systems craft
+          </span>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Right Column: Narrative, Dual Craft Architecture & Stack -->
-    <div class="lg:col-span-7 xl:col-span-7 space-y-6">
-      <!-- Lead Narrative Headline -->
-      <h2
-        class="font-heading font-bold text-2xl sm:text-3xl lg:text-[2.2rem] text-neutral-950 dark:text-white leading-[1.25] tracking-tight m-0"
-      >
-        <span data-en="Hello, I'm Yovan. I build things for the " data-id="Halo, aku Yovan. Aku bikin ini dan itu buat di ">Hello, I'm Yovan. I build things for the </span>
-        <span class="underline decoration-[var(--color-accent,#52FF1A)] decoration-2 underline-offset-4" data-en="world wide web" data-id="internet">world wide web</span>
-        <span data-en=" and occasionally things that " data-id=" dan sesekali yang "> and occasionally things that </span>
-        <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[6px] bg-neutral-900/5 dark:bg-white/10 text-neutral-950 dark:text-neutral-100 font-mono text-[0.88em] font-medium border border-neutral-300 dark:border-neutral-700 align-baseline">
-          <span class="w-1.5 h-1.5 rounded-full bg-[var(--color-accent,#52FF1A)] animate-pulse" aria-hidden="true"></span>
-          <span data-en="talk to machines" data-id="nyambung ke hardware">talk to machines</span>
-        </span>.
-      </h2>
-
-      <!-- Dual Craft Architecture (Screen & Machine) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-        <!-- 01 / Web & Digital Interfaces -->
-        <div class="p-4 rounded-[10px] border border-neutral-200/90 dark:border-neutral-800/90 bg-neutral-100/50 dark:bg-neutral-900/40 space-y-2">
-          <div class="flex items-center justify-between text-xs font-mono text-neutral-500">
-            <span class="font-semibold text-neutral-700 dark:text-neutral-300">01 // SCREEN</span>
-            <span class="text-[10px] uppercase tracking-wider" data-en="Web & UI" data-id="Web & Antarmuka">Web & UI</span>
-          </div>
-          <p
-            class="font-sans text-[13.5px] leading-relaxed text-neutral-600 dark:text-neutral-400 m-0"
-            data-en="Full-stack web applications, interactive dashboards, accessible client portals, and performance-first landing pages."
-            data-id="Aplikasi web full-stack, dashboard interaktif, portal klien yang aksesibel, dan landing page berkinerja tinggi."
-          >
-            Full-stack web applications, interactive dashboards, accessible client portals, and performance-first landing pages.
-          </p>
+  <!-- CONCEPT B: MINIMALIST ASYMMETRIC SPLIT -->
+  <div id="overview-variant-b" class="overview-variant-panel space-y-10 hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pt-0">
+      <!-- Left Column: Portrait in Studio Frame -->
+      <div class="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-24 flex flex-col items-center">
+        <div class="overview-portrait-frame relative w-full max-w-md flex flex-col items-center justify-center border border-neutral-200 dark:border-neutral-800 rounded-2xl overflow-hidden bg-neutral-100/50 dark:bg-neutral-900/40 p-4 pb-0">
+          <img
+            src={`${base}/images/v.png`}
+            alt="Portrait of Yovan Gunardio Darmawan"
+            width="540"
+            height="540"
+            class="relative z-10 w-full max-h-[460px] object-contain object-bottom select-none"
+            loading="eager"
+          />
         </div>
-
-        <!-- 02 / Hardware & Machines -->
-        <div class="p-4 rounded-[10px] border border-neutral-200/90 dark:border-neutral-800/90 bg-neutral-100/50 dark:bg-neutral-900/40 space-y-2">
-          <div class="flex items-center justify-between text-xs font-mono text-neutral-500">
-            <span class="font-semibold text-neutral-700 dark:text-neutral-300">02 // MACHINE</span>
-            <span class="text-[10px] uppercase tracking-wider" data-en="Hardware & IPC" data-id="Hardware & IPC">Hardware & IPC</span>
-          </div>
-          <p
-            class="font-sans text-[13.5px] leading-relaxed text-neutral-600 dark:text-neutral-400 m-0"
-            data-en="Touchscreen kiosks, hardware integrations, microcontrollers (ESP32), payment gateways, and direct serial/IPC protocols."
-            data-id="Touchscreen kiosk, integrasi hardware, mikrokontroler (ESP32), payment gateway, dan protokol serial/IPC."
-          >
-            Touchscreen kiosks, hardware integrations, microcontrollers (ESP32), payment gateways, and direct serial/IPC protocols.
-          </p>
+        <div class="w-full pt-3 px-1 flex items-center justify-between text-xs text-neutral-400 font-sans">
+          <span class="font-medium text-neutral-700 dark:text-neutral-300">Yovan G. Darmawan</span>
+          <span>Software & Systems Builder</span>
         </div>
       </div>
 
-      <!-- Playful Telemetry / Mambo Parody Drawer -->
-      <details class="group border border-dashed border-neutral-300 dark:border-neutral-800 rounded-[8px] bg-neutral-50/50 dark:bg-neutral-950/40 transition-colors">
-        <summary class="flex items-center justify-between px-3.5 py-2 cursor-pointer select-none text-xs font-mono text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors list-none">
-          <span class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] font-bold">›</span>
-            <span>telemetry_cadence.log</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">easter egg</span>
-          </span>
-          <span class="text-[11px] font-mono group-open:rotate-180 transition-transform duration-200">↓</span>
-        </summary>
-        <ul
-          class="px-4 pb-3 pt-2 space-y-1.5 font-sans text-xs sm:text-[13px] text-neutral-600 dark:text-neutral-400 list-none m-0 border-t border-dashed border-neutral-200 dark:border-neutral-800/80"
-          aria-label="Overview highlights"
-        >
-          <li class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
-            <span>A little bit of webapp in my life</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
-            <span>A little bit of vscode by my side</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
-            <span>A little bit of dashboard all I need</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
-            <span>A little bit of touchscreen kiosk what I see</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
-            <span>A little bit of 12v in the sun</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
-            <span>A little bit of solder all night long</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
-            <span>A little bit of LED, here I am</span>
-          </li>
-          <li class="flex items-center gap-2">
-            <span class="text-[var(--color-accent,#52FF1A)] text-xs font-mono font-bold select-none" aria-hidden="true">›</span>
-            <span>A little bit of git makes me your guy</span>
-          </li>
-        </ul>
-      </details>
+      <!-- Right Column: Studio Split Details -->
+      <div class="lg:col-span-7 xl:col-span-7 space-y-7">
+        <h2 class="overview-headline font-heading font-bold text-2xl sm:text-3xl lg:text-[2.25rem] text-neutral-950 dark:text-white leading-[1.28] tracking-tight m-0">
+          <span data-en="Hello, I'm Yovan. I build things for the " data-id="Halo, aku Yovan. Aku bikin ini dan itu buat di ">Hello, I'm Yovan. I build things for the </span>
+          <span class="text-neutral-950 dark:text-white border-b-2 border-neutral-950 dark:border-white pb-0.5" data-en="world wide web" data-id="internet">world wide web</span>
+          <span data-en=" and occasionally things that " data-id=" dan sesekali yang "> and occasionally things that </span>
+          <span class="text-neutral-500 dark:text-neutral-400" data-en="talk to machines" data-id="nyambung ke hardware">talk to machines</span>.
+        </h2>
 
-      <p
-        data-en="I enjoy building things across the stack, from the interface people see to the systems making everything run behind the scenes."
-        data-id="Aku membangun sistem dari ujung ke ujung, dari tampilan yang dilihat orang sampai hiruk pikuk sistem di belakang panggung."
-        class="font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal pt-1"
-      >
-        I enjoy building things across the stack, from the interface
-        people see to the systems making everything run behind the scenes.
-      </p>
+        <!-- Horizontal Story Panels -->
+        <div class="space-y-4 pt-1">
+          <div class="p-5 rounded-xl border border-neutral-200/90 dark:border-neutral-800/90 bg-[#fcfbf9] dark:bg-neutral-900/30 space-y-1.5">
+            <div class="text-xs font-heading font-bold uppercase tracking-wider text-neutral-950 dark:text-white">
+              Web & Cloud Applications
+            </div>
+            <p class="font-sans text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed m-0">
+              Full-stack web applications, internal dashboards, SaaS tools, and high-performance landing pages with accessibility and SEO baked in.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-xl border border-neutral-200/90 dark:border-neutral-800/90 bg-[#fcfbf9] dark:bg-neutral-900/30 space-y-1.5">
+            <div class="text-xs font-heading font-bold uppercase tracking-wider text-neutral-950 dark:text-white">
+              Kiosk Software & Physical Electronics
+            </div>
+            <p class="font-sans text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed m-0">
+              Touchscreen kiosks, interactive photobooths, 12V hardware relays, ESP32 microcontrollers, and reliable desktop IPC architectures.
+            </p>
+          </div>
+        </div>
+
+        <!-- Footnote -->
+        <div class="overview-lyrics-block pt-2">
+          <p class="font-serif italic text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed m-0">
+            “A little bit of webapp in my life, a little bit of solder all night long...”
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT C: WIDE MANIFESTO SPREAD -->
+  <div id="overview-variant-c" class="overview-variant-panel space-y-10 hidden">
+    <!-- Full-Width Statement -->
+    <div class="max-w-4xl space-y-3 pb-6 border-b border-neutral-200/80 dark:border-neutral-800/80">
+      <div class="text-xs font-mono uppercase tracking-widest text-neutral-400">Statement 01</div>
+      <h2 class="overview-headline font-heading font-black text-3xl sm:text-4xl lg:text-5xl text-neutral-950 dark:text-white leading-[1.18] tracking-tight m-0">
+        <span data-en="Hello, I'm Yovan. I build things for the " data-id="Halo, aku Yovan. Aku bikin ini dan itu buat di ">Hello, I'm Yovan. I build things for the </span>
+        <span class="underline decoration-neutral-400/60 dark:decoration-neutral-600 decoration-4 underline-offset-8" data-en="world wide web" data-id="internet">world wide web</span>
+        <span data-en=", and occasionally things that " data-id=", dan sesekali yang "> and occasionally things that </span>
+        <span class="italic font-serif font-normal" data-en="talk to machines" data-id="nyambung ke hardware">talk to machines</span>.
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      <div class="lg:col-span-4 flex flex-col items-center">
+        <div class="overview-portrait-frame relative w-full flex flex-col items-center justify-center border border-neutral-200 dark:border-neutral-800 rounded-xl overflow-hidden bg-neutral-100/40 dark:bg-neutral-900/30 p-2 pb-0">
+          <img
+            src={`${base}/images/v.png`}
+            alt="Portrait of Yovan Gunardio Darmawan"
+            width="540"
+            height="540"
+            class="relative z-10 w-full max-h-[380px] object-contain object-bottom select-none"
+            loading="eager"
+          />
+        </div>
+      </div>
+      <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="p-6 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 space-y-2">
+          <span class="text-xs font-mono text-neutral-400">01 / SCREEN</span>
+          <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white m-0">Digital Products</h3>
+          <p class="font-sans text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed m-0">
+            From customer-facing landing pages to complex enterprise dashboards and SaaS platforms, built for longevity and performance.
+          </p>
+        </div>
+        <div class="p-6 rounded-xl border border-neutral-200/80 dark:border-neutral-800/80 space-y-2">
+          <span class="text-xs font-mono text-neutral-400">02 / MACHINE</span>
+          <h3 class="font-heading font-bold text-base text-neutral-900 dark:text-white m-0">Connected Hardware</h3>
+          <p class="font-sans text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed m-0">
+            Touchscreen kiosks, interactive hardware devices, firmware bridging, serial protocols, and desktop host environments.
+          </p>
+        </div>
+        <div class="overview-lyrics-block sm:col-span-2 pt-2">
+          <blockquote class="font-serif italic text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed m-0">
+            “A little bit of webapp in my life, a little bit of solder all night long...”
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </div>
 
       <!-- Tech Stack Layout -->
       <div
@@ -284,6 +378,322 @@ const supportingStack = [
           </ul>
         </div>
       </div>
+  <!-- Temporary Live UI Tuner Bar (Bottom-Docked, Minimizable & Stacking Invariant z-[999999]) -->
+  <div
+    id="ui-tuner-bar"
+    class="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 max-w-5xl w-[96%] bg-[#fcfbf9]/95 dark:bg-[#0e0e0e]/95 backdrop-blur-md border border-neutral-300 dark:border-neutral-800 rounded-xl shadow-[0_20px_60px_rgba(0,0,0,0.45)] text-xs font-mono select-none z-[999999] pointer-events-auto transition-all duration-200"
+  >
+    <!-- Header Bar (Always Visible / Collapse Toggle) -->
+    <div
+      class="flex items-center justify-between px-3.5 py-2 border-b border-neutral-200/80 dark:border-neutral-800/80 bg-neutral-100/70 dark:bg-neutral-900/70 rounded-t-xl cursor-pointer"
+      id="tune-header-toggle"
+    >
+      <div class="flex items-center gap-2">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="font-bold text-[11px] text-neutral-800 dark:text-neutral-200 tracking-wider">LIVE UI TUNER</span>
+        <span id="tune-current-target-badge" class="px-2 py-0.5 text-[10px] rounded bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 font-semibold">Section 01 // Overview</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          id="tune-toggle-btn"
+          type="button"
+          class="text-[11px] font-bold text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white px-2 py-0.5 rounded bg-neutral-200/60 dark:bg-neutral-800/60 transition cursor-pointer"
+        >
+          Collapse [—]
+        </button>
+      </div>
+    </div>
+
+    <!-- Body Content (Collapsible) -->
+    <div id="tune-body" class="p-3.5 flex flex-wrap items-center gap-3 sm:gap-4">
+      <!-- Layout Concept Selector -->
+      <label class="flex items-center gap-1.5">
+        <span class="text-neutral-500 font-semibold">Layout:</span>
+        <select
+          id="tune-layout-sel"
+          class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-2 py-1 rounded text-xs text-neutral-900 dark:text-neutral-100 cursor-pointer"
+        >
+          <option value="a">A. Magazine Spread</option>
+          <option value="b">B. Studio Split</option>
+          <option value="c">C. Wide Manifesto</option>
+        </select>
+      </label>
+
+      <!-- Font Family Dropdown -->
+      <label class="flex items-center gap-1.5">
+        <span class="text-neutral-500 font-semibold">Font:</span>
+        <select
+          id="tune-font-sel"
+          class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-2 py-1 rounded text-xs text-neutral-900 dark:text-neutral-100 cursor-pointer"
+        >
+          <option value="'Syne', sans-serif">Syne (Heading)</option>
+          <option value="'Satoshi', sans-serif">Satoshi (Clean)</option>
+          <option value="'Newsreader', Georgia, serif">Newsreader (Editorial Serif)</option>
+          <option value="'PP Neue Montreal', sans-serif">PP Neue Montreal</option>
+          <option value="'Neue Machina', sans-serif">Neue Machina</option>
+        </select>
+      </label>
+
+      <!-- Headline Size Slider -->
+      <label class="flex items-center gap-1.5">
+        <span class="text-neutral-500 font-semibold">Size:</span>
+        <input
+          id="tune-size-slider"
+          type="range"
+          min="22"
+          max="54"
+          step="1"
+          value="36"
+          class="cursor-pointer w-24"
+        />
+        <span id="val-tune-size" class="font-bold w-10 text-neutral-800 dark:text-neutral-200">36px</span>
+      </label>
+
+      <!-- Line Height Slider -->
+      <label class="flex items-center gap-1.5">
+        <span class="text-neutral-500 font-semibold">Leading:</span>
+        <input
+          id="tune-lh-slider"
+          type="range"
+          min="1.05"
+          max="1.5"
+          step="0.05"
+          value="1.25"
+          class="cursor-pointer w-20"
+        />
+        <span id="val-tune-lh" class="font-bold w-10 text-neutral-800 dark:text-neutral-200">1.25</span>
+      </label>
+
+      <!-- Portrait Backdrop Selector -->
+      <label class="flex items-center gap-1.5">
+        <span class="text-neutral-500 font-semibold">Backdrop:</span>
+        <select
+          id="tune-backdrop-sel"
+          class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-2 py-1 rounded text-xs text-neutral-900 dark:text-neutral-100 cursor-pointer"
+        >
+          <option value="clean">Clean Studio Frame</option>
+          <option value="gradient">Soft Gradient Tint</option>
+          <option value="dither">Dither Wave (Shader)</option>
+        </select>
+      </label>
+
+      <!-- Lyrics Display Selector -->
+      <label class="flex items-center gap-1.5">
+        <span class="text-neutral-500 font-semibold">Lyrics:</span>
+        <select
+          id="tune-lyrics-sel"
+          class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-2 py-1 rounded text-xs text-neutral-900 dark:text-neutral-100 cursor-pointer"
+        >
+          <option value="show">Editorial Footnote</option>
+          <option value="hide">Hidden</option>
+        </select>
+      </label>
+
+      <!-- Action Output & Copy -->
+      <div class="flex items-center gap-2 ml-auto">
+        <input
+          id="tune-output"
+          type="text"
+          readonly
+          class="bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 px-2 py-1 text-xs font-mono rounded w-56 sm:w-64 select-all text-neutral-800 dark:text-neutral-200"
+        />
+        <button
+          id="tune-copy-btn"
+          type="button"
+          class="px-3 py-1 font-bold rounded bg-neutral-900 text-white dark:bg-white dark:text-neutral-950 hover:opacity-90 active:scale-95 transition cursor-pointer"
+        >
+          Copy CSS
+        </button>
+      </div>
     </div>
   </div>
 </section>
+
+<script is:inline>
+  (function initOverviewTuner() {
+    function setup() {
+      const layoutTabs = document.querySelectorAll('.overview-layout-tab');
+      const variantPanels = {
+        a: document.getElementById('overview-variant-a'),
+        b: document.getElementById('overview-variant-b'),
+        c: document.getElementById('overview-variant-c'),
+      };
+
+      const tunerBar = document.getElementById('ui-tuner-bar');
+      const tuneBody = document.getElementById('tune-body');
+      const toggleBtn = document.getElementById('tune-toggle-btn');
+      const headerToggle = document.getElementById('tune-header-toggle');
+      const layoutSel = document.getElementById('tune-layout-sel');
+      const fontSel = document.getElementById('tune-font-sel');
+      const sizeSlider = document.getElementById('tune-size-slider');
+      const valSize = document.getElementById('val-tune-size');
+      const lhSlider = document.getElementById('tune-lh-slider');
+      const valLh = document.getElementById('val-tune-lh');
+      const backdropSel = document.getElementById('tune-backdrop-sel');
+      const lyricsSel = document.getElementById('tune-lyrics-sel');
+      const copyBtn = document.getElementById('tune-copy-btn');
+      const output = document.getElementById('tune-output');
+
+      let currentLayout = 'a';
+
+      function switchLayout(key) {
+        if (!variantPanels[key]) return;
+        currentLayout = key;
+
+        // Switch panels
+        Object.keys(variantPanels).forEach((k) => {
+          if (variantPanels[k]) {
+            if (k === key) {
+              variantPanels[k].classList.remove('hidden');
+            } else {
+              variantPanels[k].classList.add('hidden');
+            }
+          }
+        });
+
+        // Update tabs styling
+        layoutTabs.forEach((tab) => {
+          const target = tab.getAttribute('data-layout-target');
+          if (target === key) {
+            tab.className = 'overview-layout-tab px-3 py-1 rounded-md font-medium transition-all bg-white dark:bg-neutral-800 text-neutral-950 dark:text-white shadow-sm';
+          } else {
+            tab.className = 'overview-layout-tab px-3 py-1 rounded-md font-medium transition-all text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white';
+          }
+        });
+
+        if (layoutSel && layoutSel.value !== key) {
+          layoutSel.value = key;
+        }
+
+        updateStyles();
+      }
+
+      // Connect top tab buttons
+      layoutTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const target = tab.getAttribute('data-layout-target');
+          if (target) switchLayout(target);
+        });
+      });
+
+      // Connect Tuner Layout dropdown
+      if (layoutSel) {
+        layoutSel.addEventListener('change', (e) => {
+          switchLayout(e.target.value);
+        });
+      }
+
+      function updateStyles() {
+        const font = fontSel ? fontSel.value : "'Syne', sans-serif";
+        const size = sizeSlider ? sizeSlider.value + 'px' : '36px';
+        const lh = lhSlider ? lhSlider.value : '1.25';
+        const backdrop = backdropSel ? backdropSel.value : 'clean';
+        const lyrics = lyricsSel ? lyricsSel.value : 'show';
+
+        if (valSize) valSize.textContent = size;
+        if (valLh) valLh.textContent = lh;
+
+        // Apply to all overview headlines
+        document.querySelectorAll('.overview-headline').forEach((el) => {
+          el.style.fontFamily = font;
+          el.style.fontSize = size;
+          el.style.lineHeight = lh;
+        });
+
+        // Backdrop updates across all portrait frames
+        document.querySelectorAll('.overview-portrait-frame').forEach((frame) => {
+          const shader = frame.querySelector('.overview-backdrop-shader');
+          const gradient = frame.querySelector('.overview-backdrop-gradient');
+
+          if (shader) shader.classList.toggle('hidden', backdrop !== 'dither');
+          if (gradient) gradient.classList.toggle('hidden', backdrop !== 'gradient');
+        });
+
+        // Lyrics display update
+        document.querySelectorAll('.overview-lyrics-block').forEach((el) => {
+          el.classList.toggle('hidden', lyrics === 'hide');
+        });
+
+        // Update output text
+        if (output) {
+          output.value = `layout: ${currentLayout.toUpperCase()}; font-family: ${font}; font-size: ${size}; line-height: ${lh};`;
+        }
+      }
+
+      if (fontSel) fontSel.addEventListener('change', updateStyles);
+      if (sizeSlider) sizeSlider.addEventListener('input', updateStyles);
+      if (lhSlider) lhSlider.addEventListener('input', updateStyles);
+      if (backdropSel) backdropSel.addEventListener('change', updateStyles);
+      if (lyricsSel) lyricsSel.addEventListener('change', updateStyles);
+
+      // Minimizing / Expanding
+      if (tunerBar && tuneBody && toggleBtn && headerToggle) {
+        let isMinimized = false;
+        const toggleCollapse = () => {
+          isMinimized = !isMinimized;
+          tuneBody.style.display = isMinimized ? 'none' : 'flex';
+          toggleBtn.textContent = isMinimized ? 'Expand [＋]' : 'Collapse [—]';
+        };
+
+        headerToggle.onclick = (e) => {
+          if (e.target !== toggleBtn) toggleCollapse();
+        };
+
+        toggleBtn.onclick = (e) => {
+          e.stopPropagation();
+          toggleCollapse();
+        };
+
+        // Scrollwheel page scroll isolation
+        tunerBar.addEventListener(
+          'wheel',
+          (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          },
+          { passive: false }
+        );
+
+        // Select dropdown wheel cycling
+        tunerBar.querySelectorAll('select').forEach((sel) => {
+          sel.addEventListener(
+            'wheel',
+            (e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              const delta = Math.sign(e.deltaY);
+              if (delta > 0 && sel.selectedIndex < sel.options.length - 1) {
+                sel.selectedIndex++;
+                sel.dispatchEvent(new Event('change'));
+              } else if (delta < 0 && sel.selectedIndex > 0) {
+                sel.selectedIndex--;
+                sel.dispatchEvent(new Event('change'));
+              }
+            },
+            { passive: false }
+          );
+        });
+
+        // Copy button action
+        if (copyBtn && output) {
+          copyBtn.onclick = () => {
+            output.select();
+            navigator.clipboard.writeText(output.value);
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy CSS';
+            }, 1500);
+          };
+        }
+      }
+
+      updateStyles();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setup);
+    } else {
+      setup();
+    }
+  })();
+</script>
