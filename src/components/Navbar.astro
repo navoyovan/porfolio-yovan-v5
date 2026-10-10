@@ -18,8 +18,7 @@ const homeNavItems = [
   { label: 'Featured Work', href: `${base}/#projects`, number: '02' },
   { label: 'What I Can Build', href: `${base}/#capabilities`, number: '03' },
   { label: 'Philosophy', href: `${base}/#philosophy`, number: '04' },
-  { label: 'About', href: `${base}/#about`, number: '05' },
-  { label: 'Contact', href: `${base}/#contact`, number: '06' },
+  { label: 'Contact', href: `${base}/#contact`, number: '05' },
 ];
 
 const componentLibraryNavItems = [
@@ -44,32 +43,28 @@ const secondaryNavItems = [
 const isComponentLibrary = pathname.includes('/component-library');
 const isPortfolioIndex = pathname.includes('/portfolio-index');
 
-let currentPageTitle = '// Home';
 let currentSectionItems = homeNavItems;
 
 if (isComponentLibrary) {
-  currentPageTitle = '// Component Library';
   currentSectionItems = componentLibraryNavItems;
 } else if (isPortfolioIndex) {
-  currentPageTitle = '// Portfolio Index';
   currentSectionItems = portfolioIndexNavItems;
 }
 ---
 
 <header
-  class="w-full h-14 bg-[#fcfbf9]/80 dark:bg-black/60 sticky top-0 z-50 transition-colors duration-200"
-  style="-webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);"
+  class="sticky top-0 z-50 w-full h-14 bg-[#fcfbf9]/80 dark:bg-[#090909]/80 backdrop-blur-md transition-colors duration-200"
 >
-  <div class="w-full px-6 sm:px-8 h-full flex items-center justify-between">
+  <div class="w-full px-6 sm:px-8 lg:px-12 h-full flex items-center justify-between">
     <div class="flex items-center">
       <!-- Logo / Branding -->
       <a
         id="navbar-logo"
         href={homeHref}
         aria-label="Home"
-        class="font-machina font-light text-base sm:text-lg text-neutral-950 dark:text-white tracking-wider hover:opacity-80 transition-opacity cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-400 inline-flex items-baseline"
+        class="font-machina font-light text-base sm:text-lg text-neutral-950 dark:text-white tracking-wider hover:opacity-80 transition-opacity cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white inline-flex items-baseline"
       >
-        <span>Yovan</span><span class="text-emerald-500 dark:text-emerald-400 ml-[1.5px]">;</span>
+        <span>Yovan</span><span class="text-[var(--color-accent,#1b7f3b)] dark:text-[var(--color-accent,#52FF1A)] ml-[1.5px] transition-colors">;</span>
       </a>
     </div>
 
@@ -92,12 +87,12 @@ if (isComponentLibrary) {
                       aria-expanded="false"
                       aria-haspopup="true"
                       aria-controls="desktop-sections-dropdown"
-                      class="group/nav-active relative inline-flex items-center text-[11px] sm:text-xs uppercase tracking-[0.2em] font-medium font-sans text-neutral-950 dark:text-white transition-colors cursor-pointer select-none bg-transparent border-0 p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+                      class="group/nav-active relative inline-flex items-center text-xs tracking-wider font-semibold font-sans text-neutral-950 dark:text-white transition-colors cursor-pointer select-none bg-transparent border-0 p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white"
                       aria-current="page"
                     >
                       <div
                         id="desktop-nav-content"
-                        class="inline-flex items-center gap-1"
+                        class="inline-flex items-center gap-1.5"
                       >
                         <span>{item.label}</span>
                         <span
@@ -115,23 +110,17 @@ if (isComponentLibrary) {
                       id="desktop-sections-dropdown"
                       role="menu"
                       aria-label={`${item.label} Sections`}
-                      class="absolute top-full left-0 mt-3 min-w-[240px] bg-[#fcfbf9]/95 dark:bg-black/80 backdrop-blur-md border border-neutral-200/90 dark:border-neutral-800/60 rounded-md shadow-xl dark:shadow-2xl p-1.5 z-50 opacity-0 -translate-y-2 scale-95 pointer-events-none transition-[opacity,transform] duration-200 ease-out origin-top flex flex-col gap-1"
+                      class="absolute top-full left-0 mt-2 min-w-[200px] bg-[#fcfbf9]/98 dark:bg-[#141414]/98 backdrop-blur-xl border border-neutral-200/80 dark:border-neutral-800 rounded-xl shadow-xl dark:shadow-2xl p-1.5 z-50 opacity-0 -translate-y-1 pointer-events-none transition-[opacity,transform] duration-150 ease-out will-change-[transform,opacity] origin-top flex flex-col gap-0.5"
                     >
-                      <div class="px-2.5 pt-1.5 pb-1 text-[9.5px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 font-semibold border-b border-neutral-200/60 dark:border-neutral-800/60 select-none">
-                        {currentPageTitle}
-                      </div>
                       <ul class="flex flex-col gap-0.5 list-none m-0 p-0" role="none">
                         {currentSectionItems.map((section) => (
                           <li role="none">
                             <a
                               href={section.href}
                               role="menuitem"
-                              class="desktop-section-link group flex items-center justify-between px-2.5 py-1.5 text-xs font-sans font-medium uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)] whitespace-nowrap gap-4"
+                              class="desktop-section-link flex items-center justify-between px-3 py-2 text-xs font-sans text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white"
                             >
                               <span>{section.label}</span>
-                              <span class="text-[10px] font-mono text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
-                                {section.number}
-                              </span>
                             </a>
                           </li>
                         ))}
@@ -141,7 +130,7 @@ if (isComponentLibrary) {
                 ) : (
                   <a
                     href={item.href}
-                    class="text-[11px] sm:text-xs uppercase tracking-[0.2em] font-medium font-sans text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+                    class="text-xs tracking-wider font-medium font-sans text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white"
                   >
                     {item.label}
                   </a>
@@ -158,7 +147,7 @@ if (isComponentLibrary) {
       <button
         id="theme-toggle"
         type="button"
-        class="inline-flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors p-1 bg-transparent border-0 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+        class="inline-flex items-center justify-center text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors p-1 bg-transparent border-0 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white"
         aria-label="Toggle light/dark theme"
       >
         <!-- Sun Icon (shown in dark mode to switch to light) -->
@@ -211,56 +200,50 @@ if (isComponentLibrary) {
         aria-label="Toggle Mobile Navigation Menu"
         aria-expanded="false"
         aria-controls="mobile-menu-drawer"
-        class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5 cursor-pointer relative z-50 rounded focus:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)] bg-transparent border-0 p-0"
+        class="md:hidden flex flex-col justify-center items-center w-8 h-8 gap-1.5 cursor-pointer relative z-50 rounded focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white bg-transparent border-0 p-0"
       >
         <span
           id="mobile-bar-1"
-          class="w-5 h-[1.5px] bg-neutral-950 dark:bg-white transition-transform duration-300 origin-center"
+          class="w-5 h-[1.5px] bg-neutral-950 dark:bg-white transition-transform duration-200 ease-out origin-center will-change-transform"
         ></span>
         <span
           id="mobile-bar-2"
-          class="w-5 h-[1.5px] bg-neutral-950 dark:bg-white transition-transform duration-300 origin-center"
+          class="w-5 h-[1.5px] bg-neutral-950 dark:bg-white transition-transform duration-200 ease-out origin-center will-change-transform"
         ></span>
       </button>
     </div>
   </div>
 
-  <!-- Mobile Drawer Menu (Alpha transparency matching navbar header) -->
+  <!-- Mobile Drawer Menu -->
   <div
     id="mobile-menu-drawer"
     aria-hidden="true"
-    class="md:hidden absolute top-full left-0 w-full bg-[#fcfbf9]/95 dark:bg-black/90 backdrop-blur-md border-b border-neutral-200/80 dark:border-neutral-800/60 shadow-2xl transition-all duration-300 ease-out -translate-y-4 opacity-0 pointer-events-none z-50 max-h-[calc(100dvh-3.5rem)] overflow-y-auto"
+    class="md:hidden absolute top-full left-0 w-full bg-[#fcfbf9]/98 dark:bg-[#0e0e0e]/98 backdrop-blur-xl border-b border-neutral-200/60 dark:border-neutral-800/60 shadow-xl transition-[opacity,transform] duration-200 ease-out -translate-y-1 opacity-0 pointer-events-none z-50 max-h-[calc(100dvh-3.5rem)] overflow-y-auto will-change-[transform,opacity]"
   >
-    <nav aria-label="Mobile Navigation" class="px-6 py-6 sm:py-8 flex flex-col gap-5 text-left items-start">
-      <!-- Current Page Navigation Sections -->
-      <div class="w-full flex flex-col gap-2">
-        <span class="text-[11px] font-mono font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 select-none">
-          {currentPageTitle}
+    <nav aria-label="Mobile Navigation" class="px-6 py-6 flex flex-col gap-6 text-left items-start">
+      <!-- Page Sections -->
+      <div class="w-full flex flex-col gap-1">
+        <span class="text-xs font-medium text-neutral-400 dark:text-neutral-500 mb-1 select-none">
+          Sections
         </span>
-        <ul class="w-full flex flex-col gap-1 list-none m-0 p-0" aria-label="Page Sections">
+        <ul class="w-full flex flex-col list-none m-0 p-0" aria-label="Page Sections">
           {currentSectionItems.map((item) => (
             <li>
               <a
                 href={item.href}
-                class="mobile-nav-link group flex items-center justify-between py-1.5 text-sm sm:text-base font-heading font-bold uppercase tracking-tight text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white transition-colors text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded"
+                class="mobile-nav-link flex items-center justify-between py-2.5 text-base font-sans font-medium text-neutral-800 dark:text-neutral-200 hover:text-neutral-950 dark:hover:text-white transition-colors text-left w-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white"
               >
                 <span>{item.label}</span>
-                <span class="text-[10px] font-mono text-neutral-400 dark:text-neutral-600 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
-                  {item.number}
-                </span>
               </a>
             </li>
           ))}
         </ul>
       </div>
 
-      <!-- Divider -->
-      <div class="w-full h-px bg-neutral-200/80 dark:bg-neutral-800/80 my-0.5"></div>
-
-      <!-- Pages Section -->
-      <div class="w-full flex flex-col gap-2">
-        <span class="text-[11px] font-mono font-semibold uppercase tracking-wider text-neutral-400 dark:text-neutral-500 select-none">
-          // Pages
+      <!-- Other Pages -->
+      <div class="w-full flex flex-col gap-1 pt-3 border-t border-neutral-200/60 dark:border-neutral-800/60">
+        <span class="text-xs font-medium text-neutral-400 dark:text-neutral-500 mb-1 select-none">
+          Pages
         </span>
         <ul class="w-full flex flex-col gap-1 list-none m-0 p-0" aria-label="Additional Pages">
           {secondaryNavItems.map((item) => {
@@ -272,17 +255,15 @@ if (isComponentLibrary) {
                 <a
                   href={item.href}
                   class:list={[
-                    'mobile-nav-link group flex items-center justify-between py-1.5 text-sm sm:text-base font-heading font-bold uppercase tracking-tight transition-colors text-left w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded',
+                    'mobile-nav-link flex items-center justify-between py-2 text-sm font-sans transition-colors text-left w-full focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white',
                     isActive
-                      ? 'text-neutral-950 dark:text-white font-black'
-                      : 'text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white',
+                      ? 'text-neutral-950 dark:text-white font-semibold'
+                      : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white',
                   ]}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   <span>{item.label}</span>
-                  <span class="text-xs font-mono text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
-                    →
-                  </span>
+                  {isActive && <span class="text-xs text-neutral-400 dark:text-neutral-500">Current</span>}
                 </a>
               </li>
             );
@@ -290,17 +271,15 @@ if (isComponentLibrary) {
         </ul>
       </div>
 
-      <!-- Contact Links (Left) & Fullscreen Toggle (Right) -->
-      <div class="w-full mt-6 pt-6 border-t border-neutral-200/80 dark:border-neutral-800/80 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 font-mono">
-        <div class="flex items-center gap-6 sm:gap-8">
+      <!-- Contact & Utilities -->
+      <div class="w-full pt-4 border-t border-neutral-200/60 dark:border-neutral-800/60 flex items-center justify-between text-xs text-neutral-500 dark:text-neutral-400 font-sans">
+        <div class="flex items-center gap-5">
           <a
             href="https://github.com/navoyovan"
             target="_blank"
             rel="noopener noreferrer"
-            class="hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded py-0.5"
-            aria-label="GitHub Profile (opens in new tab)"
-            data-aria-en="GitHub Profile (opens in new tab)"
-            data-aria-id="Profil GitHub (buka di tab baru)"
+            class="hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white"
+            aria-label="GitHub Profile"
           >
             GitHub
           </a>
@@ -308,10 +287,8 @@ if (isComponentLibrary) {
             href="https://linkedin.com/in/yovan-g-d-22379ba7/"
             target="_blank"
             rel="noopener noreferrer"
-            class="hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded py-0.5"
-            aria-label="LinkedIn Profile (opens in new tab)"
-            data-aria-en="LinkedIn Profile (opens in new tab)"
-            data-aria-id="Profil LinkedIn (buka di tab baru)"
+            class="hover:text-neutral-950 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white"
+            aria-label="LinkedIn Profile"
           >
             LinkedIn
           </a>
@@ -323,12 +300,9 @@ if (isComponentLibrary) {
             id="mobile-fullscreen-toggle"
             type="button"
             aria-label="Toggle Fullscreen Mode"
-            data-aria-en="Toggle Fullscreen Mode"
-            data-aria-id="Mode Layar Penuh"
-            aria-pressed="false"
-            class="px-2 py-1 -mr-1 rounded hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+            class="text-xs text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white bg-transparent border-0 p-0"
           >
-            <span id="fullscreen-text" data-en="Fullscreen" data-id="Layar Penuh" class="text-xs uppercase tracking-wider">Fullscreen</span>
+            <span id="fullscreen-text">Fullscreen</span>
           </button>
         </div>
       </div>
@@ -339,7 +313,7 @@ if (isComponentLibrary) {
   <div
     id="mobile-menu-backdrop"
     aria-hidden="true"
-    class="md:hidden fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity duration-300 opacity-0 pointer-events-none z-40"
+    class="md:hidden fixed inset-0 bg-black/60 transition-opacity duration-200 ease-out opacity-0 pointer-events-none z-40 will-change-[opacity]"
     style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;"
   ></div>
 </header>
@@ -448,14 +422,17 @@ if (isComponentLibrary) {
       updateDrawerTabIndex(open);
 
       if (open) {
-        drawer.classList.remove('-translate-y-4', 'opacity-0', 'pointer-events-none');
+        drawer.style.transitionDuration = '200ms';
+        drawer.style.transitionTimingFunction = 'cubic-bezier(0.16, 1, 0.3, 1)';
+        drawer.classList.remove('-translate-y-1', 'opacity-0', 'pointer-events-none');
         drawer.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
         if (backdrop) {
+          backdrop.style.transitionDuration = '200ms';
           backdrop.classList.remove('opacity-0', 'pointer-events-none');
           backdrop.classList.add('opacity-100', 'pointer-events-auto');
         }
-        bar1.style.transform = 'translateY(4px) rotate(45deg)';
-        bar2.style.transform = 'translateY(-4px) rotate(-45deg)';
+        bar1.style.transform = 'translateY(3.75px) rotate(45deg)';
+        bar2.style.transform = 'translateY(-3.75px) rotate(-45deg)';
 
         requestAnimationFrame(() => {
           const focusables = getFocusableInDrawer();
@@ -464,14 +441,17 @@ if (isComponentLibrary) {
           }
         });
       } else {
+        drawer.style.transitionDuration = '140ms';
+        drawer.style.transitionTimingFunction = 'cubic-bezier(0.4, 0, 1, 1)';
         drawer.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-        drawer.classList.add('-translate-y-4', 'opacity-0', 'pointer-events-none');
+        drawer.classList.add('-translate-y-1', 'opacity-0', 'pointer-events-none');
         if (backdrop) {
+          backdrop.style.transitionDuration = '140ms';
           backdrop.classList.remove('opacity-100', 'pointer-events-auto');
           backdrop.classList.add('opacity-0', 'pointer-events-none');
         }
-        bar1.style.transform = 'none';
-        bar2.style.transform = 'none';
+        bar1.style.transform = 'translateY(0px) rotate(0deg)';
+        bar2.style.transform = 'translateY(0px) rotate(0deg)';
       }
     };
 
@@ -500,8 +480,12 @@ if (isComponentLibrary) {
             const targetEl = document.querySelector(hash);
             if (targetEl) {
               e.preventDefault();
-              targetEl.scrollIntoView({ behavior: 'smooth' });
-              history.pushState(null, '', hash);
+              setMenuState(false);
+              setTimeout(() => {
+                targetEl.scrollIntoView({ behavior: 'smooth' });
+                history.pushState(null, '', hash);
+              }, 120);
+              return;
             }
           }
         }
@@ -567,7 +551,6 @@ if (isComponentLibrary) {
     const toggleBtn = document.getElementById('desktop-active-nav-btn');
     const dropdown = document.getElementById('desktop-sections-dropdown');
     const arrow = document.getElementById('desktop-nav-arrow');
-    const content = document.getElementById('desktop-nav-content');
     const sectionLinks = document.querySelectorAll<HTMLAnchorElement>('.desktop-section-link');
 
     if (!toggleBtn || !dropdown) return;
@@ -580,23 +563,21 @@ if (isComponentLibrary) {
       dropdown.setAttribute('aria-hidden', (!open).toString());
 
       if (open) {
-        dropdown.classList.remove('opacity-0', '-translate-y-2', 'scale-95', 'pointer-events-none');
-        dropdown.classList.add('opacity-100', 'translate-y-0', 'scale-100', 'pointer-events-auto');
+        dropdown.style.transitionDuration = '160ms';
+        dropdown.style.transitionTimingFunction = 'cubic-bezier(0.16, 1, 0.3, 1)';
+        dropdown.classList.remove('opacity-0', '-translate-y-1', 'pointer-events-none');
+        dropdown.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
         if (arrow) {
-          arrow.classList.add('!opacity-100', 'rotate-180');
-        }
-        if (content) {
-          content.classList.add('!translate-x-0');
+          arrow.classList.add('rotate-180');
         }
         sectionLinks.forEach((link) => link.removeAttribute('tabindex'));
       } else {
-        dropdown.classList.remove('opacity-100', 'translate-y-0', 'scale-100', 'pointer-events-auto');
-        dropdown.classList.add('opacity-0', '-translate-y-2', 'scale-95', 'pointer-events-none');
+        dropdown.style.transitionDuration = '100ms';
+        dropdown.style.transitionTimingFunction = 'cubic-bezier(0.4, 0, 1, 1)';
+        dropdown.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+        dropdown.classList.add('opacity-0', '-translate-y-1', 'pointer-events-none');
         if (arrow) {
-          arrow.classList.remove('!opacity-100', 'rotate-180');
-        }
-        if (content) {
-          content.classList.remove('!translate-x-0');
+          arrow.classList.remove('rotate-180');
         }
         sectionLinks.forEach((link) => link.setAttribute('tabindex', '-1'));
       }
@@ -621,8 +602,12 @@ if (isComponentLibrary) {
             const targetEl = document.querySelector(hash);
             if (targetEl) {
               e.preventDefault();
-              targetEl.scrollIntoView({ behavior: 'smooth' });
-              history.pushState(null, '', hash);
+              setDropdownState(false);
+              setTimeout(() => {
+                targetEl.scrollIntoView({ behavior: 'smooth' });
+                history.pushState(null, '', hash);
+              }, 100);
+              return;
             }
           }
         }

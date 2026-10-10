@@ -29,10 +29,10 @@ const isUp = dropDirection === 'up';
     aria-haspopup="menu"
     aria-expanded="false"
     aria-label="Select language"
-    class="lang-trigger group/nav-lang relative inline-flex items-center text-[11px] uppercase tracking-[0.2em] font-medium transition-colors text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white cursor-pointer select-none gap-1 bg-transparent border-0 p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+    class="lang-trigger group/nav-lang relative inline-flex items-center text-xs tracking-wider font-medium transition-colors text-neutral-500 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white cursor-pointer select-none gap-1 bg-transparent border-0 p-0 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white"
   >
     <!-- Current Code in Satoshi / Sans -->
-    <span class="lang-current-label font-sans font-medium tracking-[0.2em]">EN</span>
+    <span class="lang-current-label font-sans font-medium tracking-wider">EN</span>
 
     <!-- Arrow Indicator -->
     <span
@@ -46,22 +46,18 @@ const isUp = dropDirection === 'up';
     </span>
   </button>
 
-  <!-- Sleek Editorial Dropdown Menu -->
+  <!-- Dropdown Menu -->
   <div
     id={`${id}-menu`}
     role="menu"
     aria-label="Language Options"
     class:list={[
-      'lang-menu absolute right-0 min-w-[180px] bg-[#fcfbf9]/95 dark:bg-black/80 backdrop-blur-md border border-neutral-200/90 dark:border-neutral-800/60 rounded-md shadow-xl dark:shadow-2xl p-1.5 z-50 opacity-0 scale-95 pointer-events-none transition-[opacity,transform] duration-200 ease-out flex flex-col gap-1',
+      'lang-menu absolute right-0 min-w-[140px] bg-[#fcfbf9]/98 dark:bg-[#141414]/98 backdrop-blur-xl border border-neutral-200/80 dark:border-neutral-800 rounded-xl shadow-xl dark:shadow-2xl p-1 z-50 opacity-0 pointer-events-none transition-[opacity,transform] duration-150 ease-out will-change-[transform,opacity] flex flex-col gap-0.5',
       isUp
-        ? 'bottom-full mb-2 origin-bottom translate-y-2'
-        : 'top-full mt-2 origin-top -translate-y-2'
+        ? 'bottom-full mb-2 origin-bottom translate-y-1'
+        : 'top-full mt-2 origin-top -translate-y-1'
     ]}
   >
-    <div class="px-2.5 pt-1.5 pb-1 text-[9.5px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 font-semibold border-b border-neutral-200/60 dark:border-neutral-800/60 select-none">
-      // LANGUAGE
-    </div>
-
     <ul class="flex flex-col gap-0.5 list-none m-0 p-0" role="none">
       <!-- English Option -->
       <li role="none">
@@ -69,12 +65,10 @@ const isUp = dropDirection === 'up';
           type="button"
           role="menuitem"
           data-lang-option="en"
-          class="lang-item group flex items-center justify-between px-2.5 py-1.5 text-xs font-sans font-medium uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
+          class="lang-item flex items-center justify-between px-3 py-2 text-xs font-sans text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded-lg transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white border-0 bg-transparent"
         >
-          <span class="tracking-wider">ENGLISH</span>
-          <span class="lang-meta text-[10px] font-mono text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
-            EN
-          </span>
+          <span>English</span>
+          <span class="text-[11px] text-neutral-400 dark:text-neutral-500">EN</span>
         </button>
       </li>
 
@@ -84,12 +78,10 @@ const isUp = dropDirection === 'up';
           type="button"
           role="menuitem"
           data-lang-option="id"
-          class="lang-item group flex items-center justify-between px-2.5 py-1.5 text-xs font-sans font-medium uppercase tracking-wider text-neutral-700 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--color-accent,#52FF1A)] border-0 bg-transparent"
+          class="lang-item flex items-center justify-between px-3 py-2 text-xs font-sans text-neutral-600 dark:text-neutral-300 hover:text-neutral-950 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800/60 rounded-lg transition-colors text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white border-0 bg-transparent"
         >
-          <span class="tracking-wider">INDONESIA</span>
-          <span class="lang-meta text-[10px] font-mono text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors">
-            ID
-          </span>
+          <span>Indonesia</span>
+          <span class="text-[11px] text-neutral-400 dark:text-neutral-500">ID</span>
         </button>
       </li>
     </ul>
@@ -115,23 +107,29 @@ const isUp = dropDirection === 'up';
           // Close other open menus
           document.querySelectorAll('.lang-menu.is-open').forEach((m) => {
             if (m !== menu) {
-              m.classList.remove('is-open', 'opacity-100', 'translate-y-0', 'scale-100', 'pointer-events-auto');
-              m.classList.add('opacity-0', 'scale-95', 'pointer-events-none', isUp ? 'translate-y-2' : '-translate-y-2');
+              const otherUp = (m.closest('[data-direction]') as HTMLElement)?.dataset?.direction === 'up';
+              (m as HTMLElement).style.transitionDuration = '100ms';
+              m.classList.remove('is-open', 'opacity-100', 'translate-y-0', 'pointer-events-auto');
+              m.classList.add('opacity-0', 'pointer-events-none', otherUp ? 'translate-y-1' : '-translate-y-1');
               const otherTrigger = m.closest('.lang-switcher-wrapper')?.querySelector<HTMLButtonElement>('.lang-trigger');
               if (otherTrigger) otherTrigger.setAttribute('aria-expanded', 'false');
             }
           });
 
-          menu.classList.remove('opacity-0', 'scale-95', 'pointer-events-none', isUp ? 'translate-y-2' : '-translate-y-2');
-          menu.classList.add('is-open', 'opacity-100', 'translate-y-0', 'scale-100', 'pointer-events-auto');
+          menu.style.transitionDuration = '160ms';
+          menu.style.transitionTimingFunction = 'cubic-bezier(0.16, 1, 0.3, 1)';
+          menu.classList.remove('opacity-0', 'pointer-events-none', isUp ? 'translate-y-1' : '-translate-y-1');
+          menu.classList.add('is-open', 'opacity-100', 'translate-y-0', 'pointer-events-auto');
           trigger.setAttribute('aria-expanded', 'true');
           if (arrow) {
             arrow.classList.add(isUp ? 'rotate-0' : 'rotate-180');
           }
           items.forEach((item) => item.removeAttribute('tabindex'));
         } else {
-          menu.classList.remove('is-open', 'opacity-100', 'translate-y-0', 'scale-100', 'pointer-events-auto');
-          menu.classList.add('opacity-0', 'scale-95', 'pointer-events-none', isUp ? 'translate-y-2' : '-translate-y-2');
+          menu.style.transitionDuration = '100ms';
+          menu.style.transitionTimingFunction = 'cubic-bezier(0.4, 0, 1, 1)';
+          menu.classList.remove('is-open', 'opacity-100', 'translate-y-0', 'pointer-events-auto');
+          menu.classList.add('opacity-0', 'pointer-events-none', isUp ? 'translate-y-1' : '-translate-y-1');
           trigger.setAttribute('aria-expanded', 'false');
           if (arrow) {
             arrow.classList.remove(isUp ? 'rotate-0' : 'rotate-180');
