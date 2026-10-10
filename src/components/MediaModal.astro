@@ -118,11 +118,11 @@ const { id, title, videoSrc, imageSrc, imageAlt = title, iframeSrc } = Astro.pro
   let isMediaModalInitialized = false;
 
   function initMediaModals() {
-    if (isMediaModalInitialized) return;
+    const bindDelegate = !isMediaModalInitialized;
     isMediaModalInitialized = true;
 
-    // Delegated click handler for triggers, close buttons, and backdrop
-    document.addEventListener('click', (e) => {
+    // Delegated click handler for triggers, close buttons, and backdrop (bound once)
+    if (bindDelegate) document.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
       if (!target) return;
 
@@ -159,7 +159,8 @@ const { id, title, videoSrc, imageSrc, imageAlt = title, iframeSrc } = Astro.pro
     });
 
     // Touch gesture to swipe down to dismiss
-    document.querySelectorAll<HTMLDialogElement>('.tile-modal').forEach((d) => {
+    document.querySelectorAll<HTMLDialogElement>('.tile-modal:not([data-modal-bound])').forEach((d) => {
+      d.setAttribute('data-modal-bound', '');
       d.addEventListener('cancel', (e) => {
         e.preventDefault();
         closeModal(d);
