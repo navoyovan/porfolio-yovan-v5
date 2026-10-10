@@ -21,8 +21,8 @@ const { base } = Astro.props;
     <!-- Big Section Numeral "2" (Sliced vertically in half by container boundary) -->
     <div
       id="projects-numeral-crop"
-      class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
-      style="width: 85px; contain: paint;"
+      class="relative overflow-hidden flex items-start justify-end select-none shrink-0 w-[60px] sm:w-[85px]"
+      style="contain: paint;"
     >
       <span
         id="projects-numeral"
@@ -38,7 +38,7 @@ const { base } = Astro.props;
     <div class="w-px bg-neutral-300 dark:bg-neutral-800 shrink-0 self-stretch my-0.5" aria-hidden="true"></div>
 
     <!-- Right Side: Section label with horizontal rule and index link + Headline -->
-    <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
+    <div class="flex-1 flex flex-col justify-center min-w-0 pl-2.5 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
       <!-- Top: Category label with horizontal rule -->
       <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
         <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
@@ -69,7 +69,7 @@ const { base } = Astro.props;
           id="heading-projects"
           data-en="Things I've built"
           data-id="Beberapa karya yang aku bikin"
-          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
+          class="text-[25px] sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
         >
           Things I've built
         </h2>
