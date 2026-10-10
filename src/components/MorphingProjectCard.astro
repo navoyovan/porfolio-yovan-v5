@@ -327,12 +327,22 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 )}
 
 <script>
-  function setupMorphCardModals() {
-    document.querySelectorAll('.tile-scale-btn').forEach((btn) => {
-      btn.addEventListener('click', (e) => {
+  let isModalDelegated = false;
+
+  function initMorphCardModals() {
+    if (isModalDelegated) return;
+    isModalDelegated = true;
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target) return;
+
+      // 1. Open Modal Trigger
+      const trigger = target.closest<HTMLElement>('.tile-scale-btn');
+      if (trigger) {
         e.preventDefault();
         e.stopPropagation();
-        const targetId = btn.getAttribute('data-modal-target');
+        const targetId = trigger.getAttribute('data-modal-target');
         if (!targetId) return;
         const dialog = document.getElementById(targetId) as HTMLDialogElement | null;
         if (dialog) {
@@ -344,43 +354,52 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
             modalVideo.play().catch(() => {});
           }
         }
-      });
-    });
+        return;
+      }
 
-    document.querySelectorAll('.tile-modal').forEach((dialog) => {
-      const d = dialog as HTMLDialogElement;
-      const closeModal = () => {
-        if (!d.hasAttribute('open')) return;
-        d.classList.add('is-closing');
-        const modalVideo = d.querySelector<HTMLVideoElement>('video.tile-modal-video');
-        if (modalVideo) modalVideo.pause();
-
-        setTimeout(() => {
-          d.close();
-          d.classList.remove('is-closing');
-        }, 200);
-      };
-
-      d.querySelector('.tile-modal-close')?.addEventListener('click', (e) => {
-        e.stopPropagation();
-        closeModal();
-      });
-      d.addEventListener('click', (e) => {
-        if (e.target === d) closeModal();
-      });
-      d.addEventListener('cancel', (e) => {
+      // 2. Dismiss Button
+      const closeBtn = target.closest<HTMLElement>('.tile-modal-close');
+      if (closeBtn) {
         e.preventDefault();
-        closeModal();
-      });
+        e.stopPropagation();
+        const dialog = closeBtn.closest<HTMLDialogElement>('.tile-modal');
+        if (dialog) closeModal(dialog);
+        return;
+      }
+
+      // 3. Backdrop Click
+      if (target.classList.contains('tile-modal') && target.tagName === 'DIALOG') {
+        closeModal(target as HTMLDialogElement);
+      }
     });
+
+    document.addEventListener('cancel', (e) => {
+      const target = e.target as HTMLElement;
+      if (target && target.classList.contains('tile-modal') && target.tagName === 'DIALOG') {
+        e.preventDefault();
+        closeModal(target as HTMLDialogElement);
+      }
+    });
+
+    function closeModal(dialog: HTMLDialogElement) {
+      if (!dialog.hasAttribute('open')) return;
+      dialog.classList.add('is-closing');
+      const modalVideo = dialog.querySelector<HTMLVideoElement>('video.tile-modal-video');
+      if (modalVideo) modalVideo.pause();
+
+      setTimeout(() => {
+        dialog.close();
+        dialog.classList.remove('is-closing');
+      }, 200);
+    }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setupMorphCardModals);
+    document.addEventListener('DOMContentLoaded', initMorphCardModals);
   } else {
-    setupMorphCardModals();
+    initMorphCardModals();
   }
-  document.addEventListener('astro:page-load', setupMorphCardModals);
+  document.addEventListener('astro:page-load', initMorphCardModals);
 </script>
 
 <style>

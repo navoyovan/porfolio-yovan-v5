@@ -917,25 +917,42 @@ const { base } = Astro.props;
     const slots = document.querySelectorAll<HTMLElement>("[data-project-slot]");
     if (!slots.length || !container) return;
 
+    const activeAnimations = new WeakMap<HTMLElement, { stop: () => void }>();
+
+    // Video memory & decode overhead management: pause off-screen videos
+    if ("IntersectionObserver" in window) {
+      const videoObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const video = entry.target.querySelector<HTMLVideoElement>("video.morph-video");
+            if (!video) return;
+            if (!entry.isIntersecting && !video.paused) {
+              video.pause();
+            }
+          });
+        },
+        { root: container, threshold: 0.1 }
+      );
+      slots.forEach((slot) => videoObserver.observe(slot));
+    }
+
     const collapseSlot = (slot: HTMLElement) => {
       const card = slot.querySelector<HTMLElement>("[data-morph-card]");
-      const media = slot.querySelector<HTMLElement>("[data-morph-media]");
       const content = slot.querySelector<HTMLElement>("[data-morph-content]");
-      const scrim = slot.querySelector<HTMLElement>(".morph-scrim");
-      const statusBadge = slot.querySelector<HTMLElement>(".morph-status-badge");
-      const collapsedPill = slot.querySelector<HTMLElement>(".morph-collapsed-pill");
-      const collapsedInfo = slot.querySelector<HTMLElement>(".morph-collapsed-info");
-      const closeBtn = slot.querySelector<HTMLElement>("[data-close-card]");
-      const hoverCue = slot.querySelector<HTMLElement>(".morph-hover-cue");
       const video = slot.querySelector<HTMLVideoElement>("video.morph-video");
 
       if (!card || !content) return;
+
+      const prevCardAnim = activeAnimations.get(card);
+      if (prevCardAnim) prevCardAnim.stop();
+      const prevContentAnim = activeAnimations.get(content);
+      if (prevContentAnim) prevContentAnim.stop();
 
       card.style.transform = "";
       card.style.zIndex = "10";
       card.style.backgroundColor = "transparent";
 
-      animate(
+      const cardAnim = animate(
         card,
         {
           width: "100%",
@@ -949,6 +966,7 @@ const { base } = Astro.props;
           ease: [0.16, 1, 0.3, 1],
         },
       );
+      activeAnimations.set(card, cardAnim);
 
       const metaLabel = slot.querySelector<HTMLElement>(".morph-meta-label");
       if (metaLabel) metaLabel.style.opacity = "";
@@ -956,7 +974,7 @@ const { base } = Astro.props;
       // Hide expanded details with Motion
       content.style.pointerEvents = "none";
       content.setAttribute("aria-hidden", "true");
-      animate(
+      const contentAnim = animate(
         content,
         {
           opacity: 0,
@@ -966,6 +984,7 @@ const { base } = Astro.props;
           ease: [0.16, 1, 0.3, 1],
         },
       );
+      activeAnimations.set(content, contentAnim);
 
       if (video) video.pause();
 
@@ -983,10 +1002,14 @@ const { base } = Astro.props;
 
       const card = slot.querySelector<HTMLElement>("[data-morph-card]");
       const content = slot.querySelector<HTMLElement>("[data-morph-content]");
-      const closeBtn = slot.querySelector<HTMLElement>("[data-close-card]");
       const video = slot.querySelector<HTMLVideoElement>("video.morph-video");
 
       if (!card || !content) return;
+
+      const prevCardAnim = activeAnimations.get(card);
+      if (prevCardAnim) prevCardAnim.stop();
+      const prevContentAnim = activeAnimations.get(content);
+      if (prevContentAnim) prevContentAnim.stop();
 
       // Immediately set expanded state so media hover effects and inactive styles switch instantly
       card.setAttribute("aria-expanded", "true");
@@ -1004,7 +1027,7 @@ const { base } = Astro.props;
         ? "#141414"
         : "#f6f4ee";
 
-      animate(
+      const cardAnim = animate(
         card,
         {
           width: "125%",
@@ -1018,6 +1041,7 @@ const { base } = Astro.props;
           ease: [0.16, 1, 0.3, 1],
         },
       );
+      activeAnimations.set(card, cardAnim);
 
       const metaLabel = slot.querySelector<HTMLElement>(".morph-meta-label");
       if (metaLabel) metaLabel.style.opacity = "1";
@@ -1025,7 +1049,7 @@ const { base } = Astro.props;
       // 3. Reveal expanded details smoothly with Motion
       content.style.pointerEvents = "auto";
       content.setAttribute("aria-hidden", "false");
-      animate(
+      const contentAnim = animate(
         content,
         {
           opacity: [0, 1],
@@ -1037,6 +1061,7 @@ const { base } = Astro.props;
           ease: [0.16, 1, 0.3, 1],
         },
       );
+      activeAnimations.set(content, contentAnim);
 
       if (video) video.play().catch(() => {});
 
