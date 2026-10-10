@@ -721,6 +721,8 @@ const librariesTechniques = [
         }
       };
 
+      let lastProgress = -1;
+
       const updateHeroOnScroll = () => {
         const scrollY = window.scrollY || window.pageYOffset;
         const navHeight = 56;
@@ -728,6 +730,11 @@ const librariesTechniques = [
         const phi = 0.618034; // Golden Ratio major section (61.8%)
         const compressDistance = stageHeight * (1 - phi); // 38.2% smooth scroll distance
         const progress = Math.min(Math.max(scrollY / compressDistance, 0), 1);
+
+        if (progress === lastProgress && (progress === 1 || progress === 0)) {
+          return;
+        }
+        lastProgress = progress;
 
         const ease = 1 - Math.pow(1 - progress, 2.5);
         const minH = stageHeight * phi;
@@ -781,9 +788,6 @@ const librariesTechniques = [
           // Normal speed only at initial top position
           setTargetSpeedRate(1.0);
         }
-
-        // 5. Dynamic Phrasing: "He builds..." on initial map reveal -> "I build..." when portrait appears
-        updateIntroHeadingPhrase();
       };
 
       const introCarousel = document.getElementById('heading-intro-carousel');
@@ -831,13 +835,18 @@ const librariesTechniques = [
         );
       };
 
-      const updateIntroHeadingPhrase = (isAnimated = true) => {
-        const portraitShown = portraitEl
-          ? portraitEl.getBoundingClientRect().top < window.innerHeight * 0.75
-          : window.scrollY > window.innerHeight * 0.70;
-
-        updateIntroCarouselLayout(portraitShown ? 'i' : 'he', isAnimated);
-      };
+      if (portraitEl) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              updateIntroCarouselLayout(entry.isIntersecting ? 'i' : 'he', true);
+            });
+          },
+          { rootMargin: '0px 0px -25% 0px' }
+        );
+        observer.observe(portraitEl);
+        disposers.push(() => observer.disconnect());
+      }
 
       const updateIntroLang = () => {
         if (!introHe || !introI || !introSuffix) return;
