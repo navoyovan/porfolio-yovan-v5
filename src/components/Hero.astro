@@ -428,7 +428,40 @@ const librariesTechniques = [
     transform: translateZ(0);
   }
 
+  #hero-name-first,
+  #hero-name-middle,
+  #hero-name-last {
+    font-size: 1.45em;
+  }
+
+  #hero-semi {
+    font-size: 1.5em;
+    transform: rotate(14deg);
+    color: #52FF1A;
+    font-weight: 300;
+  }
+
+  #hero-dot {
+    font-size: 1.55em;
+    color: #52FF1A;
+    font-weight: 300;
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    #hero-name-first,
+    #hero-name-middle,
+    #hero-name-last {
+      font-size: 1em !important;
+      transform: none !important;
+      color: currentColor !important;
+    }
+    #hero-semi,
+    #hero-dot {
+      font-size: 0.8em !important;
+      transform: none !important;
+      color: currentColor !important;
+      font-weight: 300 !important;
+    }
     .animate-marquee-left,
     .animate-marquee-right {
       animation: none !important;
@@ -877,10 +910,18 @@ const librariesTechniques = [
       const nameLast = document.getElementById('hero-name-last');
 
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        const initialWait = 0.44; // Doubled initial wait before physical collapse begins
+        const initialWait = 0.72; // Extended anticipation hold so the oversized "bad" state registers
         const easeDecel = [0.16, 1, 0.3, 1];
 
-        const staggerStep = 0.225; // 125% of previous stagger step (0.18s -> 0.225s)
+        // Base tempo step (~160ms: slightly faster stagger tempo)
+        const baseStep = 0.16;
+
+        // Organic drum-swing groove (MPC ~62% swing: downbeat -> swung offbeat -> snare backbeat -> swung accent)
+        const delay1 = initialWait;                         // Downbeat kick
+        const delay2 = initialWait + (baseStep * 1.28);     // Swung offbeat hi-hat (delayed, lazy feel: +205ms)
+        const delay3 = initialWait + (baseStep * 2.06);     // Snare backbeat (quick rebound snap: +125ms from #2)
+        const delay4 = initialWait + (baseStep * 3.28);     // Swung rimshot accent (delayed pickup: +195ms from #3)
+        const delay5 = initialWait + (baseStep * 4.18);     // Resolution tail (+144ms from #4)
 
         // 1. First Name ("Yovan") - physically pushes semicolon rightwards when expanded
         if (nameFirst) {
@@ -888,12 +929,12 @@ const librariesTechniques = [
           const a1 = animate(
             nameFirst,
             {
-              fontSize: ['1.35em', '1em'],
-              opacity: [0.2, 1],
+              fontSize: ['1.45em', '1em'],
+              opacity: [0.9, 1],
             },
             {
-              duration: 0.75,
-              delay: initialWait,
+              duration: 0.65,
+              delay: delay1,
               ease: easeDecel,
             }
           );
@@ -907,13 +948,13 @@ const librariesTechniques = [
           const a2 = animate(
             semi,
             {
-              fontSize: ['1.55em', '1em'],
+              fontSize: ['1.5em', '0.8em'],
               transform: ['rotate(14deg)', 'rotate(0deg)'],
               color: ['#52FF1A', 'currentColor'],
             },
             {
-              duration: 0.7,
-              delay: initialWait + staggerStep,
+              duration: 0.62,
+              delay: delay2,
               ease: easeDecel,
             }
           );
@@ -926,12 +967,12 @@ const librariesTechniques = [
           const a3 = animate(
             nameMiddle,
             {
-              fontSize: ['1.35em', '1em'],
-              opacity: [0.2, 1],
+              fontSize: ['1.45em', '1em'],
+              opacity: [0.9, 1],
             },
             {
-              duration: 0.75,
-              delay: initialWait + (staggerStep * 2),
+              duration: 0.65,
+              delay: delay3,
               ease: easeDecel,
             }
           );
@@ -945,12 +986,12 @@ const librariesTechniques = [
           const a4 = animate(
             dot,
             {
-              fontSize: ['1.6em', '1em'],
+              fontSize: ['1.55em', '0.8em'],
               color: ['#52FF1A', 'currentColor'],
             },
             {
-              duration: 0.65,
-              delay: initialWait + (staggerStep * 3),
+              duration: 0.58,
+              delay: delay4,
               ease: easeDecel,
             }
           );
@@ -963,12 +1004,12 @@ const librariesTechniques = [
           const a5 = animate(
             nameLast,
             {
-              fontSize: ['1.3em', '1em'],
-              opacity: [0.2, 1],
+              fontSize: ['1.35em', '1em'],
+              opacity: [0.9, 1],
             },
             {
-              duration: 0.75,
-              delay: initialWait + (staggerStep * 4),
+              duration: 0.65,
+              delay: delay5,
               ease: easeDecel,
             }
           );
