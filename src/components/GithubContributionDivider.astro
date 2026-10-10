@@ -66,16 +66,6 @@ const topThreePctThreshold =
     ? activeCounts[Math.max(0, Math.floor(activeCounts.length * 0.03))] || 6
     : 6;
 
-function formatDate(dateStr: string) {
-  if (!dateStr) return '';
-  const [year, month, day] = dateStr.split('-');
-  const d = new Date(Number(year), Number(month) - 1, Number(day));
-  return d.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  });
-}
 ---
 
 <section
@@ -97,55 +87,29 @@ function formatDate(dateStr: string) {
     <div id="github-contrib-scroll" class="w-full h-full overflow-x-auto scrollbar-none px-0 py-0 flex justify-end">
       <div
         id="github-contrib-grid"
+        role="img"
+        aria-label="GitHub contribution activity over the last two years"
         class="flex flex-row h-full px-0 select-none gap-[var(--gap)] shrink-0 w-max opacity-45 hover:opacity-90 transition-opacity duration-300"
       >
         {
-          weeks.map((weekDays, wIdx) => (
-            <div
-              class="flex flex-col h-full gap-[var(--gap)] shrink-0"
-              style="width: var(--cell-inner);"
-              data-week={wIdx}
-            >
+          weeks.map((weekDays) => (
+            <div class="gcd-col">
               {weekDays.map((day) => {
                 if (day.placeholder) {
                   return (
-                    <div
-                      class="opacity-0 pointer-events-none shrink-0"
-                      style="width: var(--cell-inner); height: var(--cell-inner);"
+                    <span
+                      class="gcd-cell opacity-0 pointer-events-none"
                       aria-hidden="true"
                     />
                   );
                 }
-                const formattedDate = formatDate(day.date);
-                const countText = `${day.count} contribution${day.count === 1 ? '' : 's'}`;
-                const label = `${countText} on ${formattedDate}`;
-
-                // Direct inline emerald colors (#10b981 from navbar semicolon) - NO NEON
-                let inlineStyle = '';
-                let levelClasses = '';
-
-                if (day.level === 1) {
-                  inlineStyle = 'background-color: rgba(16, 185, 129, 0.20);';
-                } else if (day.level === 2) {
-                  inlineStyle = 'background-color: rgba(16, 185, 129, 0.45);';
-                } else if (day.level === 3) {
-                  inlineStyle = 'background-color: rgba(16, 185, 129, 0.70);';
-                } else if (day.level >= 4) {
-                  inlineStyle = 'background-color: #10b981; box-shadow: 0 0 6px rgba(16, 185, 129, 0.35);';
-                } else {
-                  levelClasses = 'bg-neutral-200/50 dark:bg-[#1c1c1c]';
-                }
 
                 return (
-                  <div
-                    tabindex="0"
-                    role="gridcell"
-                    aria-label={label}
-                    data-count={day.count}
-                    data-date={formattedDate}
-                    data-label={label}
-                    style={`width: var(--cell-inner); height: var(--cell-inner); ${inlineStyle}`}
-                    class={`rounded-[1px] sm:rounded-[2px] transition-transform duration-100 hover:scale-110 hover:z-10 hover:shadow-xs motion-reduce:transition-none motion-reduce:hover:scale-100 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 dark:focus-visible:ring-white cursor-default shrink-0 ${levelClasses}`}
+                  <span
+                    class="gcd-cell"
+                    data-c={day.count}
+                    data-d={day.date}
+                    data-l={day.level || undefined}
                   />
                 );
               })}
@@ -174,6 +138,77 @@ function formatDate(dateStr: string) {
   </div>
 </section>
 
+<style is:global>
+  #github-contrib-grid .gcd-col {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: var(--gap);
+    flex-shrink: 0;
+    width: var(--cell-inner);
+  }
+
+  #github-contrib-grid .gcd-cell {
+    width: var(--cell-inner);
+    height: var(--cell-inner);
+    border-radius: 1px;
+    flex-shrink: 0;
+    cursor: default;
+    transition: transform 100ms;
+  }
+
+  @media (min-width: 640px) {
+    #github-contrib-grid .gcd-cell {
+      border-radius: 2px;
+    }
+  }
+
+  #github-contrib-grid .gcd-cell:not([data-l]) {
+    background-color: rgba(229, 231, 235, 0.5);
+  }
+
+  .dark #github-contrib-grid .gcd-cell:not([data-l]) {
+    background-color: #1c1c1c;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) #github-contrib-grid .gcd-cell:not([data-l]) {
+      background-color: #1c1c1c;
+    }
+  }
+
+  #github-contrib-grid .gcd-cell[data-l="1"] {
+    background-color: rgba(16, 185, 129, 0.20);
+  }
+
+  #github-contrib-grid .gcd-cell[data-l="2"] {
+    background-color: rgba(16, 185, 129, 0.45);
+  }
+
+  #github-contrib-grid .gcd-cell[data-l="3"] {
+    background-color: rgba(16, 185, 129, 0.70);
+  }
+
+  #github-contrib-grid .gcd-cell[data-l="4"] {
+    background-color: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.35);
+  }
+
+  #github-contrib-grid .gcd-cell:hover {
+    transform: scale(1.1);
+    z-index: 10;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #github-contrib-grid .gcd-cell {
+      transition: none;
+    }
+    #github-contrib-grid .gcd-cell:hover {
+      transform: none;
+    }
+  }
+</style>
+
 <!-- Floating Cursor-Following Tooltip (outside masked section to prevent clipping) -->
 <div
   id="github-contrib-tooltip"
@@ -198,11 +233,27 @@ function formatDate(dateStr: string) {
         document.body.appendChild(tooltip);
       }
 
+      const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      function formatTelemetryDate(dateStr) {
+        if (!dateStr) return '';
+        const parts = dateStr.split('-');
+        if (parts.length < 3) return dateStr;
+        const month = MONTHS[parseInt(parts[1], 10) - 1] || parts[1];
+        const day = parseInt(parts[2], 10);
+        const year = parts[0];
+        return `${month} ${day}, ${year}`;
+      }
+
       function showTooltip(e) {
-        const target = e.target.closest('[data-label]');
+        const target = e.target.closest('.gcd-cell[data-d]');
         if (target) {
-          const label = target.getAttribute('data-label');
-          if (label && tooltip) {
+          const count = parseInt(target.getAttribute('data-c') || '0', 10);
+          const dateStr = target.getAttribute('data-d');
+          const formattedDate = formatTelemetryDate(dateStr);
+          const countText = `${count} contribution${count === 1 ? '' : 's'}`;
+          const label = `${countText} on ${formattedDate}`;
+
+          if (tooltip) {
             tooltip.textContent = label;
             tooltip.style.opacity = '1';
 
