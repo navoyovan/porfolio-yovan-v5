@@ -172,6 +172,7 @@
   --color-danger-hover: #DC2626;
 
   --animate-kiosk-pulse: kiosk-pulse-accent-glow 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  --animate-cta-pulse-white: cta-pulse-white-glow 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
   --animate-blob-morph: blob-morph 14s ease-in-out infinite;
   --animate-marquee-scroll: marquee-scroll 24s linear infinite;
 
@@ -195,6 +196,20 @@
 
     100% {
       box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent, var(--accent-color, #52FF1A)) 35%, transparent), 0 0 0 0 color-mix(in srgb, var(--color-accent, var(--accent-color, #52FF1A)) 0%, transparent);
+    }
+  }
+
+  @keyframes cta-pulse-white-glow {
+    0% {
+      box-shadow: 0 0 12px var(--color-cta-white-glow, rgba(255, 255, 255, 0.35)), 0 0 0 0 var(--color-cta-white-ring, rgba(255, 255, 255, 0.45));
+    }
+
+    50% {
+      box-shadow: 0 0 20px var(--color-cta-white-glow, rgba(255, 255, 255, 0.45)), 0 0 0 6px transparent;
+    }
+
+    100% {
+      box-shadow: 0 0 12px var(--color-cta-white-glow, rgba(255, 255, 255, 0.35)), 0 0 0 0 transparent;
     }
   }
 
@@ -240,6 +255,9 @@
   --transition-normal: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-fast: 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 
+  --color-cta-white-glow: rgba(0, 0, 0, 0.12);
+  --color-cta-white-ring: rgba(0, 0, 0, 0.2);
+
   /* Fluid Hero Dimensions */
   --hero-size-h1: clamp(2.4rem, 11vw, 8rem);
   --hero-size-h2: clamp(2.0rem, 9vw, 6rem);
@@ -259,6 +277,9 @@ html.dark {
   --bg-card: #090909;
   --border-color: #262626;
   --border-dark: #e5e5e5;
+
+  --color-cta-white-glow: rgba(255, 255, 255, 0.35);
+  --color-cta-white-ring: rgba(255, 255, 255, 0.5);
 
   --text-primary: #e5e5e5;
   --text-secondary: #a3a3a3;
@@ -435,6 +456,7 @@ body,
 
   .animate-blob-morph,
   .animate-kiosk-pulse,
+  .animate-cta-pulse-white,
   .animate-ping,
   .animate-pulse {
     animation: none !important;
