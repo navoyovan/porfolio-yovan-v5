@@ -93,7 +93,12 @@
       const progress = targetThumbY / maxThumbTravel;
       const targetScroll = progress * docHeight;
 
-      window.scrollTo(0, targetScroll);
+      const lenis = (window as any).__lenis;
+      if (lenis) {
+        lenis.scrollTo(targetScroll, { immediate: true });
+      } else {
+        window.scrollTo(0, targetScroll);
+      }
     });
 
     const stopDragging = () => {
@@ -123,7 +128,12 @@
       const targetProgress = targetThumbY / maxThumbTravel;
       const targetScroll = targetProgress * docHeight;
 
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      const lenis = (window as any).__lenis;
+      if (lenis) {
+        lenis.scrollTo(targetScroll, { duration: 1.0 });
+      } else {
+        window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      }
     });
   }
 

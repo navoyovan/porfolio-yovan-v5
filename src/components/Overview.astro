@@ -1,0 +1,265 @@
+---
+// Overview.astro - Curated 01 // Overview Section with Motion Enhancements
+import { DitheringShader } from "./ui/dithering-shader";
+
+interface Props {
+  base?: string;
+}
+
+const rawBase = Astro.props.base ?? import.meta.env.BASE_URL;
+const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
+
+const coreStack = [
+  {
+    name: "Laravel",
+    category: "Backend Architecture",
+    icon: "ti-brand-laravel",
+  },
+  { name: "React", category: "UI Engineering", icon: "ti-brand-react" },
+  {
+    name: "Electron",
+    category: "Desktop & Kiosk OS",
+    icon: "ti-atom-2",
+  },
+  { name: "Astro", category: "Static & Content Web", icon: "ti-brand-astro" },
+  {
+    name: "Google Cloud Platform",
+    category: "Cloud Infrastructure",
+    icon: "ti-cloud",
+  },
+  { name: "Docker", category: "Containerization", icon: "ti-brand-docker" },
+];
+
+const supportingStack = [
+  { name: "TypeScript", icon: "ti-brand-typescript" },
+  { name: "JavaScript", icon: "ti-brand-javascript" },
+  { name: "PHP", icon: "ti-brand-php" },
+  { name: "C# / .NET", icon: "ti-brand-c-sharp" },
+  { name: "Node.js", icon: "ti-brand-nodejs" },
+  { name: "Vite", icon: "ti-brand-vite" },
+  { name: "WPF & WebView2", icon: "ti-app-window" },
+  { name: "Tailwind CSS", icon: "ti-brand-tailwind" },
+  { name: "CSS Modules", icon: "ti-brand-css3" },
+  { name: "Zustand", icon: "ti-database-cog" },
+  { name: "WebSockets", icon: "ti-broadcast" },
+  { name: "RESTful APIs", icon: "ti-api" },
+  { name: "IPC Architecture", icon: "ti-arrows-exchange" },
+  { name: "ESP32 & IoT", icon: "ti-cpu" },
+  { name: "Filament", icon: "ti-layout-dashboard" },
+  { name: "SQLite", icon: "ti-database" },
+  { name: "MySQL", icon: "ti-brand-mysql" },
+  { name: "Google Cloud Storage", icon: "ti-cloud-upload" },
+  { name: "SNAP API", icon: "ti-credit-card" },
+  { name: "Three.js", icon: "ti-brand-threejs" },
+  { name: "Framer Motion", icon: "ti-brand-framer-motion" },
+  { name: "GSAP", icon: "ti-keyframes" },
+  { name: "Anime.js", icon: "ti-sparkles" },
+  { name: "Leaflet.js", icon: "ti-map-2" },
+  { name: "Chart.js", icon: "ti-chart-line" },
+  { name: "Git & GitHub", icon: "ti-brand-github" },
+  { name: "GitHub Pages", icon: "ti-brand-git" },
+  { name: "OWASP Guidelines", icon: "ti-shield-check" },
+  { name: "SEO & Metadata", icon: "ti-search" },
+  { name: "Accessibility (a11y)", icon: "ti-accessible" },
+];
+---
+
+<!-- 01 // OVERVIEW SECTION (Pusher starting with narrative headline) -->
+<section
+  id="intro"
+  aria-labelledby="heading-intro"
+  class="scroll-mt-24 pt-0 space-y-8 overview-section"
+>
+  <div
+    class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pt-0"
+  >
+    <!-- Left Column: Portrait Photo with Technical Halo -->
+    <div
+      class="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-24 flex flex-col items-center justify-center pt-0"
+      style="transform: translateZ(0);"
+    >
+      <div
+        class="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center border-b border-neutral-300/80 dark:border-neutral-800 overflow-hidden"
+        style="transform: translateZ(0); contain: paint;"
+      >
+        <!-- Dithering Shader Wave Backdrop -->
+        <div
+          class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
+          style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
+        >
+          <DitheringShader
+            client:load
+            shape="wave"
+            type="8x8"
+            pxSize={1}
+            speed={0.6}
+          />
+        </div>
+
+        <img
+          src={`${base}/images/v.png`}
+          alt="Portrait of Yovan Gunardio Darmawan"
+          width="540"
+          height="540"
+          class="relative z-10 w-full max-h-[500px] sm:max-h-[540px] object-contain object-bottom select-none pt-4"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+
+    <!-- Right Column: Narrative, Tech Stack & Bullets -->
+    <div class="lg:col-span-7 xl:col-span-7 space-y-6">
+      <p
+        data-en="Hello, I'm Yovan. I build things for the world wide web and occasionally things that talk to machines."
+        data-id="Halo, aku Yovan. Aku bikin ini dan itu buat di internet, dan sesekali ngoprak ngoprek nyambungin software ke hardware."
+        class="font-sans text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal"
+      >
+        Hello, I'm Yovan. I build things for the world wide web and
+        occasionally things that talk to machines.
+      </p>
+
+      <ul
+        class="space-y-2.5 py-1.5 pl-4 border-l-2 border-[var(--color-accent,#52FF1A)]/50 font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 list-none m-0 p-0"
+        aria-label="Overview highlights"
+      >
+        <li class="flex items-center gap-2.5">
+          <span
+            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
+            aria-hidden="true">›</span
+          >
+          <span>A little bit of webapp in my life</span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span
+            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
+            aria-hidden="true">›</span
+          >
+          <span>A little bit of vscode by my side</span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span
+            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
+            aria-hidden="true">›</span
+          >
+          <span>A little bit of dashboard all I need</span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span
+            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
+            aria-hidden="true">›</span
+          >
+          <span>A little bit of touchscreen kiosk what I see</span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span
+            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
+            aria-hidden="true">›</span
+          >
+          <span>A little bit of 12v in the sun</span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span
+            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
+            aria-hidden="true">›</span
+          >
+          <span>A little bit of solder all night long</span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span
+            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
+            aria-hidden="true">›</span
+          >
+          <span>A little bit of LED, here I am</span>
+        </li>
+        <li class="flex items-center gap-2.5">
+          <span
+            class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
+            aria-hidden="true">›</span
+          >
+          <span>A little bit of git makes me your guy</span>
+        </li>
+      </ul>
+
+      <p
+        data-en="I enjoy building things across the stack, from the interface people see to the systems making everything run behind the scenes."
+        data-id="Aku membangun sistem dari ujung ke ujung, dari tampilan yang dilihat orang sampai hiruk pikuk sistem di belakang panggung."
+        class="font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal pt-3 sm:pt-4"
+      >
+        I enjoy building things across the stack, from the interface
+        people see to the systems making everything run behind the scenes.
+      </p>
+
+      <!-- Tech Stack Layout -->
+      <div
+        class="pt-6 border-t border-neutral-200/80 dark:border-neutral-800/80"
+      >
+        <!-- Core Stack Header -->
+        <div class="flex items-center justify-between pb-6">
+          <h3
+            class="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-neutral-500 dark:text-neutral-400 m-0"
+          >
+            Core Stack
+          </h3>
+          <span
+            class="font-sans text-[11px] text-neutral-400 dark:text-neutral-500 font-medium"
+          >
+            {coreStack.length} core • {supportingStack.length} supporting
+          </span>
+        </div>
+
+        <!-- Core Stack (Icon-as-Object: Unboxed, Breathing Grid) -->
+        <ul
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 sm:gap-8 list-none m-0 p-0"
+          aria-label="Core Technologies"
+        >
+          {
+            coreStack.map((tech) => (
+              <li class="flex flex-col space-y-2.5 group cursor-default">
+                <div class="text-3xl sm:text-4xl text-neutral-800 dark:text-neutral-200 group-hover:text-[var(--color-accent,#52FF1A)] transition-[transform,color] duration-200 group-hover:-translate-y-1 group-hover:scale-105 inline-flex items-center">
+                  <i class={`ti ${tech.icon}`} aria-hidden="true" />
+                </div>
+                <div class="space-y-0.5">
+                  <div class="font-heading font-bold text-sm sm:text-base text-neutral-950 dark:text-white tracking-tight m-0">
+                    {tech.name}
+                  </div>
+                  <div class="font-sans text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 leading-tight group-hover:text-neutral-700 dark:group-hover:text-neutral-300 transition-colors m-0">
+                    {tech.category}
+                  </div>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <!-- Supporting Stack Divider & Container -->
+        <div
+          class="mt-10 pt-8 border-t border-neutral-200/80 dark:border-neutral-800/80"
+        >
+          <h3
+            class="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block m-0 pb-4"
+          >
+            Ecosystem & Supporting Tech
+          </h3>
+          <ul
+            class="flex flex-wrap items-center gap-x-4 sm:gap-x-5 gap-y-2.5 sm:gap-y-3 list-none m-0 p-0"
+            aria-label="Ecosystem and Supporting Technologies"
+          >
+            {
+              supportingStack.map((tech) => (
+                <li class="inline-flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors group">
+                  <i
+                    class={`ti ${tech.icon} text-sm text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors`}
+                    aria-hidden="true"
+                  />
+                  <span class="font-sans font-medium">{tech.name}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

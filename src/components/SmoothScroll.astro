@@ -1,0 +1,98 @@
+---
+// SmoothScroll.astro - Global Lenis Inertial Scroll Controller
+---
+
+<script>
+  import Lenis from 'lenis';
+
+  let lenisInstance: Lenis | null = null;
+  let rafId: number | null = null;
+
+  function initSmoothScroll() {
+    // Respect user's accessibility motion preference
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      if (lenisInstance) {
+        lenisInstance.destroy();
+        lenisInstance = null;
+      }
+      return;
+    }
+
+    if (lenisInstance) {
+      lenisInstance.destroy();
+      if (rafId) cancelAnimationFrame(rafId);
+    }
+
+    lenisInstance = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.8,
+    });
+
+    (window as any).__lenis = lenisInstance;
+
+    function raf(time: number) {
+      lenisInstance?.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+
+    rafId = requestAnimationFrame(raf);
+
+    // Bind hash anchor navigation to Lenis smooth scroll with navbar offset
+    const bindAnchorLinks = () => {
+      document.querySelectorAll<HTMLAnchorElement>('a[href*="#"]').forEach((anchor) => {
+        anchor.addEventListener('click', (e) => {
+          const url = new URL(anchor.href, window.location.origin);
+          if (url.pathname === window.location.pathname && url.hash && url.hash !== '#') {
+            const targetEl = document.querySelector(url.hash);
+            if (targetEl && lenisInstance) {
+              e.preventDefault();
+              lenisInstance.scrollTo(targetEl as HTMLElement, {
+                offset: -64,
+                duration: 1.2,
+              });
+              history.pushState(null, '', url.hash);
+            }
+          }
+        });
+      });
+    };
+
+    bindAnchorLinks();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmoothScroll);
+  } else {
+    initSmoothScroll();
+  }
+
+  document.addEventListener('astro:page-load', initSmoothScroll);
+</script>
+
+<style is:global>
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
+  }
+</style>

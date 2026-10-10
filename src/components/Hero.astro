@@ -1,5 +1,5 @@
 ---
-// Hero.astro - Server-rendered Hero section with Syne typography
+// Hero.astro - Cartographic Telemetry Hero with Dynamic Scroll Narrowing
 import ActionButton from "./ActionButton.astro";
 import HeroMap from "./HeroMap.astro";
 
@@ -10,213 +10,950 @@ interface Props {
 }
 
 const {
-  firstName = "yovan",
-  middleName = "gunardio",
-  lastName = "darmawan",
+  firstName = "Yovan",
+  middleName = "Gunardio.",
+  lastName = "",
 } = Astro.props;
 
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
+
+const cleanFirstName = firstName.replace(/;$/, "");
+const cleanMiddleName = middleName.replace(/\.$/, "");
+
+const stackFrameworks = [
+  { name: "Laravel", icon: "ti-brand-laravel" },
+  { name: "React", icon: "ti-brand-react" },
+  { name: "Electron", icon: "ti-atom-2" },
+  { name: "Astro", icon: "ti-brand-astro" },
+  { name: "TypeScript", icon: "ti-brand-typescript" },
+  { name: "JavaScript", icon: "ti-brand-javascript" },
+  { name: "PHP", icon: "ti-brand-php" },
+  { name: "C# / .NET", icon: "ti-brand-c-sharp" },
+  { name: "Node.js", icon: "ti-brand-nodejs" },
+  { name: "WPF & WebView2", icon: "ti-app-window" },
+  { name: "Docker", icon: "ti-brand-docker" },
+  { name: "Google Cloud Platform", icon: "ti-cloud" },
+  { name: "Tailwind CSS", icon: "ti-brand-tailwind" },
+  { name: "Filament", icon: "ti-layout-dashboard" },
+];
+
+const librariesTechniques = [
+  { name: "Zustand", icon: "ti-database-cog" },
+  { name: "Vite", icon: "ti-brand-vite" },
+  { name: "WebSockets", icon: "ti-broadcast" },
+  { name: "RESTful APIs", icon: "ti-api" },
+  { name: "IPC Architecture", icon: "ti-arrows-exchange" },
+  { name: "ESP32 & IoT", icon: "ti-cpu" },
+  { name: "SQLite", icon: "ti-database" },
+  { name: "MySQL", icon: "ti-brand-mysql" },
+  { name: "Google Cloud Storage", icon: "ti-cloud-upload" },
+  { name: "SNAP API", icon: "ti-credit-card" },
+  { name: "Three.js", icon: "ti-brand-threejs" },
+  { name: "Framer Motion", icon: "ti-brand-framer-motion" },
+  { name: "GSAP", icon: "ti-keyframes" },
+  { name: "Anime.js", icon: "ti-sparkles" },
+  { name: "Leaflet.js", icon: "ti-map-2" },
+  { name: "Chart.js", icon: "ti-chart-line" },
+  { name: "CSS Modules", icon: "ti-brand-css3" },
+  { name: "Git & GitHub", icon: "ti-brand-github" },
+  { name: "GitHub Pages", icon: "ti-brand-git" },
+  { name: "Accessibility (a11y)", icon: "ti-accessible" },
+  { name: "SEO & Metadata", icon: "ti-search" },
+  { name: "OWASP Guidelines", icon: "ti-shield-check" },
+];
 ---
 
-<section
-  id="greeting"
-  class="hero-loading relative min-h-[78vh] sm:min-h-[82vh] lg:min-h-[86vh] flex flex-col justify-center items-start z-0 pt-8 sm:pt-12 pb-10 sm:pb-16 w-full overflow-hidden"
->
-  <!-- Full-Bleed Ambient Map Background -->
-  <HeroMap />
+<!-- Sticky Scroll Wrapper for Smooth Hero Compression (Offset for 3.5rem Navbar) -->
+<div class="relative w-full" id="hero-scroll-wrapper" style="height: calc(100vh - 3.5rem + 42vh);">
+  <!-- Unified Sticky Pinned Container (Holds both compressed map stage AND locked marquee) -->
+  <div class="sticky top-[3.5rem] w-full flex flex-col z-10">
+    <main
+      class="w-full bg-[#fcfbf9] dark:bg-[#090909] text-neutral-950 dark:text-white overflow-hidden flex flex-col justify-between selection:bg-neutral-900 selection:text-white dark:selection:bg-white dark:selection:text-black will-change-[height] relative z-10"
+      id="hero-main-stage"
+      style="height: calc(100vh - 3.5rem); min-height: calc((100vh - 3.5rem) * 0.618);"
+    >
+    <!-- Full-Bleed Ambient Map Background with Rich Dynamic Parallax -->
+    <div id="hero-map-parallax" class="absolute inset-x-0 -top-28 -bottom-28 z-10 pointer-events-none overflow-hidden will-change-transform">
+      <HeroMap interactive={false} />
+      <!-- Dynamic Light & Dark Ambient Radial Vignette -->
+      <div
+        class="hero-map-vignette absolute inset-0 z-10 pointer-events-none transition-colors duration-300"
+      ></div>
+    </div>
 
-  <div
-    class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto relative z-20 pointer-events-none flex flex-col lg:flex-row lg:items-end justify-between gap-10"
-  >
-    <!-- Main Column: Title & Actions -->
-    <div class="max-w-2xl flex flex-col items-start w-full pointer-events-auto">
+    <!-- Minimal Header (Geographic Location) - Absolute to avoid scroll layout shift -->
+    <header class="absolute top-0 inset-x-0 z-20 w-full px-6 sm:px-8 lg:px-12 pt-6 sm:pt-8 flex items-center justify-between font-sans text-xs tracking-wider text-neutral-500 dark:text-neutral-400 select-none">
+      <div class="flex items-center gap-3">
+        <div id="hero-location-carousel" class="relative overflow-hidden inline-flex items-center will-change-[width]">
+          <div id="hero-location-track" class="inline-flex items-center will-change-transform">
+            <span id="hero-loc-bogor" class="whitespace-nowrap text-neutral-800 dark:text-neutral-200 font-medium pr-6" data-en="Bogor, West Java" data-id="Bogor, Jawa Barat">Bogor, West Java</span>
+            <span id="hero-loc-jakarta" class="whitespace-nowrap text-neutral-800 dark:text-neutral-200 font-medium" data-en="Greater Jakarta, Indonesia" data-id="Jabodetabek, Indonesia">Greater Jakarta, Indonesia</span>
+          </div>
+        </div>
+        <span class="text-neutral-400 dark:text-neutral-600 select-none">•</span>
+        <span id="hero-header-coords" class="text-neutral-500 font-mono text-[11px] whitespace-nowrap select-none font-medium">6°35′ S, 106°47′ E</span>
+      </div>
+    </header>
+
+    <!-- Center Stage: Balanced Position (~12.5vw from left) -->
+    <div class="relative z-20 w-full pl-[6vw] sm:pl-[10vw] lg:pl-[12vw] pr-6 my-auto flex flex-col items-start gap-3 sm:gap-4 origin-left pointer-events-none" id="hero-typography-stage">
       <h1
-        class="hero-title-group select-none flex flex-col leading-none m-0 p-0"
-        aria-label={`${firstName} ${middleName} ${lastName}`}
+        id="hero-name-container"
+        class="flex flex-col leading-[0.88] m-0 p-0 text-neutral-950 dark:text-white transition-colors duration-150 select-none font-machina font-bold pointer-events-auto"
+        style="font-size: clamp(3rem, 12vw, 8.8rem); letter-spacing: -0.02em; font-weight: 300;"
+        aria-label={`${cleanFirstName}; ${middleName}${lastName ? ` ${lastName}` : ''}`}
       >
-        <!-- Row 1: < yovan -->
-        <div
-          id="hero-h1"
-          class="hero-h1 relative inline-flex items-baseline whitespace-nowrap leading-[0.9] m-0 p-0 text-neutral-950/90 dark:text-white/90 font-heading font-black"
-          style="letter-spacing: -0.04em; margin-bottom: 0;"
-          aria-hidden="true"
-        >
-          <span
-            id="hero-bracket-l"
-            class="hero-h1-bracket-l inline-block select-none text-neutral-950 dark:text-white mr-1.5 sm:mr-[0.1em] sm:absolute sm:right-full sm:bottom-[0.15em]"
-            style="opacity: 0.6; font-weight: 900;">&lt;</span
-          >
-          <span id="hero-title-text">{firstName}</span>
+        <!-- Row 1: Yovan; -->
+        <div id="hero-title-r1" class="relative inline-flex items-baseline whitespace-nowrap">
+          <span id="hero-name-first" class="inline-block">{cleanFirstName}</span><span id="hero-semi" class="inline-block transition-colors hover:text-[#52FF1A] cursor-default">;</span>
         </div>
 
-        <!-- Row 2: gunardio; -->
-        <div
-          id="hero-h2"
-          class="hero-h2 inline-flex items-baseline whitespace-nowrap border-none p-0 m-0 leading-[0.95] text-neutral-950/85 dark:text-white/85 font-heading font-black"
-          style="letter-spacing: -0.03em; margin-top: clamp(-0.6rem, -1.2vw, -0.3rem); margin-bottom: clamp(0.2rem, 0.6vw, 0.5rem);"
-          aria-hidden="true"
-        >
-          <span>{middleName}</span>
-          <span
-            class="hero-h2-semi text-neutral-950 dark:text-white"
-            style="opacity: 0.6; margin-left: 0.05em; font-weight: 900;">;</span
-          >
+        <!-- Row 2: Gunardio. -->
+        <div id="hero-title-r2" class="inline-flex items-baseline whitespace-nowrap" style="margin-top: -0.8rem;">
+          <span id="hero-name-middle" class="inline-block">{cleanMiddleName}</span><span id="hero-dot" class="inline-block transition-colors hover:text-[#52FF1A] cursor-default">.</span>
         </div>
 
-        <!-- Row 3: // darmawan /> -->
-        <div
-          id="hero-h3"
-          class="hero-h3 relative inline-flex items-baseline whitespace-nowrap p-0 m-0 leading-[1] font-heading font-normal"
-          style="letter-spacing: 0.06em;"
-          aria-hidden="true"
-        >
-          <span
-            class="hero-h3-slashes text-[var(--color-accent,#52FF1A)] mr-[0.25em] select-none"
-            style="opacity: 0.6; font-weight: 400;">//</span
-          >
-          <span class="inline-flex items-baseline whitespace-nowrap">
-            <span class="text-neutral-700/80 dark:text-neutral-300/80"
-              >{lastName}</span
-            >
-            <span
-              id="hero-bracket-r"
-              class="hero-h1-bracket-r ml-[0.15em] select-none text-neutral-950 dark:text-white"
-              style="opacity: 0.6; font-weight: 900;">/&gt;</span
-            >
-          </span>
-        </div>
+        {lastName && (
+          <div id="hero-title-r3" class="relative inline-flex items-baseline whitespace-nowrap text-neutral-700 dark:text-neutral-300">
+            <span id="hero-name-last" class="inline-block">{lastName}</span>
+          </div>
+        )}
       </h1>
 
-      <!-- Subtitle & Quick Action Pills -->
-      <div class="mt-6 sm:mt-10 max-w-xl space-y-6 w-full">
+      <!-- Bio & Action Buttons (State-triggered reveal on scroll: 100% interactable once unhidden) -->
+      <div
+        id="hero-halved-bio"
+        data-revealed="false"
+        class="max-w-2xl opacity-0 translate-y-3 pointer-events-none transition-[opacity,transform] duration-300 ease-out pt-2 flex flex-col gap-3.5 sm:gap-4 data-[revealed=true]:opacity-100 data-[revealed=true]:translate-y-0 data-[revealed=true]:pointer-events-auto"
+      >
         <p
           data-en="Software Engineer & systems builder turning ideas into working products; from landing pages and web apps to touchscreen kiosks and the hardware behind them."
           data-id="Software Engineer & systems builder yang membuat imajinasi jadi produk nyata; mulai dari landing page, web app sampai touchscreen kiosk dan hardware pendukungnya."
-          class="text-sm sm:text-base md:text-lg text-neutral-600 dark:text-neutral-400 font-normal leading-relaxed"
+          class="font-sans text-[13.5px] sm:text-[15.5px] md:text-[17.5px] text-neutral-600 dark:text-neutral-400 font-normal leading-relaxed"
         >
           Software Engineer & systems builder turning ideas into working
           products; from landing pages and web apps to touchscreen kiosks and
           the hardware behind them.
         </p>
 
-        <div class="space-y-4 pt-1">
-          <div class="flex items-center gap-2">
-            <ActionButton
-              href="https://github.com/navoyovan"
-              target="_blank"
-              rel="noopener noreferrer"
-              ariaLabel="GitHub Profile (opens in new tab)"
-              data-aria-en="GitHub Profile (opens in new tab)"
-              data-aria-id="Profil GitHub (buka di tab baru)"
-              variant="secondary"
-              size="micro"
-            >
-              <i class="ti ti-brand-github text-sm" aria-hidden="true"></i>
-            </ActionButton>
-
-            <ActionButton
-              href="https://linkedin.com/in/yovan-g-d-22379ba7/"
-              target="_blank"
-              rel="noopener noreferrer"
-              ariaLabel="LinkedIn Profile (opens in new tab)"
-              data-aria-en="LinkedIn Profile (opens in new tab)"
-              data-aria-id="Profil LinkedIn (buka di tab baru)"
-              variant="secondary"
-              size="micro"
-            >
-              <i class="ti ti-brand-linkedin text-sm" aria-hidden="true"></i>
-            </ActionButton>
-
-            <ActionButton
-              href="mailto:yovangunardio@gmail.com"
-              ariaLabel="Send Email to Yovan"
-              data-aria-en="Send Email to Yovan"
-              data-aria-id="Kirim Email ke Yovan"
-              variant="secondary"
-              size="micro"
-            >
-              <i class="ti ti-mail text-sm" aria-hidden="true"></i>
-            </ActionButton>
-
-            <a
-              href="https://docs.google.com/document/d/1dlUKA5EGLI3qPxEOfJ3acjt4tA39oxKy_Fs1Z_JM0Pk/export?format=pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              download="Yovan_Gunardio_Resume.pdf"
-              aria-label="Download Resume / CV as PDF (opens in new tab)"
-              data-aria-en="Download Resume / CV as PDF (opens in new tab)"
-              data-aria-id="Unduh Resume / CV dalam format PDF (buka di tab baru)"
-              class="h-8 min-h-[32px] px-2.5 inline-flex items-center gap-1.5 rounded-[8px] border border-neutral-300 dark:border-neutral-700 bg-transparent text-neutral-900 dark:text-neutral-100 hover:border-neutral-950 dark:hover:border-white hover:bg-neutral-900/5 dark:hover:bg-white/10 active:scale-[0.98] transition-[transform,background-color,color,border-color] duration-150 ease-out select-none font-heading font-bold text-[11px] tracking-wider uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
-            >
-              <i class="ti ti-download text-sm" aria-hidden="true"></i>
-              <span data-en="Download Resume" data-id="Unduh Resume">Download Resume</span>
-            </a>
-          </div>
-
-          <div
-            class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto"
+        <!-- Social / Document Action Row -->
+        <div class="flex items-center gap-2 flex-wrap">
+          <ActionButton
+            href="https://github.com/navoyovan"
+            target="_blank"
+            rel="noopener noreferrer"
+            ariaLabel="GitHub Profile (opens in new tab)"
+            data-aria-en="GitHub Profile (opens in new tab)"
+            data-aria-id="Profil GitHub (buka di tab baru)"
+            variant="secondary"
+            size="micro"
           >
-            <ActionButton
-              variant="primary-neutral"
-              size="md"
-              href="#projects"
-              class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
-            >
-              <div
-                class="inline-flex items-center translate-x-[10px] group-hover:translate-x-0 transition-transform duration-200 ease-out"
-              >
-                <span data-en="FEATURED WORK" data-id="KARYA PILIHAN"
-                  >FEATURED WORK</span
-                >
-                <span
-                  class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out"
-                >
-                  ↓
-                </span>
-              </div>
-            </ActionButton>
+            <i class="ti ti-brand-github text-sm" aria-hidden="true"></i>
+          </ActionButton>
 
-            <ActionButton
-              variant="secondary"
-              size="md"
-              href={`${base}/portfolio-index`}
-              class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
-            >
-              <div
-                class="inline-flex items-center translate-x-[10px] group-hover:translate-x-0 transition-transform duration-200 ease-out"
-              >
-                <span data-en="PORTFOLIO INDEX" data-id="INDEX PORTOFOLIO"
-                  >PORTFOLIO INDEX</span
-                >
-                <span
-                  class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out"
-                >
-                  →
-                </span>
-              </div>
-            </ActionButton>
-          </div>
+          <ActionButton
+            href="https://linkedin.com/in/yovan-g-d-22379ba7/"
+            target="_blank"
+            rel="noopener noreferrer"
+            ariaLabel="LinkedIn Profile (opens in new tab)"
+            data-aria-en="LinkedIn Profile (opens in new tab)"
+            data-aria-id="Profil LinkedIn (buka di tab baru)"
+            variant="secondary"
+            size="micro"
+          >
+            <i class="ti ti-brand-linkedin text-sm" aria-hidden="true"></i>
+          </ActionButton>
+
+          <ActionButton
+            href="mailto:yovangunardio@gmail.com"
+            ariaLabel="Send Email to Yovan"
+            data-aria-en="Send Email to Yovan"
+            data-aria-id="Kirim Email ke Yovan"
+            variant="secondary"
+            size="micro"
+          >
+            <i class="ti ti-mail text-sm" aria-hidden="true"></i>
+          </ActionButton>
+
+          <a
+            href="https://docs.google.com/document/d/1dlUKA5EGLI3qPxEOfJ3acjt4tA39oxKy_Fs1Z_JM0Pk/export?format=pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Yovan_Gunardio_Resume.pdf"
+            aria-label="Download Resume / CV as PDF (opens in new tab)"
+            data-aria-en="Download Resume / CV as PDF (opens in new tab)"
+            data-aria-id="Unduh Resume / CV dalam format PDF (buka di tab baru)"
+            class="h-8 min-h-[32px] px-2.5 inline-flex items-center gap-1.5 rounded-[8px] border border-neutral-300 dark:border-neutral-700 bg-transparent text-neutral-900 dark:text-neutral-100 hover:border-neutral-950 dark:hover:border-white hover:bg-neutral-900/5 dark:hover:bg-white/10 active:scale-[0.98] transition-[transform,background-color,color,border-color] duration-150 ease-out select-none font-heading font-bold text-[11px] tracking-wider uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+          >
+            <i class="ti ti-download text-sm" aria-hidden="true"></i>
+            <span data-en="Download Resume" data-id="Unduh Resume">Download Resume</span>
+          </a>
+        </div>
+
+        <!-- Main Navigation Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto pt-0.5">
+          <ActionButton
+            variant="primary-neutral"
+            size="md"
+            href="#projects"
+            class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
+          >
+            <div class="inline-flex items-center translate-x-[10px] group-hover:translate-x-0 transition-transform duration-200 ease-out">
+              <span data-en="FEATURED WORK" data-id="KARYA PILIHAN">FEATURED WORK</span>
+              <span class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out">
+                ↓
+              </span>
+            </div>
+          </ActionButton>
+
+          <ActionButton
+            variant="secondary"
+            size="md"
+            href={`${base}/portfolio-index`}
+            class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
+          >
+            <div class="inline-flex items-center translate-x-[10px] group-hover:translate-x-0 transition-transform duration-200 ease-out">
+              <span data-en="PORTFOLIO INDEX" data-id="INDEX PORTOFOLIO">PORTFOLIO INDEX</span>
+              <span class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out">
+                →
+              </span>
+            </div>
+          </ActionButton>
         </div>
       </div>
     </div>
+
+    <!-- Clean Editorial Footer with Scale Ruler - Elevated for Navbar & Viewport Comfort -->
+    <footer class="absolute bottom-0 inset-x-0 z-20 w-full px-6 sm:px-8 lg:px-12 pb-8 sm:pb-10 lg:pb-12 flex items-end justify-between font-sans text-[11px] text-neutral-500 select-none">
+      <div class="flex flex-col items-start gap-1">
+        <span>Personal Portfolio & Systems Archive</span>
+        <span class="font-mono text-[10px] text-neutral-600">Edition 2026</span>
+      </div>
+
+      <div class="flex flex-col items-end gap-2">
+        <!-- Dynamic Architectural Scale Ruler (Bottom Right) -->
+        <div id="hero-ruler-container" class="flex flex-col gap-1 w-36 sm:w-44" aria-label="Cartographic Scale">
+          <div class="flex items-center justify-between font-mono text-[9px] tracking-widest text-neutral-400">
+            <span>0</span>
+            <span id="hero-ruler-mid">1.5</span>
+            <span id="hero-ruler-max">3 KM</span>
+          </div>
+          <!-- Architectural notched scale line -->
+          <div class="relative h-[5px] w-full border-b border-neutral-600 flex items-end justify-between">
+            <span class="w-px h-full bg-neutral-400"></span>
+            <span class="w-px h-[3px] bg-neutral-600"></span>
+            <span class="w-px h-full bg-neutral-500"></span>
+            <span class="w-px h-[3px] bg-neutral-600"></span>
+            <span class="w-px h-full bg-neutral-400"></span>
+          </div>
+        </div>
+        <span id="hero-ruler-ratio" class="text-neutral-500 text-[10px] tracking-wide font-sans">1:50,000 Architectural Scale</span>
+      </div>
+    </footer>
+  </main>
+
+  <!-- Lower Viewport Stack Marquee: Two-Tier Techno-Editorial Infinite Marquee -->
+  <div
+    class="relative w-full overflow-hidden py-4 sm:py-5 flex flex-col gap-3 sm:gap-4 select-none pointer-events-auto border-t border-neutral-200/80 dark:border-neutral-800/60 bg-[#fcfbf9]/70 dark:bg-black/40 backdrop-blur-md hero-stack-marquee-wrapper"
+    aria-label="Technology Stack Archive"
+  >
+    <!-- Row 1: Core Stacks & Frameworks (Continuous seamless leftward scroll) -->
+    <div class="marquee-row group flex overflow-hidden w-full">
+      <div class="marquee-group flex shrink-0 items-center gap-8 sm:gap-12 pr-8 sm:pr-12 animate-marquee-left group-hover:[animation-play-state:paused]">
+        {stackFrameworks.concat(stackFrameworks).map((item) => (
+          <div class="flex items-center gap-2.5 opacity-90 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
+            <span class="font-sans text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
+          </div>
+        ))}
+      </div>
+      <div class="marquee-group flex shrink-0 items-center gap-8 sm:gap-12 pr-8 sm:pr-12 animate-marquee-left group-hover:[animation-play-state:paused]" aria-hidden="true">
+        {stackFrameworks.concat(stackFrameworks).map((item) => (
+          <div class="flex items-center gap-2.5 opacity-90 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 transition-transform duration-200 hover:scale-110`} aria-hidden="true"></i>
+            <span class="font-sans text-xs sm:text-sm text-neutral-700 dark:text-neutral-300 font-medium tracking-tight whitespace-nowrap">{item.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Row 2: Libraries, Techniques & Ecosystem (Continuous seamless rightward reverse scroll) -->
+    <div class="marquee-row group flex overflow-hidden w-full">
+      <div class="marquee-group flex shrink-0 items-center gap-7 sm:gap-10 pr-7 sm:pr-10 animate-marquee-right group-hover:[animation-play-state:paused]">
+        {librariesTechniques.concat(librariesTechniques).map((item) => (
+          <div class="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-600 dark:text-neutral-400 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
+            <span class="font-sans text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
+          </div>
+        ))}
+      </div>
+      <div class="marquee-group flex shrink-0 items-center gap-7 sm:gap-10 pr-7 sm:pr-10 animate-marquee-right group-hover:[animation-play-state:paused]" aria-hidden="true">
+        {librariesTechniques.concat(librariesTechniques).map((item) => (
+          <div class="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity duration-200 shrink-0 cursor-default">
+            <i class={`ti ${item.icon} text-base sm:text-lg text-neutral-600 dark:text-neutral-400 transition-transform duration-200 hover:scale-115`} aria-hidden="true"></i>
+            <span class="font-sans text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400 font-normal tracking-tight whitespace-nowrap">{item.name}</span>
+          </div>
+        ))}
+      </div>
+    </div>
   </div>
-</section>
+
+  <!-- Section 01 Numbering Header Bar (Pinned with compressed map and marquee) -->
+  <div
+    id="hero-overview-header-bar"
+    class="w-full bg-[#fcfbf9] dark:bg-[#090909] border-t border-neutral-200/80 dark:border-neutral-800/80 transition-colors pt-8 sm:pt-12 lg:pt-16 pb-6 sm:pb-8 select-none"
+  >
+    <div class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto flex items-stretch gap-0 pb-1">
+      <!-- Big Section Numeral "1" (Sliced vertically in half by container boundary) -->
+      <div
+        id="overview-numeral-crop"
+        class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
+        style="width: 85px; contain: paint;"
+      >
+        <span
+          id="overview-numeral"
+          class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
+          aria-hidden="true"
+          style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
+        >
+          1
+        </span>
+      </div>
+
+      <!-- Vertical Divider Line (Exact Slice Axis) -->
+      <div class="w-px bg-neutral-300 dark:bg-neutral-800 shrink-0 self-stretch my-0.5" aria-hidden="true"></div>
+
+      <!-- Right Side: Denser Overview label with horizontal line + Headline -->
+      <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
+        <!-- Top: Overview label with horizontal rule -->
+        <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
+          <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
+            OVERVIEW
+          </span>
+        </div>
+
+        <!-- Section Headline -->
+        <h2
+          id="heading-intro"
+          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
+        >
+          <span
+            id="heading-intro-carousel"
+            class="relative inline-flex overflow-hidden align-baseline will-change-[width]"
+          >
+            <span
+              id="heading-intro-track"
+              class="inline-flex items-baseline whitespace-nowrap will-change-transform"
+            >
+              <span id="heading-intro-he" class="pr-2 sm:pr-3 shrink-0 leading-tight" data-en="He builds" data-id="Dia membuat">He builds</span>
+              <span id="heading-intro-i" class="pr-2 sm:pr-3 shrink-0 leading-tight" data-en="I build" data-id="Aku membuat">I build</span>
+            </span>
+          </span><span id="heading-intro-suffix" data-en="software that makes ideas real." data-id="software dan mengubah imajinasi menjadi nyata.">software that makes ideas real.</span>
+        </h2>
+      </div>
+    </div>
+  </div>
+  </div>{/* End sticky pinned container */}
+</div>{/* End hero-scroll-wrapper */}
+
+<style>
+  .hero-map-vignette {
+    background: radial-gradient(ellipse 110% 90% at 50% 50%, transparent 40%, rgba(252, 251, 249, 0.4) 70%, #fcfbf9 100%);
+  }
+
+  :global(.dark) .hero-map-vignette,
+  :global(html.dark) .hero-map-vignette {
+    background: radial-gradient(ellipse 110% 90% at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.4) 70%, #000000 100%);
+  }
+
+  .hero-stack-marquee-wrapper {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    transform: translateZ(0);
+    contain: content;
+  }
+
+  .marquee-row {
+    transform: translateZ(0);
+  }
+
+  @keyframes marquee-scroll-left {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-100%, 0, 0);
+    }
+  }
+
+  @keyframes marquee-scroll-right {
+    from {
+      transform: translate3d(-100%, 0, 0);
+    }
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .animate-marquee-left {
+    animation: marquee-scroll-left 25s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  .animate-marquee-right {
+    animation: marquee-scroll-right 18s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-marquee-left,
+    .animate-marquee-right {
+      animation: none !important;
+    }
+  }
+</style>
 
 <script>
-  const initHero = () => {
-    const greeting = document.getElementById("greeting");
-    if (greeting && greeting.classList.contains("hero-loading")) {
-      setTimeout(() => {
-        greeting.classList.remove("hero-loading");
-      }, 500);
+  import { animate, scroll } from "motion";
+
+  let cleanupHero: (() => void) | null = null;
+
+  const setupHeroInteractions = () => {
+    if (cleanupHero) {
+      cleanupHero();
+      cleanupHero = null;
     }
+
+    // 1. Dynamic Architectural Scale Ruler & Header Telemetry
+    const mapEl = document.getElementById('hero-leaflet-map');
+    const ruler = document.getElementById('hero-ruler-container');
+    const midLabel = document.getElementById('hero-ruler-mid');
+    const maxLabel = document.getElementById('hero-ruler-max');
+    const ratioLabel = document.getElementById('hero-ruler-ratio');
+    const carousel = document.getElementById('hero-location-carousel');
+    const track = document.getElementById('hero-location-track');
+    const locBogor = document.getElementById('hero-loc-bogor');
+    const locJakarta = document.getElementById('hero-loc-jakarta');
+    const headerCoords = document.getElementById('hero-header-coords');
+
+    let cachedRulerWidth = ruler ? ruler.offsetWidth : 144;
+    const disposers: (() => void)[] = [];
+
+    if (mapEl && ruler && midLabel && maxLabel && ratioLabel) {
+      let currentView = 'bogor';
+      let currentLat = -6.6271;
+      let currentLng = 106.7607;
+      let coordAnimation: any = null;
+      let carouselWidthAnim: any = null;
+      let trackTransformAnim: any = null;
+
+      const formatCoords = (lat: number, lng: number) => {
+        const absLat = Math.abs(lat);
+        const dLat = Math.floor(absLat);
+        const mLat = Math.round((absLat - dLat) * 60);
+        const hemiLat = lat >= 0 ? 'N' : 'S';
+
+        const absLng = Math.abs(lng);
+        const dLng = Math.floor(absLng);
+        const mLng = Math.round((absLng - dLng) * 60);
+        const hemiLng = lng >= 0 ? 'E' : 'W';
+
+        return `${dLat}°${String(mLat).padStart(2, '0')}′ ${hemiLat}, ${dLng}°${String(mLng).padStart(2, '0')}′ ${hemiLng}`;
+      };
+
+      const updateCarouselLayout = (isAnimated = true) => {
+        if (!carousel || !track || !locBogor || !locJakarta) return;
+        const isJkt = currentView === 'jabodetabek';
+        const targetWidth = isJkt ? locJakarta.offsetWidth : (locBogor.offsetWidth - 24); // subtract pr-6 gap
+        const slideOffset = locBogor.offsetWidth; // slide past Bogor + gap
+
+        if (carouselWidthAnim) carouselWidthAnim.stop();
+        if (trackTransformAnim) trackTransformAnim.stop();
+
+        if (!isAnimated) {
+          carousel.style.width = `${targetWidth}px`;
+          track.style.transform = isJkt ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)';
+          track.style.filter = 'blur(0px)';
+          return;
+        }
+
+        carouselWidthAnim = animate(
+          carousel,
+          { width: `${targetWidth}px` },
+          { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
+        );
+        trackTransformAnim = animate(
+          track,
+          {
+            transform: isJkt ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)',
+            filter: ['blur(0px)', 'blur(3.5px)', 'blur(0px)'],
+          },
+          { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
+        );
+      };
+
+      // Continuous coordinate rolling ticker driven by Motion during map flight
+      const animateCoordsTo = (targetLat: number, targetLng: number, duration = 1.4) => {
+        if (coordAnimation) coordAnimation.stop();
+        const startLat = currentLat;
+        const startLng = currentLng;
+
+        coordAnimation = animate(0, 1, {
+          duration,
+          ease: [0.16, 1, 0.3, 1],
+          onUpdate: (progress) => {
+            currentLat = startLat + (targetLat - startLat) * progress;
+            currentLng = startLng + (targetLng - startLng) * progress;
+
+            if (headerCoords) {
+              headerCoords.textContent = formatCoords(currentLat, currentLng);
+            }
+          },
+        });
+
+        coordAnimation.then(() => {
+          currentLat = targetLat;
+          currentLng = targetLng;
+          if (headerCoords) {
+            headerCoords.textContent = formatCoords(currentLat, currentLng);
+          }
+          coordAnimation = null;
+        }).catch(() => {
+          // Animation cancelled/stopped
+        });
+      };
+
+      // Initial layout setup
+      setTimeout(() => updateCarouselLayout(false), 50);
+
+      const onResizeRuler = () => {
+        if (ruler) cachedRulerWidth = ruler.offsetWidth;
+        updateCarouselLayout(false);
+      };
+      window.addEventListener('resize', onResizeRuler, { passive: true });
+      disposers.push(() => window.removeEventListener('resize', onResizeRuler));
+
+      const onLangChange = () => {
+        const isId = document.documentElement.lang === 'id';
+        if (locBogor) locBogor.textContent = isId ? (locBogor.dataset.id ?? 'Bogor, Jawa Barat') : (locBogor.dataset.en ?? 'Bogor, West Java');
+        if (locJakarta) locJakarta.textContent = isId ? (locJakarta.dataset.id ?? 'Jabodetabek, Indonesia') : (locJakarta.dataset.en ?? 'Greater Jakarta, Indonesia');
+        updateCarouselLayout(false);
+      };
+      window.addEventListener('portfolio:lang-change', onLangChange);
+      disposers.push(() => window.removeEventListener('portfolio:lang-change', onLangChange));
+
+      const updateScale = () => {
+        const map = (mapEl as any)._leaflet_map;
+        const L = (window as any).L;
+        if (!map || !L) return;
+
+        const rulerWidthPx = cachedRulerWidth || 144;
+
+        const center = map.getCenter();
+        const pt1 = map.latLngToContainerPoint(center);
+        const pt2 = L.point(pt1.x + rulerWidthPx, pt1.y);
+        const latLng2 = map.containerPointToLatLng(pt2);
+
+        const distanceMeters = center.distanceTo(latLng2);
+
+        let maxVal: string;
+        let midVal: string;
+
+        if (distanceMeters >= 1000) {
+          const km = distanceMeters / 1000;
+          if (km >= 10) {
+            maxVal = `${Math.round(km)} KM`;
+            midVal = `${Math.round(km / 2)}`;
+          } else {
+            maxVal = `${km.toFixed(1)} KM`;
+            midVal = `${(km / 2).toFixed(1)}`;
+          }
+        } else {
+          maxVal = `${Math.round(distanceMeters)} M`;
+          midVal = `${Math.round(distanceMeters / 2)}`;
+        }
+
+        maxLabel.textContent = maxVal;
+        midLabel.textContent = midVal;
+
+        const distanceMm = distanceMeters * 1000;
+        const screenWidthMm = rulerWidthPx * 0.264583;
+        const scaleRatio = Math.round(distanceMm / screenWidthMm / 1000) * 1000;
+        const formattedRatio = scaleRatio >= 1000 ? scaleRatio.toLocaleString('en-US') : Math.round(distanceMm / screenWidthMm);
+
+        const isRegional = typeof map.getZoom === 'function' && map.getZoom() <= 11;
+        const scaleName = isRegional ? 'Regional Scale' : 'Architectural Scale';
+        ratioLabel.textContent = `1:${formattedRatio} ${scaleName}`;
+      };
+
+      const pollMap = () => {
+        const map = (mapEl as any)._leaflet_map;
+        if (map) {
+          updateScale();
+          map.on('zoom', updateScale);
+          map.on('move', updateScale);
+          map.on('zoomend', updateScale);
+          map.on('moveend', updateScale);
+          const onMapViewChange = (e: any) => {
+            const detail = e.detail;
+            if (detail && detail.view) {
+              currentView = detail.view;
+              updateCarouselLayout(true);
+              if (detail.view === 'jabodetabek') {
+                const isMobile = window.innerWidth < 768;
+                const targetCenter = isMobile ? { lat: -6.44, lng: 106.8270 } : { lat: -6.22, lng: 106.5270 };
+                animateCoordsTo(targetCenter.lat, targetCenter.lng, 1.4);
+              } else {
+                animateCoordsTo(-6.6271, 106.7607, 1.4);
+              }
+            }
+            updateScale();
+          };
+          window.addEventListener('portfolio:map-view-change', onMapViewChange);
+          disposers.push(() => {
+            map.off('zoom', updateScale);
+            map.off('move', updateScale);
+            map.off('zoomend', updateScale);
+            map.off('moveend', updateScale);
+            window.removeEventListener('portfolio:map-view-change', onMapViewChange);
+          });
+        } else {
+          setTimeout(pollMap, 150);
+        }
+      };
+      pollMap();
+    }
+
+    // 2. Smooth Sticky Scroll Compression & Motion-Driven Marquee Momentum Easing
+    const heroMain = document.getElementById('hero-main-stage');
+    const heroWrapper = document.getElementById('hero-scroll-wrapper');
+    const typoStage = document.getElementById('hero-typography-stage');
+    const bioEl = document.getElementById('hero-halved-bio');
+    const headerEl = heroMain?.querySelector('header');
+    const footerEl = heroMain?.querySelector('footer');
+    const badgeBox = document.getElementById('hero-map-badge');
+    const mapParallax = document.getElementById('hero-map-parallax');
+
+    if (heroMain && heroWrapper) {
+      let currentPlaybackRate = 1.0;
+      let targetPlaybackRate = 1.0;
+      let speedAnimation: any = null;
+      const marqueeGroups = Array.from(heroWrapper.querySelectorAll<HTMLElement>('.marquee-group'));
+
+      const applyPlaybackRate = (rate: number) => {
+        for (let i = 0; i < marqueeGroups.length; i++) {
+          const anims = marqueeGroups[i].getAnimations();
+          for (let j = 0; j < anims.length; j++) {
+            anims[j].playbackRate = rate;
+          }
+        }
+      };
+
+      const setTargetSpeedRate = (newTarget: number) => {
+        if (Math.abs(targetPlaybackRate - newTarget) > 0.02) {
+          targetPlaybackRate = newTarget;
+          if (speedAnimation) speedAnimation.stop();
+
+          const startRate = currentPlaybackRate;
+          const isDecelerating = newTarget < startRate;
+          // Longer, graceful inertia ease for the slowdown trigger (1.5s)
+          const duration = isDecelerating ? 1.5 : 0.8;
+
+          speedAnimation = animate(0, 1, {
+            duration,
+            ease: [0.16, 1, 0.3, 1],
+            onUpdate: (progress) => {
+              currentPlaybackRate = startRate + (newTarget - startRate) * progress;
+              applyPlaybackRate(currentPlaybackRate);
+            },
+          });
+
+          speedAnimation.then(() => {
+            currentPlaybackRate = newTarget;
+            applyPlaybackRate(currentPlaybackRate);
+            speedAnimation = null;
+          }).catch(() => {
+            // Animation interrupted
+          });
+        }
+      };
+
+      const updateHeroOnScroll = () => {
+        const scrollY = window.scrollY || window.pageYOffset;
+        const navHeight = 56;
+        const stageHeight = window.innerHeight - navHeight;
+        const phi = 0.618034; // Golden Ratio major section (61.8%)
+        const compressDistance = stageHeight * (1 - phi); // 38.2% smooth scroll distance
+        const progress = Math.min(Math.max(scrollY / compressDistance, 0), 1);
+
+        const ease = 1 - Math.pow(1 - progress, 2.5);
+        const minH = stageHeight * phi;
+        const currentHeight = stageHeight - (ease * (stageHeight - minH));
+        heroMain.style.height = `${currentHeight}px`;
+
+        if (mapParallax) {
+          const mapOffsetY = progress * -95;
+          mapParallax.style.transform = `translate3d(0, ${mapOffsetY}px, 0)`;
+        }
+
+        // 1. Main Telemetry Data fades out FIRST (0.0 to 0.42 progress)
+        const mainDataOpacity = Math.max(1 - (progress / 0.42), 0);
+
+        if (headerEl) {
+          headerEl.style.opacity = mainDataOpacity.toString();
+          headerEl.style.pointerEvents = mainDataOpacity === 0 ? 'none' : 'auto';
+        }
+        if (footerEl) {
+          footerEl.style.opacity = mainDataOpacity.toString();
+          footerEl.style.pointerEvents = mainDataOpacity === 0 ? 'none' : 'auto';
+        }
+        if (badgeBox) {
+          badgeBox.style.opacity = mainDataOpacity.toString();
+          badgeBox.style.visibility = mainDataOpacity === 0 ? 'hidden' : 'visible';
+        }
+
+        // 2. Title scales down slightly
+        if (typoStage) {
+          const scale = 1 - (ease * 0.15);
+          typoStage.style.transform = `scale(${scale})`;
+        }
+
+        // 3. Bio & Action Buttons: Unhides cleanly on scroll, fully interactable once triggered
+        if (bioEl) {
+          const isRevealed = progress > 0.35;
+          if (bioEl.dataset.revealed !== String(isRevealed)) {
+            bioEl.dataset.revealed = String(isRevealed);
+          }
+        }
+
+        // 4. Motion-Decoupled Marquee Velocity Easing
+        if (progress > 0.15) {
+          // Decelerates smoothly when scrolled and stays calm all the way down
+          const slowTarget = 0.25;
+          setTargetSpeedRate(slowTarget);
+        } else {
+          // Normal speed only at initial top position
+          setTargetSpeedRate(1.0);
+        }
+
+        // 5. Dynamic Phrasing: "He builds..." on initial map reveal -> "I build..." when portrait appears
+        updateIntroHeadingPhrase();
+      };
+
+      const introCarousel = document.getElementById('heading-intro-carousel');
+      const introTrack = document.getElementById('heading-intro-track');
+      const introHe = document.getElementById('heading-intro-he');
+      const introI = document.getElementById('heading-intro-i');
+      const introSuffix = document.getElementById('heading-intro-suffix');
+      const portraitEl = document.querySelector('#intro img') || document.querySelector('#intro');
+
+      let currentIntroMode: 'he' | 'i' = 'he';
+      let introCarouselWidthAnim: any = null;
+      let introTrackTransformAnim: any = null;
+
+      const updateIntroCarouselLayout = (targetMode: 'he' | 'i', isAnimated = true) => {
+        if (!introCarousel || !introTrack || !introHe || !introI) return;
+        if (currentIntroMode === targetMode && isAnimated) return;
+        currentIntroMode = targetMode;
+
+        const isI = targetMode === 'i';
+        const targetWidth = isI ? introI.offsetWidth : introHe.offsetWidth;
+        const slideOffset = introHe.offsetWidth;
+
+        if (introCarouselWidthAnim) introCarouselWidthAnim.stop();
+        if (introTrackTransformAnim) introTrackTransformAnim.stop();
+
+        if (!isAnimated) {
+          introCarousel.style.width = `${targetWidth}px`;
+          introTrack.style.transform = isI ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)';
+          introTrack.style.filter = 'blur(0px)';
+          return;
+        }
+
+        introCarouselWidthAnim = animate(
+          introCarousel,
+          { width: `${targetWidth}px` },
+          { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
+        );
+        introTrackTransformAnim = animate(
+          introTrack,
+          {
+            transform: isI ? `translate3d(-${slideOffset}px, 0, 0)` : 'translate3d(0, 0, 0)',
+            filter: ['blur(0px)', 'blur(4px)', 'blur(0px)'],
+          },
+          { duration: 0.52, ease: [0.16, 1, 0.3, 1] }
+        );
+      };
+
+      const updateIntroHeadingPhrase = (isAnimated = true) => {
+        const portraitShown = portraitEl
+          ? portraitEl.getBoundingClientRect().top < window.innerHeight * 0.75
+          : window.scrollY > window.innerHeight * 0.70;
+
+        updateIntroCarouselLayout(portraitShown ? 'i' : 'he', isAnimated);
+      };
+
+      const updateIntroLang = () => {
+        if (!introHe || !introI || !introSuffix) return;
+        const isId = document.documentElement.lang === 'id';
+        introHe.textContent = isId ? (introHe.dataset.id ?? 'Dia membuat') : (introHe.dataset.en ?? 'He builds');
+        introI.textContent = isId ? (introI.dataset.id ?? 'Aku membuat') : (introI.dataset.en ?? 'I build');
+        introSuffix.textContent = isId ? (introSuffix.dataset.id ?? 'software dan mengubah imajinasi menjadi nyata.') : (introSuffix.dataset.en ?? 'software that makes ideas real.');
+        updateIntroCarouselLayout(currentIntroMode, false);
+      };
+
+      window.addEventListener('portfolio:lang-change', updateIntroLang);
+      disposers.push(() => window.removeEventListener('portfolio:lang-change', updateIntroLang));
+
+      const onResize = () => {
+        updateIntroCarouselLayout(currentIntroMode, false);
+      };
+      window.addEventListener('resize', onResize);
+      disposers.push(() => window.removeEventListener('resize', onResize));
+
+      // Initial layout setup
+      updateIntroCarouselLayout('he', false);
+
+      // On-load Hero Headline: Physical Staggered Layout Flow via Motion (Elements physically push each other in flow)
+      const nameFirst = document.getElementById('hero-name-first');
+      const semi = document.getElementById('hero-semi');
+      const nameMiddle = document.getElementById('hero-name-middle');
+      const dot = document.getElementById('hero-dot');
+      const nameLast = document.getElementById('hero-name-last');
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const initialWait = 0.44; // Doubled initial wait before physical collapse begins
+        const easeDecel = [0.16, 1, 0.3, 1];
+
+        const staggerStep = 0.225; // 125% of previous stagger step (0.18s -> 0.225s)
+
+        // 1. First Name ("Yovan") - physically pushes semicolon rightwards when expanded
+        if (nameFirst) {
+          nameFirst.style.willChange = 'font-size, opacity';
+          const a1 = animate(
+            nameFirst,
+            {
+              fontSize: ['1.35em', '1em'],
+              opacity: [0.2, 1],
+            },
+            {
+              duration: 0.75,
+              delay: initialWait,
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a1.stop());
+        }
+
+        // 2. Semicolon (";") - physically contracts its glyph box & pops accent color
+        if (semi) {
+          semi.style.transformOrigin = 'center';
+          semi.style.willChange = 'font-size, transform, color';
+          const a2 = animate(
+            semi,
+            {
+              fontSize: ['1.55em', '1em'],
+              transform: ['rotate(14deg)', 'rotate(0deg)'],
+              color: ['#52FF1A', 'currentColor'],
+            },
+            {
+              duration: 0.7,
+              delay: initialWait + staggerStep,
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a2.stop());
+        }
+
+        // 3. Middle Name ("Gunardio") - physically pushes dot rightwards when expanded
+        if (nameMiddle) {
+          nameMiddle.style.willChange = 'font-size, opacity';
+          const a3 = animate(
+            nameMiddle,
+            {
+              fontSize: ['1.35em', '1em'],
+              opacity: [0.2, 1],
+            },
+            {
+              duration: 0.75,
+              delay: initialWait + (staggerStep * 2),
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a3.stop());
+        }
+
+        // 4. Period / Dot (".") - physically contracts and pops accent color
+        if (dot) {
+          dot.style.transformOrigin = 'center';
+          dot.style.willChange = 'font-size, color';
+          const a4 = animate(
+            dot,
+            {
+              fontSize: ['1.6em', '1em'],
+              color: ['#52FF1A', 'currentColor'],
+            },
+            {
+              duration: 0.65,
+              delay: initialWait + (staggerStep * 3),
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a4.stop());
+        }
+
+        // 5. Last Name (if present)
+        if (nameLast) {
+          nameLast.style.willChange = 'font-size, opacity';
+          const a5 = animate(
+            nameLast,
+            {
+              fontSize: ['1.3em', '1em'],
+              opacity: [0.2, 1],
+            },
+            {
+              duration: 0.75,
+              delay: initialWait + (staggerStep * 4),
+              ease: easeDecel,
+            }
+          );
+          disposers.push(() => a5.stop());
+        }
+      }
+
+      // Bind scroll via Motion
+      const stopScroll = scroll(() => {
+        updateHeroOnScroll();
+      });
+      disposers.push(stopScroll);
+
+      // Hook Lenis scroll engine for sub-pixel 120fps parallax synchronization if present
+      const bindLenis = () => {
+        const lenis = (window as any).__lenis;
+        if (lenis && typeof lenis.on === 'function') {
+          const onLenis = () => updateHeroOnScroll();
+          lenis.on('scroll', onLenis);
+          disposers.push(() => lenis.off('scroll', onLenis));
+        }
+      };
+      bindLenis();
+      setTimeout(bindLenis, 300);
+
+      updateHeroOnScroll();
+    }
+
+    cleanupHero = () => {
+      disposers.forEach((dispose) => dispose());
+    };
   };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initHero);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHeroInteractions);
   } else {
-    initHero();
+    setupHeroInteractions();
   }
-  document.addEventListener("astro:page-load", initHero);
+  document.addEventListener('astro:page-load', setupHeroInteractions);
 </script>

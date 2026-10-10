@@ -1,66 +1,14 @@
 ---
 import RootLayout from "../layouts/RootLayout.astro";
 import Hero from "../components/Hero.astro";
+import Overview from "../components/Overview.astro";
+import FeaturedProjects from "../components/FeaturedProjects.astro";
 import StatusBadge from "../components/StatusBadge.astro";
 import ActionButton from "../components/ActionButton.astro";
-import ProjectTile from "../components/ProjectTile.astro";
-import HoverExpandButton from "../components/HoverExpandButton.astro";
 import EasterEggs from "../components/EasterEggs.astro";
-import { DitheringShader } from "../components/ui/dithering-shader";
 
 const rawBase = import.meta.env.BASE_URL;
 const base = rawBase.endsWith("/") ? rawBase.slice(0, -1) : rawBase;
-
-const coreStack = [
-  {
-    name: "Laravel",
-    category: "Backend Architecture",
-    icon: "ti-brand-laravel",
-  },
-  { name: "React", category: "UI Engineering", icon: "ti-brand-react" },
-  {
-    name: "Electron",
-    category: "Desktop & Kiosk OS",
-    icon: "ti-device-desktop",
-  },
-  { name: "Astro", category: "Static & Content Web", icon: "ti-brand-astro" },
-  {
-    name: "Google Cloud Platform",
-    category: "Cloud Infrastructure",
-    icon: "ti-cloud",
-  },
-  { name: "Docker", category: "Containerization", icon: "ti-brand-docker" },
-];
-
-const supportingStack = [
-  { name: "TypeScript", icon: "ti-brand-typescript" },
-  { name: "JavaScript", icon: "ti-brand-javascript" },
-  { name: "PHP", icon: "ti-brand-php" },
-  { name: "C# / .NET", icon: "ti-code" },
-  { name: "Node.js", icon: "ti-brand-nodejs" },
-  { name: "Vite", icon: "ti-brand-vite" },
-  { name: "WPF & WebView2", icon: "ti-app-window" },
-  { name: "Tailwind CSS", icon: "ti-brand-tailwind" },
-  { name: "CSS Modules", icon: "ti-brand-css3" },
-  { name: "Zustand", icon: "ti-atom" },
-  { name: "WebSockets", icon: "ti-broadcast" },
-  { name: "RESTful APIs", icon: "ti-api" },
-  { name: "Filament", icon: "ti-layout-dashboard" },
-  { name: "SQLite", icon: "ti-database" },
-  { name: "MySQL", icon: "ti-brand-mysql" },
-  { name: "Google Cloud Storage", icon: "ti-cloud-upload" },
-  { name: "SNAP API", icon: "ti-credit-card" },
-  { name: "Three.js", icon: "ti-3d-cube-sphere" },
-  { name: "GSAP", icon: "ti-keyframes" },
-  { name: "Anime.js", icon: "ti-sparkles" },
-  { name: "Leaflet.js", icon: "ti-map" },
-  { name: "Chart.js", icon: "ti-chart-line" },
-  { name: "Git & GitHub", icon: "ti-brand-github" },
-  { name: "GitHub Pages", icon: "ti-brand-git" },
-  { name: "OWASP Guidelines", icon: "ti-shield-check" },
-  { name: "SEO & Metadata", icon: "ti-search" },
-  { name: "Accessibility (a11y)", icon: "ti-accessible" },
-];
 
 const capabilities = [
   {
@@ -140,1183 +88,15 @@ const capabilities = [
   <div class="relative">
     <EasterEggs />
 
-    <Hero firstName="yovan" middleName="gunardio" lastName="darmawan" />
+    <Hero firstName="Yovan" middleName="Gunardio." />
 
     <div class="relative z-10 w-[92%] sm:w-[86%] lg:w-[80%] mx-auto space-y-24 pb-28">
       <!-- 01 // OVERVIEW & HERO STATEMENT -->
-      <section
-        id="intro"
-        aria-labelledby="heading-intro"
-        class="scroll-mt-24 pt-16 space-y-8"
-      >
-        <div
-          class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800"
-        >
-          <span
-            class="font-heading font-bold text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400"
-          >
-            01 // OVERVIEW
-          </span>
-        </div>
-
-        <!-- Section Headline Header (Header 2 Full Width) -->
-        <h2
-          id="heading-intro"
-          data-en="I build software that makes ideas real."
-          data-id="Aku membuat software dan mengubah imajinasi menjadi nyata."
-          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-neutral-950 dark:text-white leading-[1.12] font-heading w-full"
-        >
-          I build software that makes ideas real.
-        </h2>
-
-        <div
-          class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pt-2"
-        >
-          <!-- Left Column: Portrait Photo with Technical Halo -->
-          <div
-            class="lg:col-span-5 xl:col-span-5 lg:sticky lg:top-24 flex flex-col items-center justify-center pt-4 sm:pt-6"
-            style="transform: translateZ(0);"
-          >
-            <div
-              class="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center border-b border-neutral-300/80 dark:border-neutral-800 overflow-hidden"
-              style="transform: translateZ(0); contain: paint;"
-            >
-              <!-- Dithering Shader Wave Backdrop (Unmasked) -->
-              <div
-                class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
-                style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
-              >
-                <DitheringShader
-                  client:load
-                  shape="wave"
-                  type="8x8"
-                  pxSize={1}
-                  speed={0.6}
-                />
-              </div>
-
-              <img
-                src={`${base}/images/v.png`}
-                alt="Portrait of Yovan Gunardio Darmawan"
-                width="540"
-                height="540"
-                class="relative z-10 w-full max-h-[500px] sm:max-h-[540px] object-contain object-bottom select-none pt-4"
-                loading="eager"
-                decoding="async"
-                fetchpriority="high"
-              />
-            </div>
-          </div>
-
-          <!-- 65% Right Column: Narrative, Tech Stack & CTA -->
-          <div class="lg:col-span-7 xl:col-span-7 space-y-6">
-            <p
-              data-en="Hello, I'm Yovan. I build things for the world wide web and occasionally things that talk to machines."
-              data-id="Halo, aku Yovan. Aku bikin ini dan itu buat di internet, dan sesekali ngoprak ngoprek nyambungin software ke hardware."
-              class="text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal"
-            >
-              Hello, I'm Yovan. I build things for the world wide web and
-              occasionally things that talk to machines.
-            </p>
-
-            <ul
-              class="space-y-2.5 py-1.5 pl-4 border-l-2 border-[var(--color-accent,#52FF1A)]/50 font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 list-none m-0 p-0"
-              aria-label="Overview highlights"
-            >
-              <li class="flex items-center gap-2.5">
-                <span
-                  class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-                  aria-hidden="true">›</span
-                >
-                <span>A little bit of webapp in my life</span>
-              </li>
-              <li class="flex items-center gap-2.5">
-                <span
-                  class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-                  aria-hidden="true">›</span
-                >
-                <span>A little bit of vscode by my side</span>
-              </li>
-              <li class="flex items-center gap-2.5">
-                <span
-                  class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-                  aria-hidden="true">›</span
-                >
-                <span>A little bit of dashboard all I need</span>
-              </li>
-              <li class="flex items-center gap-2.5">
-                <span
-                  class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-                  aria-hidden="true">›</span
-                >
-                <span>A little bit of touchscreen kiosk what I see</span>
-              </li>
-              <li class="flex items-center gap-2.5">
-                <span
-                  class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-                  aria-hidden="true">›</span
-                >
-                <span>A little bit of 12v in the sun</span>
-              </li>
-              <li class="flex items-center gap-2.5">
-                <span
-                  class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-                  aria-hidden="true">›</span
-                >
-                <span>A little bit of solder all night long</span>
-              </li>
-              <li class="flex items-center gap-2.5">
-                <span
-                  class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-                  aria-hidden="true">›</span
-                >
-                <span>A little bit of LED, here I am</span>
-              </li>
-              <li class="flex items-center gap-2.5">
-                <span
-                  class="text-[var(--color-accent,#52FF1A)] text-xs font-mono select-none font-bold"
-                  aria-hidden="true">›</span
-                >
-                <span>A little bit of git makes me your guy</span>
-              </li>
-            </ul>
-
-            <p
-              data-en="I enjoy building things across the stack, from the interface people see to the systems making everything run behind the scenes."
-              data-id="Aku membangun sistem dari ujung ke ujung, dari tampilan yang dilihat orang sampai hiruk pikuk sistem di belakang panggung."
-              class="text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal pt-3 sm:pt-4"
-            >
-              I enjoy building things across the stack, from the interface
-              people see to the systems making everything run behind the scenes.
-            </p>
-
-            <!-- Tech Stack Layout -->
-            <div
-              class="pt-6 border-t border-neutral-200/80 dark:border-neutral-800/80"
-            >
-              <!-- Core Stack Header -->
-              <div class="flex items-center justify-between pb-6">
-                <h3
-                  class="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-neutral-500 dark:text-neutral-400 m-0"
-                >
-                  Core Stack
-                </h3>
-                <span
-                  class="font-sans text-[11px] text-neutral-400 dark:text-neutral-500 font-medium"
-                >
-                  {coreStack.length} core • {supportingStack.length} supporting
-                </span>
-              </div>
-
-              <!-- Core Stack (Icon-as-Object: Unboxed, Breathing Grid) -->
-              <ul
-                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 sm:gap-8 list-none m-0 p-0"
-                aria-label="Core Technologies"
-              >
-                {
-                  coreStack.map((tech) => (
-                    <li class="flex flex-col space-y-2.5 group cursor-default">
-                      <div class="text-3xl sm:text-4xl text-neutral-800 dark:text-neutral-200 group-hover:text-[var(--color-accent,#52FF1A)] transition-[transform,color] duration-200 group-hover:-translate-y-1 group-hover:scale-105 inline-flex items-center">
-                        <i class={`ti ${tech.icon}`} aria-hidden="true" />
-                      </div>
-                      <div class="space-y-0.5">
-                        <div class="font-heading font-bold text-sm sm:text-base text-neutral-950 dark:text-white tracking-tight m-0">
-                          {tech.name}
-                        </div>
-                        <div class="font-sans text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 leading-tight group-hover:text-neutral-700 dark:group-hover:text-neutral-300 transition-colors m-0">
-                          {tech.category}
-                        </div>
-                      </div>
-                    </li>
-                  ))
-                }
-              </ul>
-
-              <!-- Supporting Stack Divider & Container -->
-              <div
-                class="mt-10 pt-8 border-t border-neutral-200/80 dark:border-neutral-800/80"
-              >
-                <h3
-                  class="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-neutral-500 dark:text-neutral-400 block m-0 pb-4"
-                >
-                  Ecosystem & Supporting Tech
-                </h3>
-                <ul
-                  class="flex flex-wrap items-center gap-x-4 sm:gap-x-5 gap-y-2.5 sm:gap-y-3 list-none m-0 p-0"
-                  aria-label="Ecosystem and Supporting Technologies"
-                >
-                  {
-                    supportingStack.map((tech) => (
-                      <li class="inline-flex items-center gap-1.5 text-xs text-neutral-600 dark:text-neutral-400 hover:text-neutral-950 dark:hover:text-white transition-colors group">
-                        <i
-                          class={`ti ${tech.icon} text-sm text-neutral-400 dark:text-neutral-500 group-hover:text-[var(--color-accent,#52FF1A)] transition-colors`}
-                          aria-hidden="true"
-                        />
-                        <span class="font-sans font-medium">{tech.name}</span>
-                      </li>
-                    ))
-                  }
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Overview base={base} />
 
       <!-- 02 // PROJECTS & HYPEBOX -->
-      <section
-        id="projects"
-        aria-labelledby="heading-projects"
-        class="scroll-mt-24 pt-16 space-y-10"
-      >
-        <div
-          class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800"
-        >
-          <span
-            class="font-heading font-bold text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400"
-          >
-            02 // FEATURED WORK
-          </span>
-          <a
-            href={`${base}/portfolio-index`}
-            class="group/action inline-flex items-center gap-1 font-heading font-bold text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400 hover:text-[var(--color-accent,#52FF1A)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)] rounded px-1"
-          >
-            <span
-              class="group-hover/action:underline underline-offset-4 decoration-[var(--color-accent,#52FF1A)]"
-            >
-              View Full Index
-            </span>
-            <span
-              class="inline-block opacity-40 transition-all duration-200 group-hover/action:opacity-100 group-hover/action:translate-x-0.5"
-            >
-              →
-            </span>
-          </a>
-        </div>
+      <FeaturedProjects base={base} />
 
-        <!-- Project Intro Copywriting -->
-        <div class="space-y-3 max-w-3xl">
-          <h2
-            id="heading-projects"
-            data-en="Things I've built"
-            data-id="Beberapa karya yang aku bikin"
-            class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-neutral-950 dark:text-white leading-tight font-heading"
-          >
-            Things I've built
-          </h2>
-          <p
-            data-en="A collection of projects, and products where I tried to solve a problem, learn something new, or just casually building some SaaS Multi-tenant B2B Ecosystem"
-            data-id="Kumpulan proyek dan produk tempat aku mencoba menyelesaikan masalah, belajar hal baru, atau sekedar bikin SaaS Multi-tenant B2B"
-            class="text-base sm:text-lg text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal"
-          >
-            A collection of projects, and products where I tried to solve a
-            problem, learn something new, or just some SaaS Milti-tenant B2B
-            Ecosystem
-          </p>
-        </div>
-
-        <!-- Featured Spotlight: Hypebox Pipeline & Connected Ecosystem -->
-        <article
-          aria-labelledby="heading-hypebox"
-          class="space-y-8"
-        >
-          <!-- Hypebox Header & Actions -->
-          <div
-            class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-neutral-200/80 dark:border-neutral-800/80"
-          >
-            <div class="space-y-1">
-              <h3
-                id="heading-hypebox"
-                class="text-2xl sm:text-3xl font-black tracking-tight text-neutral-950 dark:text-white leading-none font-heading"
-              >
-                HYPE-BOX
-              </h3>
-              <p
-                data-en="A connected photo booth platform, built from kiosk to backend."
-                data-id="Platform photo booth terintegrasi, dibangun dari software kiosk sampai backend."
-                class="text-sm font-medium text-neutral-600 dark:text-neutral-400 m-0 pt-0.5"
-              >
-                A connected photo booth platform, built from kiosk to backend.
-              </p>
-            </div>
-
-            <div
-              class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto"
-            >
-              <ActionButton
-                variant="secondary"
-                size="sm"
-                href="https://navoyovan.github.io/photobooth-kiosk-demo/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ariaLabel="Launch Kiosk Demo (opens in new tab)"
-                data-aria-en="Launch Kiosk Demo (opens in new tab)"
-                data-aria-id="Uji Coba Kiosk (buka di tab baru)"
-                class="group/btn overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
-              >
-                <div
-                  class="inline-flex items-center translate-x-[10px] group-hover/btn:translate-x-0 transition-transform duration-200 ease-out"
-                >
-                  <span data-en="Launch Kiosk Demo" data-id="Uji Coba Kiosk"
-                    >Launch Kiosk Demo</span
-                  >
-                  <span
-                    class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 ease-out"
-                    aria-hidden="true"
-                  >
-                    ↗
-                  </span>
-                </div>
-              </ActionButton>
-              <ActionButton
-                variant="primary"
-                size="sm"
-                href="https://navoyovan.github.io/hypebox/"
-                target="_blank"
-                rel="noopener noreferrer"
-                ariaLabel="Visit Hypebox Site (opens in new tab)"
-                data-aria-en="Visit Hypebox Site (opens in new tab)"
-                data-aria-id="Kunjungi Situs Hypebox (buka di tab baru)"
-                class="group/btn overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
-              >
-                <div
-                  class="inline-flex items-center translate-x-[10px] group-hover/btn:translate-x-0 transition-transform duration-200 ease-out"
-                >
-                  <span
-                    data-en="Visit Hypebox Site"
-                    data-id="Kunjungi Situs Hypebox">Visit Hypebox Site</span
-                  >
-                  <span
-                    class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 ease-out"
-                    aria-hidden="true"
-                  >
-                    ↗
-                  </span>
-                </div>
-              </ActionButton>
-            </div>
-          </div>
-
-          <!-- Architecture Summary -->
-          <p
-            data-en="An integrated hardware-software pipeline orchestrating printers, camera hardware, a touchscreen Electron client, real-time WebSocket telemetry, and cloud fleet management."
-            data-id="Pipeline hardware-software terintegrasi yang menghubungkan printer, kamera, aplikasi touchscreen berbasis Electron, telemetry real-time WebSocket, dan cloud fleet management."
-            class="text-sm sm:text-base text-neutral-700 dark:text-neutral-300 leading-relaxed max-w-3xl font-normal m-0"
-          >
-            An integrated hardware-software pipeline orchestrating physical
-            printers, camera hardware, a touchscreen Electron client, real-time
-            WebSocket telemetry, and cloud fleet management.
-          </p>
-
-          <!-- Pipeline Cards (1-line side-scroll on mobile, 4-col grid on desktop) -->
-          <div
-            class="flex flex-nowrap overflow-x-auto gap-4 pb-4 pt-3 sm:pt-4 -mx-4 px-4 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 lg:gap-4 no-scrollbar"
-          >
-            <!-- STAGE 01: Initiation & Payment -->
-            <div
-              class="w-[280px] sm:w-[320px] lg:w-auto shrink-0 lg:shrink flex flex-col justify-between p-4 sm:p-5 bg-[#f6f4ee] dark:bg-[#141414] border border-neutral-300/80 dark:border-neutral-800 transition-all duration-200 hover:border-neutral-400 dark:hover:border-neutral-600 shadow-sm relative group"
-            >
-              <div class="flex flex-col flex-1 gap-3">
-                <p
-                  class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-semibold m-0"
-                >
-                  Edge &rarr; API
-                </p>
-                <h4
-                  class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
-                >
-                  Touch &amp; QRIS Payment
-                </h4>
-                <p
-                  data-en="Kiosk generates order. Laravel REST API generates dynamic QRIS via SNAP API with webhook confirmation."
-                  data-id="Kiosk bikin order. Laravel REST API mengenerate kode QRIS via SNAP API dengan konfirmasi webhook."
-                  class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal m-0"
-                >
-                  Kiosk generates order. Laravel REST API generates dynamic QRIS
-                  via SNAP API with webhook confirmation.
-                </p>
-              </div>
-              <div class="mt-auto pt-3.5 space-y-2">
-                <div
-                  class="flex items-center justify-between font-mono text-[10px] text-neutral-500 dark:text-neutral-400"
-                >
-                  <span>Protocol:</span>
-                  <span
-                    class="font-semibold text-neutral-700 dark:text-neutral-300"
-                    >REST / SNAP</span
-                  >
-                </div>
-                <ul
-                  class="flex flex-wrap gap-1.5 list-none p-0 m-0"
-                  aria-label="Tech tokens"
-                >
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >ELECTRON</span
-                    >
-                  </li>
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >LARAVEL</span
-                    >
-                  </li>
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >SNAP API</span
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- STAGE 02: Real-time Capture -->
-            <div
-              class="w-[280px] sm:w-[320px] lg:w-auto shrink-0 lg:shrink flex flex-col justify-between p-4 sm:p-5 bg-[#f6f4ee] dark:bg-[#141414] border border-neutral-300/80 dark:border-neutral-800 transition-all duration-200 hover:border-neutral-400 dark:hover:border-neutral-600 shadow-sm relative group"
-            >
-              <div class="flex flex-col flex-1 gap-3">
-                <p
-                  class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-semibold m-0"
-                >
-                  Camera Engine
-                </p>
-                <h4
-                  class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
-                >
-                  Viewfinder &amp; FX
-                </h4>
-                <p
-                  data-en="Camera via USB, captures images with countdown burst. Canvas compositor renders multi-frame layouts and color grading."
-                  data-id="Kamera via USB, jepret foto dengan countdown burst. Canvas compositor merender layout multi-frame dan color grading."
-                  class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal m-0"
-                >
-                  Camera via USB, captures images with countdown burst. Canvas
-                  compositor renders multi-frame layouts and color grading.
-                </p>
-              </div>
-              <div class="mt-auto pt-3.5 space-y-2">
-                <div
-                  class="flex items-center justify-between font-mono text-[10px] text-neutral-500 dark:text-neutral-400"
-                >
-                  <span>Performance:</span>
-                  <span
-                    class="font-semibold text-neutral-700 dark:text-neutral-300"
-                    >Fast / GPU Accel</span
-                  >
-                </div>
-                <ul
-                  class="flex flex-wrap gap-1.5 list-none p-0 m-0"
-                  aria-label="Tech tokens"
-                >
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >REACT</span
-                    >
-                  </li>
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >CANVAS API</span
-                    >
-                  </li>
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >NODE IPC</span
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- STAGE 03: Cloud Sync & WebSockets -->
-            <div
-              class="w-[280px] sm:w-[320px] lg:w-auto shrink-0 lg:shrink flex flex-col justify-between p-4 sm:p-5 bg-[#f6f4ee] dark:bg-[#141414] border border-neutral-300/80 dark:border-neutral-800 transition-all duration-200 hover:border-neutral-400 dark:hover:border-neutral-600 shadow-sm relative group"
-            >
-              <div class="flex flex-col flex-1 gap-3">
-                <p
-                  class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-semibold m-0"
-                >
-                  Live Reverb &amp; GCS
-                </p>
-                <h4
-                  class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
-                >
-                  WebSocket Push &amp; GCS
-                </h4>
-                <p
-                  data-en="Composited strips sync to Google Cloud Storage while Laravel Reverb broadcasts real-time telemetry to connected operator dashboards."
-                  data-id="Hasil foto di upload ke Google Cloud Storage, sementara Laravel Reverb membroadcast telemetry real-time ke dashboard operator."
-                  class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal m-0"
-                >
-                  Composited strips sync to Google Cloud Storage while Laravel
-                  Reverb broadcasts real-time telemetry to connected operator
-                  dashboards.
-                </p>
-              </div>
-              <div class="mt-auto pt-3.5 space-y-2">
-                <div
-                  class="flex items-center justify-between font-mono text-[10px] text-neutral-500 dark:text-neutral-400"
-                >
-                  <span>Telemetry:</span>
-                  <span
-                    class="font-semibold text-neutral-700 dark:text-neutral-300"
-                    >WebSocket / WSS</span
-                  >
-                </div>
-                <ul
-                  class="flex flex-wrap gap-1.5 list-none p-0 m-0"
-                  aria-label="Tech tokens"
-                >
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >REVERB</span
-                    >
-                  </li>
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >GCS BUCKET</span
-                    >
-                  </li>
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >SQLITE</span
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <!-- STAGE 04: Hardware Print & Fleet -->
-            <!-- <div
-              class="w-[280px] sm:w-[320px] lg:w-auto shrink-0 lg:shrink flex flex-col justify-between p-4 sm:p-5 bg-[#f6f4ee] dark:bg-[#141414] border border-neutral-300/80 dark:border-neutral-800 transition-all duration-200 hover:border-neutral-400 dark:hover:border-neutral-600 shadow-sm relative group"
-            >
-              <div class="flex flex-col flex-1 gap-3">
-                <p
-                  class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-semibold m-0"
-                >
-                  Hardware &amp; Ops
-                </p>
-                <h4
-                  class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
-                >
-                  Printer &amp; Fleet Ops
-                </h4>
-                <p
-                  class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal m-0"
-                >
-                  Electron dispatches native ESC/POS print jobs to printers
-                  while Portal Dashboard aggregates live sales revenue &
-                  telemetry.
-                </p>
-              </div>
-              <div
-                class="mt-auto pt-3.5 border-t border-neutral-200/80 dark:border-neutral-800/80 space-y-2"
-              >
-                <div
-                  class="flex items-center justify-between font-mono text-[10px] text-neutral-500 dark:text-neutral-400"
-                >
-                  <span>Hardware:</span>
-                  <span
-                    class="font-semibold text-neutral-700 dark:text-neutral-300"
-                    >USB ESC/POS Driver</span
-                  >
-                </div>
-                <ul
-                  class="flex flex-wrap gap-1.5 list-none p-0 m-0"
-                  aria-label="Tech tokens"
-                >
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >USB PRINTER</span
-                    >
-                  </li>
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >REACT SPA</span
-                    >
-                  </li>
-                  <li>
-                    <span
-                      class="font-sans text-[9px] sm:text-[10px] font-semibold uppercase tracking-wider text-neutral-700 dark:text-neutral-300 bg-neutral-200/60 dark:bg-neutral-800/80 px-2 sm:px-2.5 py-0.5 rounded inline-block"
-                      >ASTRO SSG</span
-                    >
-                  </li>
-                </ul>
-              </div>
-            </div> -->
-          </div>
-
-          <!-- Dual Visual Specimen Viewports: Kiosk Client & Vendor Portal -->
-          <div
-            class="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 pt-4 sm:pt-6"
-          >
-            <!-- Specimen 1: Kiosk Touchscreen -->
-            <div
-              class="group relative border border-neutral-300/80 dark:border-neutral-800 bg-[#f6f4ee] dark:bg-[#141414] flex flex-col justify-between overflow-hidden shadow-sm transition-all duration-200 hover:border-neutral-400 dark:hover:border-neutral-600"
-            >
-              <div class="p-4 sm:p-5 flex flex-col flex-1 gap-3">
-                <p
-                  class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-semibold m-0"
-                >
-                  STANDALONE APP
-                </p>
-                <h4
-                  class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
-                >
-                  Touchscreen Kiosk Client
-                </h4>
-                <p
-                  data-en="Electron-based self-service UI for event guests or public spaces. Offline-tolerant state machine, print spooler, and countdown capture loop."
-                  data-id="UI self-service berbasis Electron untuk tamu event atau area publik. Dengan spooler printer, dan alur jepret foto otomatis dan tetap tolerir meski tanpa internet."
-                  class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal m-0"
-                >
-                  Electron-based self-service UI for event guests or public
-                  spaces. Offline-tolerant state machine, print spooler, and
-                  countdown capture loop.
-                </p>
-              </div>
-              <div
-                class="relative w-full aspect-[16/9] border-t border-neutral-200/80 dark:border-neutral-800 overflow-hidden bg-neutral-100 dark:bg-neutral-900"
-              >
-                <img
-                  src={`${base}/images/kiosk-screenshot.webp`}
-                  alt="Photobooth Kiosk UI Screenshot"
-                  width="1280"
-                  height="720"
-                  class="w-full h-full object-cover object-top"
-                  loading="lazy"
-                  decoding="async"
-                  onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
-                />
-                <div
-                  class="hidden absolute inset-0 flex-col items-center justify-center p-4 text-center space-y-2 bg-[#121212]"
-                >
-                  <div
-                    class="w-8 h-8 rounded-full border border-dashed border-neutral-700 flex items-center justify-center text-neutral-500"
-                  >
-                    <i class="ti ti-device-desktop text-lg" aria-hidden="true"
-                    ></i>
-                  </div>
-                  <span class="font-mono text-[11px] text-neutral-400"
-                    >Place screenshot at <br /><code
-                      class="text-[var(--color-accent,#52FF1A)]"
-                      >public/images/kiosk-screenshot.webp</code
-                    ></span
-                  >
-                </div>
-              </div>
-              <div
-                class="p-3.5 sm:p-4 bg-neutral-100/60 dark:bg-neutral-900/60 border-t border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between gap-2.5 min-w-0"
-              >
-                <span
-                  class="font-mono text-[10px] sm:text-[11px] text-neutral-400 dark:text-neutral-500 truncate"
-                  >Electron</span
-                >
-                <div class="flex items-center gap-2 ml-auto shrink-0">
-                  <!-- Webcam & Public Server Upload Notice Tooltip Pill -->
-                  <div class="relative group/warning flex items-center">
-                    <button
-                      type="button"
-                      class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-amber-500/10 dark:bg-amber-400/10 text-amber-800 dark:text-amber-300 border border-amber-500/20 dark:border-amber-400/20 text-[11px] font-sans font-medium transition-colors hover:bg-amber-500/20 dark:hover:bg-amber-400/20 focus:outline-none focus-visible:ring-1 focus-visible:ring-amber-500 cursor-help"
-                      aria-label="Webcam and upload consent warning"
-                      data-aria-en="Webcam and upload consent warning"
-                      data-aria-id="Peringatan izin webcam dan persetujuan unggahan"
-                    >
-                      <svg
-                        class="w-3.5 h-3.5 shrink-0 text-amber-600 dark:text-amber-400"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        aria-hidden="true"
-                      >
-                        <path d="M12 9v4"></path>
-                        <path d="M12 17h.01"></path>
-                        <path
-                          d="M5.07 19H19a2 2 0 0 0 1.75 -2.96L13.75 4a2 2 0 0 0 -3.5 0L3.32 16.04a2 2 0 0 0 1.75 2.96z"
-                        ></path>
-                      </svg>
-                      <span
-                        class="hidden sm:inline"
-                        data-en="Webcam & Upload Consent"
-                        data-id="Izin Kamera & Unggah"
-                        >Webcam &amp; Upload Consent</span
-                      >
-                      <span class="sm:hidden" data-en="Notice" data-id="Info"
-                        >Notice</span
-                      >
-                    </button>
-
-                    <!-- Interactive Tooltip Popover -->
-                    <div
-                      role="tooltip"
-                      class="pointer-events-none absolute bottom-full right-0 mb-2 w-64 sm:w-72 p-3 rounded-lg bg-neutral-950 dark:bg-neutral-900 text-white border border-neutral-800 dark:border-neutral-700 shadow-xl opacity-0 translate-y-1 group-hover/warning:opacity-100 group-hover/warning:translate-y-0 group-focus-within/warning:opacity-100 group-focus-within/warning:translate-y-0 transition-all duration-150 z-30 text-left"
-                    >
-                      <div class="flex items-start gap-2.5">
-                        <svg
-                          class="w-4 h-4 shrink-0 text-amber-400 mt-0.5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          aria-hidden="true"
-                        >
-                          <path d="M12 9v4"></path>
-                          <path d="M12 17h.01"></path>
-                          <path
-                            d="M5.07 19H19a2 2 0 0 0 1.75 -2.96L13.75 4a2 2 0 0 0 -3.5 0L3.32 16.04a2 2 0 0 0 1.75 2.96z"
-                          ></path>
-                        </svg>
-                        <div class="flex-1 space-y-1">
-                          <p
-                            class="font-heading font-bold text-xs text-white leading-tight m-0"
-                            data-en="Webcam & Upload Notice"
-                            data-id="Pemberitahuan Kamera & Unggahan"
-                          >
-                            Webcam &amp; Upload Notice
-                          </p>
-                          <p
-                            class="font-sans text-[11px] text-neutral-300 leading-relaxed m-0"
-                            data-en="The demo asks for webcam access for live photo capture and asks for consent before optionally uploading snapshots to the public demo gallery."
-                            data-id="Situs Uji Coba akan meminta akses webcam untuk foto langsung dan meminta persetujuan sebelum mengunggah foto ke galeri demo publik secara opsional."
-                          >
-                            The demo asks for webcam access for live photo
-                            capture and asks for consent before optionally
-                            uploading snapshots to the public demo gallery.
-                          </p>
-                        </div>
-                      </div>
-                      <!-- Popover Arrow Pointer -->
-                      <div
-                        class="absolute -bottom-1 right-6 w-2 h-2 bg-neutral-950 dark:bg-neutral-900 border-r border-b border-neutral-800 dark:border-neutral-700 rotate-45"
-                        aria-hidden="true"
-                      >
-                      </div>
-                    </div>
-                  </div>
-
-                  <HoverExpandButton
-                    href="https://navoyovan.github.io/photobooth-kiosk-demo/"
-                    label="LAUNCH DEMO"
-                    labelEn="LAUNCH DEMO"
-                    labelId="UJI COBA"
-                    size="micro"
-                    variant="solid"
-                    expandDirection="left"
-                    rotateIcon={false}
-                    ariaLabel="Launch Kiosk Demo (opens in new tab)"
-                    data-aria-en="Launch Kiosk Demo (opens in new tab)"
-                    data-aria-id="Uji Coba Kiosk (buka di tab baru)"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="shrink-0 z-10"
-                  >
-                    <svg
-                      slot="icon"
-                      class="w-3.5 h-3.5"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                  </HoverExpandButton>
-                </div>
-              </div>
-            </div>
-
-            <!-- Specimen 2: Vendor Portal & Cloud Telemetry -->
-            <div
-              class="group relative border border-neutral-300/80 dark:border-neutral-800 bg-[#f6f4ee] dark:bg-[#141414] flex flex-col justify-between overflow-hidden shadow-sm transition-all duration-200 hover:border-neutral-400 dark:hover:border-neutral-600"
-            >
-              <div class="p-4 sm:p-5 flex flex-col flex-1 gap-3">
-                <p
-                  class="font-sans text-[11px] uppercase tracking-wider text-neutral-500 dark:text-neutral-400 font-semibold m-0"
-                >
-                  FLEET MANAGER
-                </p>
-                <h4
-                  class="text-lg sm:text-xl font-bold text-neutral-950 dark:text-white tracking-tight leading-tight group-hover:text-[var(--color-accent,#52FF1A)] transition-colors font-heading m-0"
-                >
-                  Vendor Portal &amp; Telemetry
-                </h4>
-                <p
-                  data-en="Operator web portal for real-time kiosk fleet telemetry, custom print frame asset designers, coupon engines, and sales analytics."
-                  data-id="Portal web operator untuk telemetri armada kiosk photobooth real-time, editor frame custom, sistem kupon, dan analitik penjualan."
-                  class="font-sans text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal m-0"
-                >
-                  Operator web portal for real-time kiosk fleet telemetry,
-                  custom print frame asset designers, coupon engines, and sales
-                  analytics.
-                </p>
-              </div>
-              <div
-                class="relative w-full aspect-[16/9] border-t border-neutral-200/80 dark:border-neutral-800 overflow-hidden bg-neutral-100 dark:bg-neutral-900"
-              >
-                <img
-                  src={`${base}/images/vendor-portal-screenshot.webp`}
-                  alt="Vendor Portal UI Screenshot"
-                  width="1280"
-                  height="720"
-                  class="w-full h-full object-cover object-top"
-                  loading="lazy"
-                  decoding="async"
-                  onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';"
-                />
-                <div
-                  class="hidden absolute inset-0 flex-col items-center justify-center p-3 text-center space-y-1.5 bg-[#121212]"
-                >
-                  <div
-                    class="w-7 h-7 rounded-full border border-dashed border-neutral-700 flex items-center justify-center text-neutral-500"
-                  >
-                    <i
-                      class="ti ti-layout-dashboard text-base"
-                      aria-hidden="true"></i>
-                  </div>
-                  <span class="font-mono text-[10px] text-neutral-400"
-                    >Place screenshot at <br /><code
-                      class="text-[var(--color-accent,#52FF1A)]"
-                      >public/images/vendor-portal-screenshot.webp</code
-                    ></span
-                  >
-                </div>
-              </div>
-              <div
-                class="p-3.5 sm:p-4 bg-neutral-100/60 dark:bg-neutral-900/60 border-t border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between gap-3 min-w-0"
-              >
-                <span
-                  class="font-mono text-[10px] sm:text-[11px] text-neutral-400 dark:text-neutral-500 truncate"
-                  >React • Laravel • Reverb</span
-                >
-                <HoverExpandButton
-                  href="https://navoyovan.github.io/hypebox/"
-                  label="EXPLORE ECOSYSTEM"
-                  labelEn="EXPLORE ECOSYSTEM"
-                  labelId="JELAJAHI EKOSISTEM"
-                  size="micro"
-                  variant="solid"
-                  expandDirection="left"
-                  rotateIcon={false}
-                  ariaLabel="Explore Hypebox Ecosystem (opens in new tab)"
-                  data-aria-en="Explore Hypebox Ecosystem (opens in new tab)"
-                  data-aria-id="Jelajahi Ekosistem Hypebox (buka di tab baru)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="shrink-0 ml-auto z-10"
-                >
-                  <svg
-                    slot="icon"
-                    class="w-3.5 h-3.5"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </HoverExpandButton>
-              </div>
-            </div>
-          </div>
-        </article>
-
-        <!-- Additional Featured Work Grid (Full-Bleed Horizontal Carousel) -->
-        <div class="pt-8 space-y-4">
-          <div class="flex items-center justify-between">
-            <h3
-              class="text-xl sm:text-2xl font-bold tracking-tight text-neutral-950 dark:text-white font-heading"
-            >
-              Other(s)
-            </h3>
-          </div>
-
-          <!-- Full-bleed seamless horizontal container -->
-          <div
-            class="relative w-screen left-1/2 -translate-x-1/2 overflow-hidden py-1"
-          >
-            <div
-              id="others-scroll-container"
-              class="flex flex-nowrap overflow-x-auto gap-4 sm:gap-5 pb-5 pt-2 pl-[4%] sm:pl-[7%] lg:pl-[10%] pr-[4%] sm:pr-[7%] lg:pr-[10%] no-scrollbar scroll-smooth"
-            >
-              <div
-                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-              >
-                <ProjectTile
-                  title="mcTextureGhost"
-                  brand="mctextureghost"
-                  category="DESKTOP & GAMEDEV"
-                  categoryId="DESKTOP & GAMEDEV"
-                  imageSrc={`${base}/images/mctextureghost-workspace.webp`}
-                  description="Minecraft Bedrock texture workspace & ghost asset scanner with live 3D block and entity visualizers."
-                  descriptionId="Workspace tekstur Minecraft Bedrock dan pemindai aset ghost dengan visualisator 3D blok dan entitas live."
-                  tags={[
-                    "C# / WPF",
-                    "WebView2",
-                    "React 19",
-                    "Three.js",
-                    "GSAP",
-                    "Zustand",
-                  ]}
-                  metaText="mctextureghost.git"
-                  actionText="VIEW REPO"
-                  actionTextId="LIHAT REPO"
-                  href="https://github.com/navoyovan/mcTextureGhost"
-                />
-              </div>
-              <div
-                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-              >
-                <ProjectTile
-                  title="Component Library"
-                  brand="portfolio"
-                  category="DESIGN SYSTEM"
-                  categoryId="DESIGN SYSTEM"
-                  description="Design system, typography specimens, color tokens, and interactive UI primitives architected for this Portfolio."
-                  descriptionId="Design system, typography, color tokens, dan komponen UI interaktif yang dirancang untuk Portfolio ini."
-                  tags={["Astro v5", "Tailwind v4", "UI Tokens", "Components"]}
-                  metaText="component-library"
-                  actionText="EXPLORE SYSTEM"
-                  actionTextId="JELAJAHI SISTEM"
-                  href={`${base}/component-library`}
-                  videoSrc={`${base}/images/component-library.webm`}
-                />
-              </div>
-              <div
-                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-              >
-                <ProjectTile
-                  title="Interactive Map"
-                  category="GIS & SPATIAL"
-                  categoryId="GIS & SPATIAL"
-                  description="Geospatial visualization and tracking platform with custom assets and telemetry."
-                  descriptionId="Platform visualisasi dan pelacakan geospasial dengan aset kustom dan telemetri."
-                  status="PROTOTYPE"
-                  statusId="PROTOTIPE"
-                  statusVariant="neutral"
-                  tags={["Laravel", "Leaflet.js", "AJAX", "Tailwind"]}
-                  metaText="interactive-map.git"
-                  actionText="VIEW REPO"
-                  actionTextId="LIHAT REPO"
-                  href="https://github.com/navoyovan/interactive-map"
-                />
-              </div>
-              <div
-                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-              >
-                <ProjectTile
-                  title="Frame & Cutout Studio"
-                  brand="hypebox"
-                  category="PHOTOBOOTH ASSETS"
-                  categoryId="ASET PHOTOBOOTH"
-                  videoSrc={`${base}/images/frame-editor-showcase_converted.webm`}
-                  description="Interactive photobooth frame cutout layout editor with drag-and-drop slot positioning, and alpha mask detection."
-                  descriptionId="Editor layout bingkai photobooth interaktif dengan pemosisian slot drag-and-drop, dan alpha mask detection."
-                  tags={[
-                    "React 19",
-                    "Canvas API",
-                    "Layout Telemetry",
-                    "Vector Masks",
-                  ]}
-                  metaText="frame-cutout-studio"
-                  actionText="EXPLORE STUDIO"
-                  actionTextId="JELAJAHI STUDIO"
-                  href="https://navoyovan.github.io/photobooth-kiosk-demo/?step=2&tab=upload"
-                />
-              </div>
-              <div
-                class="w-[370px] sm:w-[410px] lg:w-[426px] shrink-0 flex flex-col"
-              >
-                <ProjectTile
-                  title="Color Grading & Textures"
-                  brand="hypebox"
-                  category="IMAGE PROCESSING"
-                  categoryId="PEMROSESAN GAMBAR"
-                  videoSrc={`${base}/images/color-grading-showcase_converted.webm`}
-                  description="Realtime CSS filter color grading studio with grain, scratches, and custom texture blend mode layering."
-                  descriptionId="Studio color grading, edit secara langsung pakai layer blend mode dengan tekstur seperti grain, scratches, dan custom textures."
-                  tags={[
-                    "CSS Filters",
-                    "SVG Noise",
-                    "Blend Modes",
-                    "Color Lab",
-                  ]}
-                  metaText="color-grading-engine"
-                />
-              </div>
-            </div>
-
-            <!-- Custom Horizontal Scrollbar Matching Page Scrollbar (Zero layout shift reserved height) -->
-            <div
-              class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto h-4 my-2 flex items-center justify-center"
-            >
-              <div
-                id="others-scrollbar-track"
-                class="w-48 sm:w-64 h-1.5 hover:h-3.5 active:h-3.5 bg-neutral-200/80 dark:bg-neutral-800/80 rounded-full cursor-pointer relative overflow-hidden group transition-[height,background-color] duration-200 flex items-center"
-                aria-hidden="true"
-              >
-                <div
-                  id="others-scrollbar-thumb"
-                  class="h-full bg-neutral-900/30 dark:bg-white/30 group-hover:bg-neutral-900/60 dark:group-hover:bg-white/60 active:bg-neutral-900/80 dark:active:bg-white/80 rounded-full cursor-grab active:cursor-grabbing transition-[background-color] duration-200 absolute top-0 left-0"
-                  style="width: 25%; transform: translateX(0px);"
-                >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <script>
-        function setupOthersHorizontalScroll() {
-          const container = document.getElementById("others-scroll-container");
-          const track = document.getElementById("others-scrollbar-track");
-          const thumb = document.getElementById("others-scrollbar-thumb");
-          if (!container || !track || !thumb) return;
-
-          let isDraggingThumb = false;
-          let startThumbX = 0;
-          let initialThumbX = 0;
-          let currentThumbX = 0;
-
-          const updateThumb = () => {
-            if (isDraggingThumb) return;
-            const maxScroll = container.scrollWidth - container.clientWidth;
-            if (maxScroll <= 0) {
-              track.style.display = "none";
-              return;
-            }
-            track.style.display = "block";
-
-            const trackWidth = track.clientWidth;
-            const thumbWidth = Math.max(
-              28,
-              (container.clientWidth / container.scrollWidth) * trackWidth,
-            );
-            thumb.style.width = `${thumbWidth}px`;
-
-            const maxThumbTravel = trackWidth - thumbWidth;
-            const scrollProgress = Math.min(
-              1,
-              Math.max(0, container.scrollLeft / maxScroll),
-            );
-            currentThumbX = scrollProgress * maxThumbTravel;
-            thumb.style.transform = `translateX(${currentThumbX}px)`;
-          };
-
-          container.addEventListener(
-            "scroll",
-            () => {
-              requestAnimationFrame(updateThumb);
-            },
-            { passive: true },
-          );
-
-          window.addEventListener("resize", updateThumb);
-          requestAnimationFrame(updateThumb);
-          setTimeout(updateThumb, 400);
-
-          // Scrollbar Thumb Dragging
-          thumb.addEventListener("mousedown", (e) => {
-            if (e.button !== 0) return;
-            isDraggingThumb = true;
-            startThumbX = e.clientX;
-            initialThumbX = currentThumbX;
-            document.body.classList.add("select-none", "cursor-grabbing");
-            container.style.scrollBehavior = "auto";
-            e.preventDefault();
-            e.stopPropagation();
-          });
-
-          window.addEventListener("mousemove", (e) => {
-            if (!isDraggingThumb) return;
-            const maxScroll = container.scrollWidth - container.clientWidth;
-            const trackWidth = track.clientWidth;
-            const thumbWidth = thumb.clientWidth;
-            const maxThumbTravel = trackWidth - thumbWidth;
-            if (maxThumbTravel <= 0 || maxScroll <= 0) return;
-
-            const deltaX = e.clientX - startThumbX;
-            const targetThumbX = Math.min(
-              maxThumbTravel,
-              Math.max(0, initialThumbX + deltaX),
-            );
-            currentThumbX = targetThumbX;
-            thumb.style.transform = `translateX(${targetThumbX}px)`;
-
-            const progress = targetThumbX / maxThumbTravel;
-            container.scrollLeft = progress * maxScroll;
-          });
-
-          const stopDraggingThumb = () => {
-            if (isDraggingThumb) {
-              isDraggingThumb = false;
-              document.body.classList.remove("select-none", "cursor-grabbing");
-              container.style.scrollBehavior = "";
-              updateThumb();
-            }
-          };
-
-          window.addEventListener("mouseup", stopDraggingThumb);
-          window.addEventListener("blur", stopDraggingThumb);
-
-          // Scrollbar Track Click-to-Jump
-          track.addEventListener("click", (e) => {
-            if (e.target === thumb) return;
-            const rect = track.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const trackWidth = track.clientWidth;
-            const thumbWidth = thumb.clientWidth;
-            const maxThumbTravel = trackWidth - thumbWidth;
-            const maxScroll = container.scrollWidth - container.clientWidth;
-            if (maxThumbTravel <= 0 || maxScroll <= 0) return;
-
-            const targetThumbX = Math.min(
-              maxThumbTravel,
-              Math.max(0, clickX - thumbWidth / 2),
-            );
-            const targetProgress = targetThumbX / maxThumbTravel;
-            container.scrollTo({
-              left: targetProgress * maxScroll,
-              behavior: "smooth",
-            });
-          });
-        }
-
-        if (document.readyState === "loading") {
-          document.addEventListener(
-            "DOMContentLoaded",
-            setupOthersHorizontalScroll,
-          );
-        } else {
-          setupOthersHorizontalScroll();
-        }
-        document.addEventListener(
-          "astro:page-load",
-          setupOthersHorizontalScroll,
-        );
-      </script>
 
       <!-- 03 // WHAT I CAN BUILD -->
       <section
@@ -1324,25 +104,48 @@ const capabilities = [
         aria-labelledby="heading-capabilities"
         class="scroll-mt-24 pt-16 space-y-8"
       >
-        <div
-          class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800"
-        >
-          <span
-            class="font-heading font-bold text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400"
+        <!-- Section 03 Sliced Numeral Header Bar -->
+        <div class="flex items-stretch gap-0 pb-1">
+          <!-- Big Section Numeral "3" (Sliced vertically in half by container boundary) -->
+          <div
+            id="capabilities-numeral-crop"
+            class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
+            style="width: 85px; contain: paint;"
           >
-            03 // WHAT I CAN BUILD
-          </span>
-        </div>
+            <span
+              id="capabilities-numeral"
+              class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
+              aria-hidden="true"
+              style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
+            >
+              3
+            </span>
+          </div>
 
-        <div class="space-y-3">
-          <h2
-            id="heading-capabilities"
-            data-en="From simple pages to systems that do stuff."
-            data-id="Dari halaman sederhana sampai sistem yang beneran kerja."
-            class="text-3xl sm:text-4xl font-heading font-bold tracking-tight text-neutral-900 dark:text-neutral-100"
-          >
-            From simple pages to systems that do stuff.
-          </h2>
+          <!-- Vertical Divider Line (Exact Slice Axis) -->
+          <div class="w-px bg-neutral-300 dark:bg-neutral-800 shrink-0 self-stretch my-0.5" aria-hidden="true"></div>
+
+          <!-- Right Side: Section label with horizontal rule + Headline -->
+          <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
+            <!-- Top: Category label with horizontal rule -->
+            <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
+              <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
+                WHAT I CAN BUILD
+              </span>
+            </div>
+
+            <!-- Section Headline -->
+            <div class="pt-0.5">
+              <h2
+                id="heading-capabilities"
+                data-en="From simple pages to systems that do stuff."
+                data-id="Dari halaman sederhana sampai sistem yang beneran kerja."
+                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
+              >
+                From simple pages to systems that do stuff.
+              </h2>
+            </div>
+          </div>
         </div>
 
         <div class="flex flex-col gap-4 pb-4">
@@ -1361,7 +164,7 @@ const capabilities = [
                       <h3
                         data-en={item.title}
                         data-id={item.titleId || item.title}
-                        class="text-lg sm:text-xl font-heading font-bold text-neutral-950 dark:text-white group-hover:text-[var(--color-accent,#52FF1A)] transition-colors m-0"
+                        class="text-xl sm:text-2xl font-subheading font-semibold text-neutral-950 dark:text-white group-hover:text-[var(--color-accent,#52FF1A)] transition-colors m-0"
                       >
                         {item.title}
                       </h3>
@@ -1400,38 +203,62 @@ const capabilities = [
         aria-labelledby="heading-philosophy"
         class="scroll-mt-24 pt-16 space-y-8"
       >
-        <div
-          class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800"
-        >
-          <span
-            class="font-heading font-bold text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400"
+        <!-- Section 04 Sliced Numeral Header Bar -->
+        <div class="flex items-stretch gap-0 pb-1">
+          <!-- Big Section Numeral "4" (Sliced vertically in half by container boundary) -->
+          <div
+            id="philosophy-numeral-crop"
+            class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
+            style="width: 85px; contain: paint;"
           >
-            04 // PHILOSOPHY
-          </span>
-        </div>
+            <span
+              id="philosophy-numeral"
+              class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
+              aria-hidden="true"
+              style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
+            >
+              4
+            </span>
+          </div>
 
-        <div class="flex flex-col lg:flex-row items-start gap-8 lg:gap-12">
-          <!-- 65% Left Column: Principles, Strategy & Quote -->
-          <div class="w-full lg:w-[65%] space-y-8">
-            <div class="space-y-4">
+          <!-- Vertical Divider Line (Exact Slice Axis) -->
+          <div class="w-px bg-neutral-300 dark:bg-neutral-800 shrink-0 self-stretch my-0.5" aria-hidden="true"></div>
+
+          <!-- Right Side: Section label with horizontal rule + Headline & Subdeck -->
+          <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
+            <!-- Top: Category label with horizontal rule -->
+            <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
+              <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
+                PHILOSOPHY
+              </span>
+            </div>
+
+            <!-- Section Headline & Subdeck -->
+            <div class="space-y-1.5 pt-0.5">
               <h2
                 id="heading-philosophy"
-                data-en="I build the thing, not the stack."
+                data-en="I build for the thing, not the stack."
                 data-id="Aku bikin produk, bukan sekedar stacknya doang."
-                class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-neutral-950 dark:text-white leading-tight font-heading"
+                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
               >
                 I build for the thing, not the stack.
               </h2>
               <p
                 data-en="Understanding the whole problem before deciding how to solve it. The interface, the backend, the hardware, the weird edge cases; they're all part of the same product."
                 data-id="Dengan memahami masalahnya secara menyeluruh sebelum milih jalan solusinya. Antarmuka, backend, hardware, sampai kasus unik yang ga kepikiran, semuanya tetap bagian dari satu produk."
-                class="text-base sm:text-lg text-neutral-700 dark:text-neutral-300 leading-relaxed font-normal"
+                class="font-sans text-sm sm:text-base text-neutral-600 dark:text-neutral-400 leading-relaxed font-normal tracking-[0.5px] max-w-3xl m-0"
               >
                 Understanding the whole problem before deciding how to solve it.
                 The interface, the backend, the hardware, the weird edge cases;
                 they're all part of the same product.
               </p>
             </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row items-start gap-8 lg:gap-12 pt-2">
+          <!-- 65% Left Column: Principles, Strategy & Quote -->
+          <div class="w-full lg:w-[65%] space-y-8">
 
             <div class="space-y-8 sm:space-y-10 pt-2">
               <div class="group flex items-start gap-4 sm:gap-6">
@@ -1560,7 +387,7 @@ const capabilities = [
                 class="p-6 sm:p-7 border-l-4 border-[var(--color-accent,#52FF1A)] bg-[#f6f4ee] dark:bg-[#141414] border-y border-r border-neutral-300/60 dark:border-neutral-800 space-y-3"
               >
                 <blockquote
-                  class="text-2xl sm:text-3xl md:text-4xl font-bold italic tracking-tight text-neutral-950 dark:text-white font-heading"
+                  class="text-2xl sm:text-3xl md:text-4xl font-normal italic tracking-tight text-neutral-950 dark:text-white font-subheading"
                 >
                   "_"
                 </blockquote>
@@ -1589,28 +416,54 @@ const capabilities = [
         aria-labelledby="heading-about"
         class="scroll-mt-24 pt-16 space-y-8"
       >
-        <div
-          class="flex items-center justify-between pb-2 border-b border-neutral-200 dark:border-neutral-800"
-        >
-          <span
-            class="font-heading font-bold text-xs uppercase tracking-wider text-neutral-500 dark:text-neutral-400"
+        <!-- Section 05 Sliced Numeral Header Bar -->
+        <div class="flex items-stretch gap-0 pb-1">
+          <!-- Big Section Numeral "5" (Sliced vertically in half by container boundary) -->
+          <div
+            id="about-numeral-crop"
+            class="relative overflow-hidden flex items-start justify-end select-none shrink-0"
+            style="width: 85px; contain: paint;"
           >
-            05 // ABOUT
-          </span>
+            <span
+              id="about-numeral"
+              class="relative font-sans font-black leading-none text-neutral-950/40 dark:text-white/40 tracking-[0.5px] shrink-0 select-none"
+              aria-hidden="true"
+              style="font-size: 92px; left: 9px; top: -6px; display: inline-block;"
+            >
+              5
+            </span>
+          </div>
+
+          <!-- Vertical Divider Line (Exact Slice Axis) -->
+          <div class="w-px bg-neutral-300 dark:bg-neutral-800 shrink-0 self-stretch my-0.5" aria-hidden="true"></div>
+
+          <!-- Right Side: Section label with horizontal rule + Headline -->
+          <div class="flex-1 flex flex-col justify-center min-w-0 pl-3 sm:pl-4 lg:pl-5 py-0.5 gap-1.5">
+            <!-- Top: Category label with horizontal rule -->
+            <div class="flex items-center justify-between pb-1 border-b border-neutral-200 dark:border-neutral-800 w-full">
+              <span class="font-sans font-medium text-[10.5px] sm:text-xs uppercase tracking-[0.5px] text-neutral-500 dark:text-neutral-400">
+                ABOUT
+              </span>
+            </div>
+
+            <!-- Section Headline -->
+            <div class="pt-0.5">
+              <h2
+                id="heading-about"
+                data-en="A little bit about myself."
+                data-id="Sedikit cerita tentang aku."
+                class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[0.5px] text-neutral-950 dark:text-white leading-[1.08] font-montreal w-full m-0"
+              >
+                A little bit about myself.
+              </h2>
+            </div>
+          </div>
         </div>
 
         <div
-          class="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start"
+          class="relative grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pt-2"
         >
           <div class="lg:col-span-5 space-y-3">
-            <h2
-              id="heading-about"
-              data-en="A little bit about myself."
-              data-id="Sedikit cerita tentang aku."
-              class="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-neutral-950 dark:text-white leading-tight font-heading"
-            >
-              A little bit about myself.
-            </h2>
             <div
               aria-hidden="true"
               class="hidden lg:block font-mono text-[10px] sm:text-[11px] text-neutral-400/50 dark:text-neutral-600/60 italic leading-relaxed pt-1 select-none"
