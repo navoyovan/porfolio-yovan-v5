@@ -25,6 +25,7 @@ interface Props {
   footerName?: string;
   date?: string;
   dateLabel?: string;
+  aspect?: string;
   class?: string;
   [key: string]: any;
 }
@@ -58,6 +59,7 @@ const {
   footerName,
   date,
   dateLabel,
+  aspect = 'aspect-video',
   class: className = '',
   ...rest
 } = Astro.props;
@@ -72,7 +74,7 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 <article
   aria-labelledby={titleId}
   class:list={[
-    'group relative flex flex-col bg-[#f6f4ee] dark:bg-[#141414] border border-neutral-300/80 dark:border-neutral-800 transition-all duration-200 hover:border-neutral-400 dark:hover:border-neutral-600 overflow-hidden shadow-sm',
+    'group relative flex flex-col bg-[#f6f4ee] dark:bg-[#141414] rounded-md transition-all duration-200 overflow-hidden shadow-sm',
     className
   ]}
   {...rest}
@@ -80,7 +82,8 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
   <!-- Media / Viewfinder Container (Adapted from Easter Egg Modal) -->
   <div
     class:list={[
-      'tile-media relative w-full aspect-video overflow-hidden border-b border-neutral-300/80 dark:border-neutral-800/80 select-none flex items-center justify-center group/media',
+      'tile-media relative w-full overflow-hidden select-none flex items-center justify-center group/media rounded-t-md',
+      aspect,
       previewBg ? previewBg : 'bg-neutral-200/60 dark:bg-neutral-900'
     ]}
   >
