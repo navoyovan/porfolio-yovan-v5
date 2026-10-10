@@ -675,7 +675,7 @@ const { base } = Astro.props;
     >
       <div
         id="others-scroll-container"
-        class="relative flex flex-nowrap overflow-x-auto gap-4 sm:gap-5 pt-14 pl-[max(8%,72px)] sm:pl-[max(10%,88px)] lg:pl-[max(12%,120px)] pr-[max(8%,72px)] sm:pr-[max(10%,88px)] lg:pr-[max(12%,120px)] no-scrollbar items-start"
+        class="relative flex flex-nowrap overflow-x-auto gap-4 sm:gap-5 pt-14 pl-6 pr-6 sm:pl-12 sm:pr-12 no-scrollbar items-start"
         style="margin-top: -24px; padding-bottom: 340px; margin-bottom: -340px;"
       >
         <MorphingProjectCard
@@ -712,6 +712,7 @@ const { base } = Astro.props;
           metaText="component-library"
           actionText="Explore System"
           actionTextId="Jelajahi Sistem"
+          actionArrow="→"
           href={`${base}/component-library`}
           videoSrc={`${base}/images/component-library.webm`}
         />
@@ -918,22 +919,97 @@ const { base } = Astro.props;
     if (!slots.length || !container) return;
 
     const activeAnimations = new WeakMap<HTMLElement, { stop: () => void }>();
+    const isTouch = window.matchMedia("(hover: none)").matches;
 
-    // Video memory & decode overhead management: pause off-screen videos
+    // Touch media-player controls: tap media to reveal logo overlay + zoom
+    // button, auto-fade after 3s idle (group-hover never fires without hover).
+    const controlsTimers = new WeakMap<HTMLElement, number>();
+
+    const hideMediaControls = (media: HTMLElement) => {
+      const t = controlsTimers.get(media);
+      if (t) {
+        window.clearTimeout(t);
+        controlsTimers.delete(media);
+      }
+      media.classList.remove("controls-visible");
+    };
+
+    const showMediaControls = (media: HTMLElement) => {
+      const t = controlsTimers.get(media);
+      if (t) window.clearTimeout(t);
+      media.classList.add("controls-visible");
+      controlsTimers.set(
+        media,
+        window.setTimeout(() => {
+          media.classList.remove("controls-visible");
+          controlsTimers.delete(media);
+        }, 3000),
+      );
+    };
+
+    // Video autoplay, one at a time on every viewport: visibility is measured
+    // against the screen (viewport root), so only the most-visible tile on
+    // screen plays and the rest stay paused (saves decode/battery). Expanded
+    // tile owns its own playback via expand/collapse and is left alone here.
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if ("IntersectionObserver" in window) {
+      const visibility = new Map<HTMLElement, number>();
+      slots.forEach((slot) => visibility.set(slot, 0));
+
+      const updatePlayback = () => {
+        const anyExpanded = Array.from(slots).some(
+          (s) => (s as HTMLElement).getAttribute("data-is-expanded") === "true",
+        );
+        let bestSlot: HTMLElement | null = null;
+        let bestRatio = 0;
+        visibility.forEach((ratio, slot) => {
+          // Skip picture tiles — only video tiles compete for autoplay
+          if (ratio > bestRatio && slot.querySelector("video.morph-video")) {
+            bestRatio = ratio;
+            bestSlot = slot;
+          }
+        });
+        slots.forEach((slot) => {
+          const el = slot as HTMLElement;
+          const video = el.querySelector<HTMLVideoElement>("video.morph-video");
+          if (!video) return;
+          if (el.getAttribute("data-is-expanded") === "true") return;
+          if (anyExpanded || reduceMotion || el !== bestSlot || bestRatio < 0.35) {
+            if (!video.paused) video.pause();
+            return;
+          }
+          if (video.paused) {
+            video.muted = true;
+            video.play().catch(() => {});
+          }
+        });
+      };
+
       const videoObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            const video = entry.target.querySelector<HTMLVideoElement>("video.morph-video");
-            if (!video) return;
-            if (!entry.isIntersecting && !video.paused) {
-              video.pause();
-            }
+            visibility.set(
+              entry.target as HTMLElement,
+              entry.isIntersecting ? entry.intersectionRatio : 0,
+            );
           });
+          updatePlayback();
         },
-        { root: container, threshold: 0.1 }
+        { root: null, threshold: [0, 0.35, 0.6, 1] }
       );
       slots.forEach((slot) => videoObserver.observe(slot));
+
+      // Background tab: pause everything; resume the most-visible on return
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          slots.forEach((slot) => {
+            const video = (slot as HTMLElement).querySelector<HTMLVideoElement>("video.morph-video");
+            if (video && !video.paused) video.pause();
+          });
+        } else {
+          updatePlayback();
+        }
+      });
     }
 
     const collapseSlot = (slot: HTMLElement) => {
@@ -951,6 +1027,12 @@ const { base } = Astro.props;
       card.style.transform = "";
       card.style.zIndex = "10";
       card.style.backgroundColor = "transparent";
+
+      // Freeze auto height (mobile adaptive) to px so Motion can animate back to 100%
+      if (!card.style.height || card.style.height === "auto") {
+        card.style.height = `${card.offsetHeight}px`;
+        void card.offsetHeight;
+      }
 
       card.classList.add("is-morphing");
       const cardAnim = animate(
@@ -992,6 +1074,9 @@ const { base } = Astro.props;
 
       if (video) video.pause();
 
+      const slotMedia = slot.querySelector<HTMLElement>("[data-morph-media]");
+      if (slotMedia) hideMediaControls(slotMedia);
+
       card.setAttribute("aria-expanded", "false");
       slot.setAttribute("data-is-expanded", "false");
     };
@@ -1032,16 +1117,47 @@ const { base } = Astro.props;
         : "#f6f4ee";
 
       card.classList.add("is-morphing");
-      const cardAnim = animate(
-        card,
-        {
-          width: "125%",
-          left: "-12.5%",
-          top: `-${topOffset}px`,
-          height: "670px",
-          boxShadow: "none",
-        },
-        {
+      // Mobile: grow vertically in place (no horizontal bleed — viewport is
+      // already ~slot width, so 125% would overshoot both sides). Desktop
+      // keeps the 125% / -12.5% horizontal bloom.
+      // Mobile height is adaptive: measure the card's natural content height
+      // instead of the fixed 670px desktop height, so short cards don't leave
+      // a long empty bottom.
+      const isMobile = window.innerWidth < 640;
+      let targetHeight = 670;
+      if (isMobile) {
+        const prevHeight = card.style.height;
+        card.style.height = "auto";
+        const naturalH = card.scrollHeight;
+        card.style.height = prevHeight || "";
+        void card.offsetHeight;
+        targetHeight = Math.ceil(Math.min(Math.max(naturalH, 380), 720));
+      }
+      // Edge-aware bloom: middle tiles bloom centered (±12.5%), but the first
+      // tile blooms rightward and the last tile leftward so nothing clips off
+      // the viewport edge (scroll can't go negative past the flush edge).
+      const slotIndex = Array.from(slots).indexOf(slot);
+      let leftFactor = 0;
+      let rightFactor = 0;
+      if (!isMobile) {
+        leftFactor = 0.125;
+        rightFactor = 0.125;
+        if (slotIndex === 0) {
+          leftFactor = 0;
+          rightFactor = 0.25;
+        } else if (slotIndex === slots.length - 1) {
+          leftFactor = 0.25;
+          rightFactor = 0;
+        }
+      }
+      const expandedGeometry = {
+        width: `${(1 + leftFactor + rightFactor) * 100}%`,
+        left: leftFactor === 0 ? "0px" : `${-leftFactor * 100}%`,
+        top: `-${topOffset}px`,
+        height: isMobile ? `${targetHeight}px` : "670px",
+        boxShadow: "none",
+      };
+      const cardAnim = animate(card, expandedGeometry, {
           duration: 0.4,
           ease: [0.16, 1, 0.3, 1],
         },
@@ -1049,6 +1165,9 @@ const { base } = Astro.props;
       activeAnimations.set(card, cardAnim);
       cardAnim.then(() => {
         card.classList.remove("is-morphing");
+        // Stay adaptive after the morph (language toggle / font load reflows
+        // naturally instead of clipping inside a fixed px height).
+        if (isMobile) card.style.height = "auto";
       });
 
       const metaLabel = slot.querySelector<HTMLElement>(".morph-meta-label");
@@ -1073,13 +1192,16 @@ const { base } = Astro.props;
 
       if (video) video.play().catch(() => {});
 
+      // Touch: flash media-player controls (logo + zoom), auto-hide when idle
+      if (isTouch && media) showMediaControls(media);
+
       // 4. ALONGSIDE THE MIDDLE ANCHOR: Ensure expanded card is ALWAYS fully in the viewport!
       // A. Horizontal scroll container alignment
       if (container) {
         const slotLeft = slot.offsetLeft;
         const slotWidth = slot.offsetWidth;
-        const expandedWidth = slotWidth * 1.25;
-        const expandedLeft = slotLeft - slotWidth * 0.125;
+        const expandedWidth = slotWidth * (1 + leftFactor + rightFactor);
+        const expandedLeft = slotLeft - slotWidth * leftFactor;
         const expandedRight = expandedLeft + expandedWidth;
 
         const currentScroll = container.scrollLeft;
@@ -1108,7 +1230,7 @@ const { base } = Astro.props;
 
       // B. Vertical window viewport alignment
       const slotRect = slot.getBoundingClientRect();
-      const cardHeight = 670;
+      const cardHeight = isMobile ? targetHeight : 670;
       const expandedTop = slotRect.top - topOffset;
       const expandedBottom = expandedTop + cardHeight;
       const vh = window.innerHeight;
@@ -1134,6 +1256,25 @@ const { base } = Astro.props;
     slots.forEach((slot) => {
       const card = slot.querySelector<HTMLElement>("[data-morph-card]");
       const closeButtons = slot.querySelectorAll<HTMLElement>("[data-close-card]");
+      const media = slot.querySelector<HTMLElement>("[data-morph-media]");
+
+      // Touch: tap expanded media toggles player controls (tap zoom/modal
+      // buttons still pass through). Guarded against double-binding on
+      // astro:page-load re-init.
+      if (media && !media.hasAttribute("data-controls-bound")) {
+        media.setAttribute("data-controls-bound", "true");
+        media.addEventListener("click", (e) => {
+          if (!isTouch) return;
+          if (slot.getAttribute("data-is-expanded") !== "true") return;
+          const target = e.target as HTMLElement;
+          if (target.closest("button, a")) return;
+          if (media.classList.contains("controls-visible")) {
+            hideMediaControls(media);
+          } else {
+            showMediaControls(media);
+          }
+        });
+      }
 
       if (card) {
         card.addEventListener("click", (e) => {

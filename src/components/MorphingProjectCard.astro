@@ -19,6 +19,7 @@ interface Props {
   tags?: string[];
   actionText?: string;
   actionTextId?: string;
+  actionArrow?: string;
   metaText?: string;
   brand?: string;
   class?: string;
@@ -40,6 +41,7 @@ const {
   tags = [],
   actionText = 'View Repo',
   actionTextId = 'Lihat Repo',
+  actionArrow = '↗',
   metaText = '',
   brand = '',
   class: className = '',
@@ -53,7 +55,7 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 <!-- Fixed-dimension slot: NEVER shifts or pushes neighboring cards -->
 <div
   class:list={[
-    'project-slot relative shrink-0 w-[360px] sm:w-[440px] md:w-[480px] lg:w-[calc((100vw-5rem)/3.15)] lg:min-w-[460px] h-[295px] sm:h-[335px] lg:h-[375px]',
+    'project-slot relative shrink-0 w-[calc(100vw-3rem)] max-w-[360px] sm:max-w-none sm:w-[440px] md:w-[480px] lg:w-[calc((100vw-5rem)/3.15)] lg:min-w-[460px] h-[295px] sm:h-[335px] lg:h-[375px]',
     className
   ]}
   data-project-slot
@@ -100,7 +102,7 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
       )}
       <!-- Fullscreen Media Button (Standardized ActionButton micro, Bottom Right) -->
       {(videoSrc || imageSrc) && (
-        <div class="absolute bottom-2.5 right-2.5 z-30 opacity-0 group-hover/media:opacity-100 transition-opacity duration-200 pointer-events-auto">
+        <div class="tile-zoom-btn absolute bottom-2.5 right-2.5 z-30 opacity-0 group-hover/media:opacity-100 transition-opacity duration-200 pointer-events-auto">
           <ActionButton
             size="micro"
             variant="primary-neutral"
@@ -277,7 +279,7 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
           >
             <div class="inline-flex items-center translate-x-[10px] group-hover:translate-x-0 transition-transform duration-200 ease-out">
               <span data-en={actionText} data-id={actionTextId || actionText}>{actionText}</span>
-              <span class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out text-neutral-400 group-hover:text-white dark:group-hover:text-neutral-950" aria-hidden="true">↗</span>
+              <span class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out text-neutral-400 group-hover:text-white dark:group-hover:text-neutral-950" aria-hidden="true">{actionArrow}</span>
             </div>
           </ActionButton>
         </div>
@@ -342,5 +344,14 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
+  }
+
+  /* Touch: media-player style controls — tap media to show logo + zoom,
+     they auto-fade after 3s idle (no hover on touch, so group-hover never fires) */
+  @media (hover: none) {
+    .morph-media.controls-visible .tile-hologram-overlay,
+    .morph-media.controls-visible .tile-zoom-btn {
+      opacity: 1;
+    }
   }
 </style>
