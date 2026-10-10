@@ -1,6 +1,7 @@
 ---
 import StatusBadge from './StatusBadge.astro';
 import ActionButton from './ActionButton.astro';
+import MediaModal from './MediaModal.astro';
 
 interface Props {
   index: string | number;
@@ -285,122 +286,7 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
   </div>
 </div>
 
-{(videoSrc || imageSrc) && (
-  <dialog
-    id={`modal-${titleId}`}
-    class="tile-modal backdrop:bg-black/80 backdrop:backdrop-blur-md bg-transparent p-0 m-auto w-[95vw] max-w-5xl overflow-visible border-0"
-  >
-    <div class="flex flex-col items-center justify-center w-full h-full max-h-[90vh]">
-      <!-- Dismiss Label -->
-      <div class="w-full flex justify-end mb-2 px-1">
-        <button
-          type="button"
-          class="tile-modal-close font-mono text-xs text-red-500 hover:text-red-400 hover:underline cursor-pointer select-none transition-colors p-0 bg-transparent border-0 flex items-center gap-1"
-        >
-          <span class="sm:hidden" data-en="↓ Swipe down to dismiss" data-id="↓ Usap ke bawah untuk menutup">↓ Swipe down to dismiss</span>
-          <span class="hidden sm:inline" data-en="Dismiss x [esc]" data-id="Tutup x [esc]">Dismiss x [esc]</span>
-        </button>
-      </div>
-
-      <!-- Scaled Media Card -->
-      <div class="w-full bg-[#fcfbf9] dark:bg-[#0e0e0e] shadow-2xl rounded-sm overflow-hidden aspect-video flex items-center justify-center relative">
-        {videoSrc ? (
-          <video
-            src={videoSrc}
-            loop
-            muted
-            playsinline
-            controls
-            class="tile-modal-video w-full h-full object-contain bg-black"
-          />
-        ) : imageSrc ? (
-          <img
-            src={imageSrc}
-            alt={title}
-            loading="lazy"
-            class="w-full h-full object-contain bg-neutral-100 dark:bg-neutral-900"
-          />
-        ) : null}
-      </div>
-    </div>
-  </dialog>
-)}
-
-<script>
-  let isModalDelegated = false;
-
-  function initMorphCardModals() {
-    if (isModalDelegated) return;
-    isModalDelegated = true;
-
-    document.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      if (!target) return;
-
-      // 1. Open Modal Trigger
-      const trigger = target.closest<HTMLElement>('.tile-scale-btn');
-      if (trigger) {
-        e.preventDefault();
-        e.stopPropagation();
-        const targetId = trigger.getAttribute('data-modal-target');
-        if (!targetId) return;
-        const dialog = document.getElementById(targetId) as HTMLDialogElement | null;
-        if (dialog) {
-          dialog.showModal();
-          dialog.style.transform = 'none';
-          const modalVideo = dialog.querySelector<HTMLVideoElement>('video.tile-modal-video');
-          if (modalVideo) {
-            modalVideo.currentTime = 0;
-            modalVideo.play().catch(() => {});
-          }
-        }
-        return;
-      }
-
-      // 2. Dismiss Button
-      const closeBtn = target.closest<HTMLElement>('.tile-modal-close');
-      if (closeBtn) {
-        e.preventDefault();
-        e.stopPropagation();
-        const dialog = closeBtn.closest<HTMLDialogElement>('.tile-modal');
-        if (dialog) closeModal(dialog);
-        return;
-      }
-
-      // 3. Backdrop Click
-      if (target.classList.contains('tile-modal') && target.tagName === 'DIALOG') {
-        closeModal(target as HTMLDialogElement);
-      }
-    });
-
-    document.addEventListener('cancel', (e) => {
-      const target = e.target as HTMLElement;
-      if (target && target.classList.contains('tile-modal') && target.tagName === 'DIALOG') {
-        e.preventDefault();
-        closeModal(target as HTMLDialogElement);
-      }
-    });
-
-    function closeModal(dialog: HTMLDialogElement) {
-      if (!dialog.hasAttribute('open')) return;
-      dialog.classList.add('is-closing');
-      const modalVideo = dialog.querySelector<HTMLVideoElement>('video.tile-modal-video');
-      if (modalVideo) modalVideo.pause();
-
-      setTimeout(() => {
-        dialog.close();
-        dialog.classList.remove('is-closing');
-      }, 200);
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMorphCardModals);
-  } else {
-    initMorphCardModals();
-  }
-  document.addEventListener('astro:page-load', initMorphCardModals);
-</script>
+<MediaModal id={`modal-${titleId}`} title={title} videoSrc={videoSrc} imageSrc={imageSrc} />
 
 <style>
   .morph-card {
@@ -453,23 +339,5 @@ const titleId = `tile-${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
     opacity: 0 !important;
     visibility: hidden !important;
     pointer-events: none !important;
-  }
-</style>
-
-<style is:global>
-  .tile-modal {
-    opacity: 0;
-    transform: translateY(15px) scale(0.98);
-    transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  
-  .tile-modal[open] {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  
-  .tile-modal.is-closing {
-    opacity: 0;
-    transform: translateY(15px) scale(0.98);
   }
 </style>
