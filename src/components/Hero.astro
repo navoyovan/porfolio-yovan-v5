@@ -147,6 +147,7 @@ const librariesTechniques = [
             data-aria-en="GitHub Profile (opens in new tab)"
             data-aria-id="Profil GitHub (buka di tab baru)"
             variant="secondary"
+            borderStyle="solid"
             size="micro"
           >
             <i class="ti ti-brand-github text-sm" aria-hidden="true"></i>
@@ -160,6 +161,7 @@ const librariesTechniques = [
             data-aria-en="LinkedIn Profile (opens in new tab)"
             data-aria-id="Profil LinkedIn (buka di tab baru)"
             variant="secondary"
+            borderStyle="solid"
             size="micro"
           >
             <i class="ti ti-brand-linkedin text-sm" aria-hidden="true"></i>
@@ -173,6 +175,7 @@ const librariesTechniques = [
             data-aria-en="21st.dev Profile (opens in new tab)"
             data-aria-id="Profil 21st.dev (buka di tab baru)"
             variant="secondary"
+            borderStyle="solid"
             size="micro"
           >
             <i class="ti ti-cube text-sm" aria-hidden="true"></i>
@@ -184,6 +187,7 @@ const librariesTechniques = [
             data-aria-en="Send Email to Yovan"
             data-aria-id="Kirim Email ke Yovan"
             variant="secondary"
+            borderStyle="solid"
             size="micro"
           >
             <i class="ti ti-mail text-sm" aria-hidden="true"></i>
@@ -197,7 +201,7 @@ const librariesTechniques = [
             aria-label="Download Resume / CV as PDF (opens in new tab)"
             data-aria-en="Download Resume / CV as PDF (opens in new tab)"
             data-aria-id="Unduh Resume / CV dalam format PDF (buka di tab baru)"
-            class="h-8 min-h-[32px] px-2.5 inline-flex items-center gap-1.5 rounded-[8px] border border-neutral-300 dark:border-neutral-700 bg-transparent text-neutral-900 dark:text-neutral-100 hover:border-neutral-950 dark:hover:border-white hover:bg-neutral-900/5 dark:hover:bg-white/10 active:scale-[0.98] transition-[transform,background-color,color,border-color] duration-150 ease-out select-none font-heading font-bold text-[11px] tracking-wider uppercase focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
+            class="h-8 min-h-[32px] px-2.5 inline-flex items-center gap-1.5 rounded-[8px] border border-neutral-300 dark:border-neutral-700 bg-transparent text-neutral-900 dark:text-neutral-100 hover:border-neutral-950 dark:hover:border-white hover:bg-neutral-900/5 dark:hover:bg-white/10 active:scale-[0.98] transition-[transform,background-color,color,border-color] duration-150 ease-out select-none font-sans font-medium text-xs tracking-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent,#52FF1A)]"
           >
             <i class="ti ti-download text-sm" aria-hidden="true"></i>
             <span data-en="Download Resume" data-id="Unduh Resume">Download Resume</span>
@@ -209,11 +213,14 @@ const librariesTechniques = [
           <ActionButton
             variant="primary-neutral"
             size="md"
+            font="sans"
+            uppercase={false}
+            rounded="rounded-lg"
             href="#projects"
-            class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
+            class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px] font-medium"
           >
             <div class="inline-flex items-center translate-x-[10px] group-hover:translate-x-0 transition-transform duration-200 ease-out">
-              <span data-en="FEATURED WORK" data-id="KARYA PILIHAN">FEATURED WORK</span>
+              <span data-en="Featured Work" data-id="Karya Pilihan">Featured Work</span>
               <span class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out">
                 ↓
               </span>
@@ -222,12 +229,16 @@ const librariesTechniques = [
 
           <ActionButton
             variant="secondary"
+            borderStyle="solid"
             size="md"
+            font="sans"
+            uppercase={false}
+            rounded="rounded-lg"
             href={`${base}/portfolio-index`}
-            class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px]"
+            class="group overflow-hidden w-full sm:w-auto max-sm:!py-[11px] font-medium"
           >
             <div class="inline-flex items-center translate-x-[10px] group-hover:translate-x-0 transition-transform duration-200 ease-out">
-              <span data-en="PORTFOLIO INDEX" data-id="INDEX PORTOFOLIO">PORTFOLIO INDEX</span>
+              <span data-en="Portfolio Index" data-id="Indeks Portofolio">Portfolio Index</span>
               <span class="inline-flex items-center justify-center w-3.5 ml-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-out">
                 →
               </span>
