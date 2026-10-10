@@ -772,7 +772,7 @@ const { base } = Astro.props;
 
       <!-- Custom Horizontal Scrollbar Matching Page Scrollbar (Zero layout shift reserved height) -->
       <div
-        class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto h-4 my-2 flex items-center justify-center relative z-20 pointer-events-auto"
+        class="w-[92%] sm:w-[86%] lg:w-[80%] mx-auto h-4 my-2 flex items-center justify-center relative z-40 pointer-events-auto"
       >
         <div
           id="others-scrollbar-track"
@@ -952,6 +952,7 @@ const { base } = Astro.props;
       card.style.zIndex = "10";
       card.style.backgroundColor = "transparent";
 
+      card.classList.add("is-morphing");
       const cardAnim = animate(
         card,
         {
@@ -967,6 +968,9 @@ const { base } = Astro.props;
         },
       );
       activeAnimations.set(card, cardAnim);
+      cardAnim.then(() => {
+        card.classList.remove("is-morphing");
+      });
 
       const metaLabel = slot.querySelector<HTMLElement>(".morph-meta-label");
       if (metaLabel) metaLabel.style.opacity = "";
@@ -1027,6 +1031,7 @@ const { base } = Astro.props;
         ? "#141414"
         : "#f6f4ee";
 
+      card.classList.add("is-morphing");
       const cardAnim = animate(
         card,
         {
@@ -1042,6 +1047,9 @@ const { base } = Astro.props;
         },
       );
       activeAnimations.set(card, cardAnim);
+      cardAnim.then(() => {
+        card.classList.remove("is-morphing");
+      });
 
       const metaLabel = slot.querySelector<HTMLElement>(".morph-meta-label");
       if (metaLabel) metaLabel.style.opacity = "1";
