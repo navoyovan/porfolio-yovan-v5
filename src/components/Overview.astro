@@ -93,8 +93,9 @@ const supportingStack = [
         class="relative w-full max-w-md sm:max-w-lg flex flex-col items-center justify-center border-b border-neutral-300/80 dark:border-neutral-800 overflow-hidden"
         style="transform: translateZ(0); contain: paint;"
       >
+        <!-- Dithering Shader Wave Backdrop -->
         <div
-          class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden [&>astro-island]:w-full [&>astro-island]:h-full [&>astro-island]:absolute [&>astro-island]:inset-0 [&>astro-island]:block"
+          class="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden"
           style="transform: translateZ(0); will-change: transform; backface-visibility: hidden;"
         >
           <DitheringShader
@@ -103,17 +104,18 @@ const supportingStack = [
             type="8x8"
             pxSize={1}
             speed={0.6}
-            className="w-full h-full"
           />
         </div>
+
         <img
           src={`${base}/images/v.png`}
           alt="Portrait of Yovan Gunardio Darmawan"
           width="540"
           height="540"
           class="relative z-10 w-full max-h-[500px] sm:max-h-[540px] object-contain object-bottom select-none pt-4"
-          loading="lazy"
+          loading="eager"
           decoding="async"
+          fetchpriority="high"
         />
       </div>
       <div class="w-full pt-3 flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-500 font-sans px-1">
